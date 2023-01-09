@@ -1,0 +1,56 @@
+/* General */
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+html {
+    height: 100%;
+    position: relative;
+    font-size: 10px;
+    scroll-behavior: smooth;
+}
+body {
+    --color-primary: #597BFC;
+    --color-title: #222222;
+    --color-text: #454d58;
+    --color-background: #FAFAFA;
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.25;
+    color: var(--color-text);
+    min-height: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-background);
+    /* Disable webkit grey background on tap */
+    -webkit-tap-highlight-color: transparent;
+    /* Solve font rendering on Chrome and FF (more weight) */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* Layout */
+.layout {
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 104rem;
+}
+.layout-title {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--color-title);
+    margin: 0 0 1.5rem 0;
+}
+.layout-footer {
+    text-align: center;
+    font-size: 1.4rem;
+    color: var(--color-text);
+}
+.layout-footer > a {
+    color: var(--color-primary);
+    text-decoration: none;
+}

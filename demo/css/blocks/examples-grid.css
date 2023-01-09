@@ -1,0 +1,359 @@
+/* General */
+.b-examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
+    gap: 2rem;
+    margin: 0 0 6rem 0;
+}
+.b-examples-grid > * {
+    border-radius: 1rem;
+}
+
+
+/* Repositories */
+.b-examples-grid > .example-repositories {
+    color: #57606a;
+    border: 0.1rem solid #d0d7de;
+    background-color: #FFFFFF;
+}
+.b-examples-grid > .example-repositories > .row {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 2rem 2rem;
+    border-bottom: 0.1rem solid #d0d7de;
+}
+.b-examples-grid > .example-repositories > .row:last-child {
+    border-bottom: none;
+}
+.b-examples-grid > .example-repositories > .row > .chart {
+    --tooltip-background: var(--line-color);
+    flex: 0 0 auto;
+    width: 12rem;
+    height: 2.4rem;
+    margin: 2rem 0 0 0;
+}
+.b-examples-grid > .example-repositories > .row > .text {
+    flex: 1 1 auto;
+}
+.b-examples-grid > .example-repositories > .row > .text > .title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #43484e;
+}
+.b-examples-grid > .example-repositories > .row > .text > .details {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.b-examples-grid > .example-repositories > .row > .text > .details > li {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    white-space: nowrap;
+    margin: 0.6rem 2rem 0 0;
+    font-size: 1.4rem;
+    color: #5d6672;
+}
+.b-examples-grid > .example-repositories > .row > .text > .details > li > img {
+    height: 1.6rem;
+    margin: 0 0.25em 0 0;
+    filter: invert(37%) sepia(11%) saturate(529%) hue-rotate(175deg) brightness(101%) contrast(88%);
+}
+@media (min-width: 66rem) {
+    .b-examples-grid > .example-repositories {
+        grid-column: span 2;
+    }
+    .b-examples-grid > .example-repositories > .row {
+        flex-direction: row;
+        align-items: center;
+    }
+    .b-examples-grid > .example-repositories > .row > .chart {
+        margin: 0 0 0 2rem;
+    }
+}
+
+
+/* Visitors */
+.b-examples-grid > .example-visitors {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    color: #FFFFFF;
+    background-color: #7346d3;
+}
+.b-examples-grid > .example-visitors > .title {
+    position: relative;
+    line-height: 1;
+    margin: 2rem 2rem 1rem 2rem;
+}
+.b-examples-grid > .example-visitors > .title .count {
+    font-size: 2.4rem;
+    font-weight: bold;
+}
+.b-examples-grid > .example-visitors > .title .text {
+    font-size: 1.4rem;
+    opacity: 0.75;
+    margin: 0.3rem 0 0 0;
+}
+.b-examples-grid > .example-visitors > .title .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 4rem;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(250deg) brightness(107%) contrast(101%);
+    opacity: 0.5;
+}
+.b-examples-grid > .example-visitors > .chart {
+    --line-color: #FFFFFF;
+    --area-opacity: 0.15;
+    --tooltip-font-color: #7346d3;
+    --tooltip-background: #FFFFFF;
+    --tooltip-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    --point-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 0 0 1rem 1rem;
+    width: 100%;
+    height: 10rem;
+}
+
+
+/* Orders */
+.b-examples-grid > .example-orders {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    color: #FFFFFF;
+    background-color: #0376EE;
+    background-image: linear-gradient(-90deg, #0376EE, #165CE9);
+}
+.b-examples-grid > .example-orders > .title {
+    text-align: center;
+    line-height: 1;
+    padding: 2rem 2rem 1rem 2rem;
+}
+.b-examples-grid > .example-orders > .title .count {
+    font-size: 2.4rem;
+    font-weight: bold;
+}
+.b-examples-grid > .example-orders > .title .text {
+    font-size: 1.4rem;
+    opacity: 0.75;
+    margin: 0.3rem 0 0 0;
+}
+.b-examples-grid > .example-orders > .chart {
+    --column-color: #FFFFFF;
+    --column-opacity: 0.3;
+    --column-focused-opacity: 0.6;
+    --tooltip-font-color: #FFFFFF;
+    --tooltip-background: #333333;
+    border-radius: 0 0 1rem 1rem;
+    width: 100%;
+    height: 10rem;
+}
+
+
+/* Sources */
+.b-examples-grid > .example-sources {
+    --color-1: #A838FF;
+    --color-2: #19D6BF;
+    --color-3: #3C37FF;
+    --color-4: #FFBD3C;
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: #1C1E27;
+    background-image: linear-gradient(#383941 0.1rem, transparent 0.1rem),
+                      linear-gradient(90deg, #383941 0.1rem, transparent 0.1rem);
+    background-size: 2rem 2rem;
+}
+.b-examples-grid > .example-sources > .chart {
+    position: relative;
+    width: 12rem;
+    height: 12rem;
+}
+.b-examples-grid > .example-sources > .chart > .pie {
+    --slice-color-1: var(--color-1);
+    --slice-color-2: var(--color-2);
+    --slice-color-3: var(--color-3);
+    --slice-color-4: var(--color-4);
+    --slice-focused-opacity: 0.6;
+    --tooltip-font-color: #1C1E27;
+    --tooltip-background: #D8D7DA;
+    width: 100%;
+    height: 100%;
+}
+.b-examples-grid > .example-sources > .chart > .title {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 1;
+}
+.b-examples-grid > .example-sources > .chart > .title > span {
+    font-size: 1.5rem;
+    color: #D8D7DA;
+}
+.b-examples-grid > .example-sources > .chart > .title > b {
+    color: #FFFFFF;
+    font-size: 1.8rem;
+    margin: 0.2rem 0;
+}
+.b-examples-grid > .example-sources > .legend {
+    color: #FFFFFF;
+    margin: 0 0 0 2rem;
+    padding: 0;
+}
+.b-examples-grid > .example-sources > .legend > li {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    list-style: none;
+    margin: 0.4rem 0;
+}
+.b-examples-grid > .example-sources > .legend > li::before {
+    content: '';
+    display: inline-block;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 0.2rem;
+    margin: 0 0.8rem 0 0;
+    background-color: red;
+}
+.b-examples-grid > .example-sources > .legend > li:nth-child(1):before { background-color: var(--color-1); }
+.b-examples-grid > .example-sources > .legend > li:nth-child(2):before { background-color: var(--color-2); }
+.b-examples-grid > .example-sources > .legend > li:nth-child(3):before { background-color: var(--color-3); }
+.b-examples-grid > .example-sources > .legend > li:nth-child(4):before { background-color: var(--color-4); }
+
+
+/* Contributions */
+.b-examples-grid > .example-contributions {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    border: 0.1rem solid #dce1e5;
+    background-color: #FFFFFF;
+}
+.b-examples-grid > .example-contributions > .chart {
+    --line-color: #FD7549;
+    --area-opacity: 0.12;
+    width: 16rem;
+}
+.b-examples-grid > .example-contributions > .title {
+    font-size: 1.8rem;
+    margin: 0.6rem 0 0 0;
+}
+.b-examples-grid > .example-contributions > .title > b {
+    font-weight: bold;
+    color: #FD7549;
+}
+.b-examples-grid > .example-contributions > .subtitle {
+    font-size: 1.4rem;
+    opacity: 0.75;
+}
+
+/* Health */
+.b-examples-grid > .example-health {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 1rem;
+    border: 0.1rem solid #dce1e5;
+    background-color: #FFFFFF;
+}
+.b-examples-grid > .example-health > .item {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 1rem;
+}
+.b-examples-grid > .example-health > .item > .chart {
+    position: relative;
+    width: 5.6rem;
+    height: 5.6rem;
+}
+.b-examples-grid > .example-health > .item > .chart > tc-pie {
+    --slice-color: #51A7E1;
+    --area-color: #000000;
+    --area-opacity: 0.1;
+    width: 100%;
+    height: 100%;
+}
+.b-examples-grid > .example-health > .item:nth-child(1) > .chart > tc-pie { --slice-color: #F17A33; }
+.b-examples-grid > .example-health > .item:nth-child(2) > .chart > tc-pie { --slice-color: #2DCD71; }
+.b-examples-grid > .example-health > .item:nth-child(3) > .chart > tc-pie { --slice-color: #7346D2; }
+.b-examples-grid > .example-health > .item:nth-child(4) > .chart > tc-pie { --slice-color: #51A7E1; }
+.b-examples-grid > .example-health > .item > .chart > img {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    width: 40%;
+}
+.b-examples-grid > .example-health > .item:nth-child(1) > .chart > img { filter: invert(64%) sepia(54%) saturate(3662%) hue-rotate(340deg) brightness(99%) contrast(91%); }
+.b-examples-grid > .example-health > .item:nth-child(2) > .chart > img { filter: invert(61%) sepia(12%) saturate(2268%) hue-rotate(92deg) brightness(105%) contrast(94%); }
+.b-examples-grid > .example-health > .item:nth-child(3) > .chart > img { filter: invert(33%) sepia(100%) saturate(852%) hue-rotate(231deg) brightness(83%) contrast(102%); }
+.b-examples-grid > .example-health > .item:nth-child(4) > .chart > img { filter: invert(70%) sepia(12%) saturate(7217%) hue-rotate(177deg) brightness(95%) contrast(85%); }
+.b-examples-grid > .example-health > .item > .text {
+    margin: 0 0 0 1rem;
+    line-height: 1.1;
+}
+
+
+/* Users */
+.b-examples-grid > .example-users {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    padding: 2rem 3rem;
+    border: 0.1rem solid #dce1e5;
+    background-color: #FFFFFF;
+}
+.b-examples-grid > .example-users > .item {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    width: 100%;
+    margin: 0 0 1rem 0;
+}
+.b-examples-grid > .example-users > .item:last-child {
+    margin-bottom: 0;
+}
+.b-examples-grid > .example-users > .item > img {
+    flex: 0 0 auto;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    margin: 0 1rem 0 0;
+}
+.b-examples-grid > .example-users > .item > .chart {
+    flex: 1 1 auto;
+}
+.b-examples-grid > .example-users > .item > .chart > div {
+    font-size: 1.4rem;
+}
+.b-examples-grid > .example-users > .item > .chart > tc-bar {
+    --area-color: #000000;
+    --area-opacity: 0.06;
+    display: block;
+    height: 1.2rem;
+    width: 100%;
+}
+@media (min-width: 40rem) {
+    .b-examples-grid > .example-users {
+        grid-column: span 2;
+    }
+}

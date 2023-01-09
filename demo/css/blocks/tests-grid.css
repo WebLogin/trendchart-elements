@@ -1,0 +1,38 @@
+/* General */
+.b-tests-grid {
+    --card-border-color: #E5E7EA;
+    --card-footer-background-color: #F3F4F6;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    margin: 0 0 6rem 0;
+}
+.b-tests-grid > .test {
+    display: flex;
+    flex-flow: column nowrap;
+}
+.b-tests-grid > .test > .content {
+    flex: 1 1 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    min-height: 10rem;
+    border-radius: 0.8rem 0.8rem 0 0;
+    border: 0.1rem solid var(--card-border-color);
+    background-color: #FFFFFF;
+}
+.b-tests-grid > .test > .footer {
+    flex: 1 0 auto;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: stretch;
+    padding: 1rem;
+    font-size: 1.4rem;
+    text-align: center;
+    border-radius: 0 0 0.8rem 0.8rem;
+    border: 0.1rem solid var(--card-border-color);
+    border-top: 0;
+    background-color: var(--card-footer-background-color);
+}

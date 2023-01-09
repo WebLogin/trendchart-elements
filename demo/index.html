@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>TrendChart Elements</title>
+        <meta name="viewport" content="width=device-size, initial-scale=1.0, minimum-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+        <link rel="icon" type="image/png" sizes="96x96" href="images/favicon.png">
+        <link rel="stylesheet" href="css/master.css">
+    </head>
+    <body>
+        <div class="layout">
+            <h2 class="layout-title">Usage examples</h2>
+            <section class="b-examples-grid">
+                <div class="example-repositories">
+                    <div class="row">
+                        <div class="text">
+                            <div class="title">Lorem ipsum dolor sit amet</div>
+                            <ul class="details">
+                                <li><img src="./images/star.svg"/> 423</li>
+                                <li><img src="./images/archive.svg"/> 35</li>
+                                <li><img src="./images/activity.svg"/> 1 876</li>
+                                <li><img src="./images/calendar.svg"/> 1 week ago</li>
+                            </ul>
+                        </div>
+                        <tc-line class="chart"
+                            values="[6,16,20,11,13,16,14,4,14,11,18,10,8,15,19,11,20,18,12,14]"
+                            line-size="1.5"
+                            style="--line-color:#54C430;">
+                        </tc-line>
+                    </div>
+                    <div class="row">
+                        <div class="text">
+                            <div class="title">Ullam ex deleniti adipisci quod</div>
+                            <ul class="details">
+                                <li><img src="./images/star.svg"/> 25</li>
+                                <li><img src="./images/archive.svg"/> 124</li>
+                                <li><img src="./images/activity.svg"/> 172</li>
+                                <li><img src="./images/calendar.svg"/> 2 month ago</li>
+                            </ul>
+                        </div>
+                        <tc-line class="chart"
+                            values="[0,0,0,-2,0,-5,-8,0,0,0,0,-2,-2,-4,-5,0,0,0,-2,-4]"
+                            line-size="1.5"
+                            style="--line-color:#E60706;">
+                        </tc-line>
+                    </div>
+                </div>
+                <div class="example-visitors">
+                    <div class="title">
+                        <div class="count">415</div>
+                        <div class="text">Visitors (30 days)</div>
+                        <img class="icon" src="./images/users.svg"/>
+                    </div>
+                    <tc-line class="chart"
+                        values="[12,10,12,11,13,16,14,10,12,11,17,18,16,17,20,14,15,13,12,14]"
+                        min="0">
+                    </tc-line>
+                </div>
+                <div class="example-orders">
+                    <div class="title">
+                        <div class="count">3 275€</div>
+                        <div class="text">Orders (14 days)</div>
+                    </div>
+                    <tc-column class="chart"
+                        values="[120,100,120,110,130,160,140,100,120,110,170,180,160,170,200,140,150,130]"
+                        min="0"
+                        column-radius="2" column-gap="2"
+                        tooltip-text="%V%€">
+                    </tc-column>
+                </div>
+                <div class="example-sources">
+                    <div class="chart">
+                        <tc-pie class="pie"
+                            values="[1200,800,400,200]"
+                            slice-size="10"
+                            slice-gap="6">
+                        </tc-pie>
+                        <div class="title">
+                            <span>Traffic<br>Sources</span>
+                            <b>2&nbsp;600</b>
+                        </div>
+                    </div>
+                    <ul class="legend">
+                        <li>Search</li>
+                        <li>Direct</li>
+                        <li>Referral</li>
+                        <li>Social</li>
+                    </ul>
+                </div>
+                <div class="example-contributions">
+                    <tc-line class="chart"
+                        values="[26,22,20,24,30,34,18,29,33,41,38,53,32,25,19,28,20,18,19,18,34,12]"
+                        min="0">
+                    </tc-line>
+                    <div class="title"><b>918</b> Contributions</div>
+                    <div class="subtitle">From <b>34</b> users</div>
+                </div>
+                <div class="example-health">
+                    <div class="item">
+                        <div class="chart">
+                            <tc-pie values="[7652]" slice-size="6" max="10000" tooltip-disabled></tc-pie>
+                            <img src="./images/running.svg"/>
+                        </div>
+                        <div class="text">7,652<br>Steps</div>
+                    </div>
+                    <div class="item">
+                        <div class="chart">
+                            <tc-pie values="[1608]" slice-size="6" max="2000" tooltip-disabled></tc-pie>
+                            <img src="./images/fire.svg"/>
+                        </div>
+                        <div class="text">1,608<br>Cals</div>
+                    </div>
+                    <div class="item">
+                        <div class="chart">
+                            <tc-pie values="[392]" slice-size="6" max="540" tooltip-disabled></tc-pie>
+                            <img src="./images/moon.svg"/>
+                        </div>
+                        <div class="text">7h32m<br>Sleep</div>
+                    </div>
+                    <div class="item">
+                        <div class="chart">
+                            <tc-pie values="[4]" slice-size="6" max="10" tooltip-disabled></tc-pie>
+                            <img src="./images/drop.svg"/>
+                        </div>
+                        <div class="text">4<br>Glass</div>
+                    </div>
+                </div>
+                <div class="example-users">
+                    <div class="item">
+                        <img src="./images/portrait-1.jpg"/>
+                        <div class="chart">
+                            <div>Nicolas</div>
+                            <tc-bar values="[68]"
+                                min="0" max="100"
+                                bar-radius="4" bar-gap="0"
+                                tooltip-text="%V%%"
+                                style="--bar-color: #54C430;">
+                            </tc-bar>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="./images/portrait-2.jpg"/>
+                        <div class="chart">
+                            <div>Caroline</div>
+                            <tc-bar values="[89]"
+                                min="0" max="100"
+                                bar-radius="4" bar-gap="0"
+                                tooltip-text="%V%%"
+                                style="--bar-color: #54C430;">
+                            </tc-bar>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="./images/portrait-3.jpg"/>
+                        <div class="chart">
+                            <div>James</div>
+                            <tc-bar values="[24]"
+                                min="0" max="100"
+                                bar-radius="4" bar-gap="0"
+                                tooltip-text="%V%%"
+                                style="--bar-color: #F17A33;">
+                            </tc-bar>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <h2 class="layout-title">Tests : Line chart</h2>
+            <section class="b-tests-grid">
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"></tc-line>
+                    </div>
+                    <div class="footer">
+                        Default
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            style="--area-opacity: 0.15;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        With area
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            min="0"
+                            style="--area-opacity: 0.15;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        With area + Min
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            line-size="1"
+                            style="--area-opacity: 1; --point-color:black;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Area only
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            line-size="4">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Thick line
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,-10,-12,-11,17,18,20,17,16,14,15,13,12,14]"
+                            style="--line-color: #784BD1; --area-opacity: 0.15;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Some negative values
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[-12,-10,-12,-11,-7,-6,-8,-10,-12,-11,-17,-18,-20,-17,-16,-14,-15,-13,-12,-14]"
+                            style="--line-color: #e2445c; --area-opacity: 0.15;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Only negative values
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            style="width:40px; height:20px; --line-color: #7F5347;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Tiny size
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            style="width:100%; height:100%; --line-color: #fdab3d; --area-opacity: 0.15;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Container size
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            min="0"
+                            style="width:100%; height:100%; --line-color: #fdab3d; --area-opacity: 0.15;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Container size + Min
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            max="30"
+                            style="width:100%; height:100%; --line-color: #fdab3d; --area-opacity: 0.15;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Container size + Max
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            style="--line-color: #CAB641;"
+                            tooltip-disabled>
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Tooltip disabled
+                    </div>
+                </div>
+            </section>
+
+
+            <h2 class="layout-title">Tests : Column chart</h2>
+            <section class="b-tests-grid">
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"></tc-column>
+                    </div>
+                    <div class="footer">
+                        Default
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]" min="0"></tc-column>
+                    </div>
+                    <div class="footer">
+                        Default + Min
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            style="--area-opacity: 0.15;">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        With area
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            column-gap="0">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        No gap
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10]"
+                            column-gap="6">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Large gap
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            column-radius="10">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Rounded corners
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[65]"
+                            min="0" max="100"
+                            column-gap="0" column-radius="3"
+                            style="width:20px; --area-opacity:0.15;">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        One value + Min + Max + Area
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,-13,-9,10,8,12,15]"
+                            style="--column-color: #784BD1;">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Some negative values
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[-14,-12,-7,-15,-17,-19,-13,-9,-10,-8,-12,-15]"
+                            style="--column-color: #e2445c;">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Only negative values
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            style="width:40px; height:20px; --column-color:#7F5347;">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Tiny size
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            style="width:100%; height:100%; --column-color:#fdab3d;">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Container size
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            min="0"
+                            style="width:100%; height:100%; --column-color:#fdab3d;">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Container size + Min
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            max="30"
+                            style="width:100%; height:100%; --column-color:#fdab3d;">
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Container size + Max
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            style="--column-color: #CAB641;"
+                            tooltip-disabled>
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Tooltip disabled
+                    </div>
+                </div>
+            </section>
+
+
+            <h2 class="layout-title">Tests : Bar chart</h2>
+            <section class="b-tests-grid">
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"></tc-bar>
+                    </div>
+                    <div class="footer">
+                        Default
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]" min="0"></tc-bar>
+                    </div>
+                    <div class="footer">
+                        Default + Min
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            style="--area-opacity: 0.15;">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        With area
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            bar-gap="0">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        No gap
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            bar-gap="6">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Large gap
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            bar-radius="10">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Rounded corners
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[65]"
+                            min="0" max="100"
+                            bar-gap="0" bar-radius="3"
+                            style="height:20px; --area-opacity:0.15;">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        One value + Min + Max + Area
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,-15,-17,19]"
+                            style="--bar-color: #784BD1;">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Some negative values
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[-14,-12,-7,-15,-17,-19]"
+                            style="--bar-color: #e2445c;">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Only negative values
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            style="width:40px; height:20px; --bar-color:#7F5347;">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Tiny size
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            style="width:100%; height:100%; --bar-color:#fdab3d;">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Container size
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            min="0"
+                            style="width:100%; height:100%; --bar-color:#fdab3d;">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Container size + Min
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            max="30"
+                            style="width:100%; height:100%; --bar-color:#fdab3d;">
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Container size + Max
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            style="--bar-color: #CAB641;"
+                            tooltip-disabled>
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Tooltip disabled
+                    </div>
+                </div>
+            </section>
+
+
+            <h2 class="layout-title">Tests : Pie chart</h2>
+            <section class="b-tests-grid">
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[120,100,80]"></tc-pie>
+                    </div>
+                    <div class="footer">
+                        Default
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[120,100,80]"
+                            slice-gap="0"
+                            style="--slice-color-1: #597BFC; --slice-color-2: #e2445c; --slice-color-3: #9CD326;">
+                        </tc-pie>
+                    </div>
+                    <div class="footer">
+                        No gap
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[120,100,80]"
+                            slice-gap="4"
+                            style="--slice-color-1: #597BFC; --slice-color-2: #e2445c; --slice-color-3: #9CD326;">
+                        </tc-pie>
+                    </div>
+                    <div class="footer">
+                        Large gap
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[120,100,80]"
+                            slice-size="15"
+                            style="--slice-color-1: #597BFC; --slice-color-2: #e2445c; --slice-color-3: #9CD326;">
+                        </tc-pie>
+                    </div>
+                    <div class="footer">
+                        Donut
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[100]"
+                            slice-size="15">
+                        </tc-pie>
+                    </div>
+                    <div class="footer">
+                        One value
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[70]" slice-size="15" max="100"
+                            style="--area-opacity: 0.15;">
+                        </tc-pie>
+                    </div>
+                    <div class="footer">
+                        One value + Max + Area
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[120,100,80]"
+                            style="width:20px; height:20px; --slice-color-1: #9CD326; --slice-color-2: #597BFC; --slice-color-3: #e2445c;">
+                        </tc-pie>
+                    </div>
+                    <div class="footer">
+                        Tiny size
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[120,100,80]"
+                            style="width:100%; height:100%; --slice-color-1: #9CD326; --slice-color-2: #597BFC; --slice-color-3: #e2445c;">
+                        </tc-pie>
+                    </div>
+                    <div class="footer">
+                        Container size
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-pie values="[120,100,80]"
+                            style="--slice-color-1: #CAB641; --slice-color-2: #d5c567; --slice-color-3: #dfd38d;"
+                            tooltip-disabled>
+                        </tc-pie>
+                    </div>
+                    <div class="footer">
+                        Tooltip disabled
+                    </div>
+                </div>
+            </section>
+
+
+            <footer class="layout-footer">
+                Examples and Tests for <a href="https://github.com/WebLogin/trendchart-elements">TrendChart Element</a>
+            </footer>
+        </div>
+        <script type="module" src="../dist/index.js"></script>
+        <!-- <script type="module" src="../dist/bundle.min.js"></script> -->
+    </body>
+</html>
