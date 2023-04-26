@@ -75,7 +75,7 @@ export class TcBar extends TcBase {
                 width = 1;
                 if (valueMax < 0 && valueScale) {
                     xLeft--;
-                };
+                }
             }
 
             this.valueShapes.push({

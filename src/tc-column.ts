@@ -75,7 +75,7 @@ export class TcColumn extends TcBase {
                 height = 1;
                 if (valueMax > 0 && valueScale) {
                     yTop--;
-                };
+                }
             }
 
             this.valueShapes.push({
