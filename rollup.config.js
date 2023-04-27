@@ -8,7 +8,7 @@ export default {
     input: "./src/index.ts",
     output: [
         {
-            file: "./dist/bundle.min.js",
+            file: "./demo/js/master.js",
             format: "es",
             compact: true,
         },
@@ -23,11 +23,9 @@ export default {
                 }
             }
         }),
-        typescript(),
-        terser({
-            format: {
-                comments: false,
-            },
-        })
+        typescript({
+            declaration: false
+        }),
+        terser()
     ],
 };

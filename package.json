@@ -10,13 +10,17 @@
         "chart",
         "trend"
     ],
+    "homepage": "https://github.com/WebLogin/trendchart-elements",
     "type": "module",
     "main": "dist/index.js",
     "module": "dist/index.js",
     "types": "dist/index.d.ts",
+    "files": [
+        "/dist"
+      ],
     "scripts": {
-        "demo": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
-        "build": "rm -rf dist && tsc && rollup -c"
+        "build": "rm -rf dist && tsc && rollup --config",
+        "demo": "concurrently --kill-others \"rollup --config --watch\" \"wds\""
     },
     "dependencies": {
         "lit": "^2.0.2"
