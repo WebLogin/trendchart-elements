@@ -9,15 +9,7 @@
 /node_modules/
 /npm-debug.log
 
-## testing
-/coverage/
-
-## temp folders
-/.tmp/
-
-# build
-/dist/
-/out-tsc/
-
+*.log
+.DS_Store
 storybook-static
 custom-elements.json
