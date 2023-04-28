@@ -27,12 +27,12 @@ export class TcColumn extends TcBase {
                 width: 120px;
                 height: 40px;
             }
-            .chart > .bar {
+            .chart > .column {
                 fill: var(--column-color);
                 opacity: var(--column-opacity);
                 stroke: none;
             }
-            .chart > .bar.is-focused {
+            .chart > .column.is-focused {
                 opacity: var(--column-focused-opacity);
             }
             .chart > .area {
@@ -59,16 +59,16 @@ export class TcColumn extends TcBase {
 
         const valueScale = valueMax - valueMin;
 
-        const barWidth = (this.width - (this.columnGap * (this.values.length - 1))) / this.values.length;
+        const columnWidth = (this.width - (this.columnGap * (this.values.length - 1))) / this.values.length;
 
-        const barPositionY = (value: number): number => {
+        const columnPositionY = (value: number): number => {
             return this.height - (valueScale ? ((value - valueMin) / valueScale) * this.height : 1);
         };
 
         this.values.forEach((value, index) => {
-            let xLeft = (barWidth + this.columnGap) * index;
-            let yTop = (value < 0) ? barPositionY(Math.min(valueMax, 0)) : barPositionY(value);
-            let yBottom = (value < 0) ? barPositionY(value) : barPositionY(Math.max(valueMin, 0));
+            let xLeft = (columnWidth + this.columnGap) * index;
+            let yTop = (value < 0) ? columnPositionY(Math.min(valueMax, 0)) : columnPositionY(value);
+            let yBottom = (value < 0) ? columnPositionY(value) : columnPositionY(Math.max(valueMin, 0));
 
             let height = yBottom - yTop;
             if (height == 0) {
@@ -85,7 +85,7 @@ export class TcColumn extends TcBase {
                     x: xLeft,
                     y: yTop,
                 },
-                width: barWidth,
+                width: columnWidth,
                 height: height,
             });
         });
@@ -134,7 +134,7 @@ export class TcColumn extends TcBase {
                         height="100%"
                         rx="${columnRadius}" ry="${columnRadius}"
                     />
-                    <rect class="bar ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                    <rect class="column ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
                         x="${valueShape.origin.x}"
                         y="${valueShape.origin.y}"
                         width="${valueShape.width}"
