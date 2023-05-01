@@ -22,7 +22,6 @@ export class TcLine extends TcBase {
                 --line-color: #597BFC;
                 --line-opacity: 1;
                 --area-color: var(--line-color);
-                --area-opacity: 0;
                 --point-color: var(--line-color);
                 --point-opacity: 1;
                 --point-shadow: none;
@@ -38,11 +37,6 @@ export class TcLine extends TcBase {
                 opacity: var(--point-opacity);
                 box-shadow: var(--point-shadow);
                 transform: translate(-50%, -50%);
-            }
-            .chart > .area {
-                fill: var(--area-color);
-                opacity: var(--area-opacity);
-                stroke: none;
             }
             .chart > .line {
                 fill: none;

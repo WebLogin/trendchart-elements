@@ -23,7 +23,6 @@ export class TcBar extends TcBase {
                 --bar-opacity: 1;
                 --bar-focused-opacity: 0.5;
                 --area-color: var(--bar-color);
-                --area-opacity: 0;
                 width: 120px;
                 height: 60px;
             }
@@ -34,11 +33,6 @@ export class TcBar extends TcBase {
             }
             .chart > .bar.is-focused {
                 opacity: var(--bar-focused-opacity);
-            }
-            .chart > .area {
-                fill: var(--area-color);
-                opacity: var(--area-opacity);
-                stroke: none;
             }
         `,
     ];

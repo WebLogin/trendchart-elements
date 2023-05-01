@@ -27,6 +27,7 @@ export abstract class TcBase extends LitElement {
 
     static styles = css`
         :host {
+            --area-opacity: 0;
             --tooltip-font-color: white;
             --tooltip-font-size: 0.875em;
             --tooltip-font-weight: bold;
@@ -54,6 +55,11 @@ export abstract class TcBase extends LitElement {
             z-index: 1;
             overflow: hidden;
             border-radius: inherit
+        }
+        .chart .area {
+            fill: var(--area-color);
+            opacity: var(--area-opacity);
+            stroke: none;
         }
         .tooltip {
             position: absolute;

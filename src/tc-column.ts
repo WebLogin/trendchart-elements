@@ -23,7 +23,6 @@ export class TcColumn extends TcBase {
                 --column-opacity: 1;
                 --column-focused-opacity: 0.5;
                 --area-color: var(--column-color);
-                --area-opacity: 0;
                 width: 120px;
                 height: 40px;
             }
@@ -34,11 +33,6 @@ export class TcColumn extends TcBase {
             }
             .chart > .column.is-focused {
                 opacity: var(--column-focused-opacity);
-            }
-            .chart > .area {
-                fill: var(--area-color);
-                opacity: var(--area-opacity);
-                stroke: none;
             }
         `,
     ];

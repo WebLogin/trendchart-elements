@@ -26,7 +26,6 @@ export class TcPie extends TcBase {
                 --slice-opacity: 1;
                 --slice-focused-opacity: 0.5;
                 --area-color: var(--slice-color);
-                --area-opacity: 0;
                 border-radius: 100%;
                 width: 60px;
                 height: 60px;
@@ -38,11 +37,6 @@ export class TcPie extends TcBase {
             }
             .chart .slice.is-focused {
                 opacity: var(--slice-focused-opacity);
-            }
-            .chart .area {
-                fill: var(--area-color);
-                opacity: var(--area-opacity);
-                stroke: none;
             }
         `,
     ];
