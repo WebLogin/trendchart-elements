@@ -88,6 +88,10 @@ export class TcColumn extends TcBase {
 
 
     protected willUpdate(changedProperties: PropertyValues<this>) {
+        if (!this.width || !this.height) {
+            return;
+        }
+
         if (changedProperties.has('columnGap')) {
             this.validatePropertyAsPositiveNumber('columnGap');
         }

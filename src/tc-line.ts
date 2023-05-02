@@ -104,6 +104,10 @@ export class TcLine extends TcBase {
 
 
     protected willUpdate(changedProperties: PropertyValues<this>) {
+        if (!this.width || !this.height) {
+            return;
+        }
+
         if (changedProperties.has('lineSize')) {
             this.validatePropertyAsPositiveNumber('lineSize');
         }

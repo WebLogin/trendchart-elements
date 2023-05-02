@@ -88,6 +88,10 @@ export class TcBar extends TcBase {
 
 
     protected willUpdate(changedProperties: PropertyValues<this>) {
+        if (!this.width || !this.height) {
+            return;
+        }
+
         if (changedProperties.has('barGap')) {
             this.validatePropertyAsPositiveNumber('barGap');
         }

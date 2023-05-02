@@ -1,4 +1,4 @@
-import { css, CSSResultGroup, html, HTMLTemplateResult, LitElement, nothing, TemplateResult } from 'lit';
+import { CSSResultGroup, HTMLTemplateResult, LitElement, TemplateResult, css, html, nothing } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { ValueCircle, ValueRectangle, ValueSlice } from './types.js';
 
