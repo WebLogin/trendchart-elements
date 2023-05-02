@@ -50,6 +50,9 @@ let TcColumn = class TcColumn extends TcBase {
         });
     }
     willUpdate(changedProperties) {
+        if (!this.width || !this.height) {
+            return;
+        }
         if (changedProperties.has('columnGap')) {
             this.validatePropertyAsPositiveNumber('columnGap');
         }

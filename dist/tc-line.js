@@ -54,6 +54,9 @@ let TcLine = class TcLine extends TcBase {
             .concat('Z');
     }
     willUpdate(changedProperties) {
+        if (!this.width || !this.height) {
+            return;
+        }
         if (changedProperties.has('lineSize')) {
             this.validatePropertyAsPositiveNumber('lineSize');
         }

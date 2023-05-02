@@ -81,6 +81,9 @@ let TcPie = class TcPie extends TcBase {
         }
     }
     willUpdate(changedProperties) {
+        if (!this.width || !this.height) {
+            return;
+        }
         if (changedProperties.has('sliceGap')) {
             this.validatePropertyAsPositiveNumber('sliceGap');
         }
@@ -93,8 +96,11 @@ let TcPie = class TcPie extends TcBase {
         }
     }
     findValueShapeAtPosition(x, y) {
-        const point = new DOMPoint(x, y);
-        const valueShapeFocusedIndex = Array.from(this.renderRoot.querySelectorAll('.chart .slice')).findIndex((path) => {
+        const chart = this.renderRoot.querySelector('.chart');
+        const point = chart.createSVGPoint();
+        point.x = x;
+        point.y = y;
+        const valueShapeFocusedIndex = Array.from(chart.querySelectorAll('.slice')).findIndex((path) => {
             return path.isPointInFill(point);
         });
         if (valueShapeFocusedIndex === -1) {

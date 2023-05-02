@@ -50,6 +50,9 @@ let TcBar = class TcBar extends TcBase {
         });
     }
     willUpdate(changedProperties) {
+        if (!this.width || !this.height) {
+            return;
+        }
         if (changedProperties.has('barGap')) {
             this.validatePropertyAsPositiveNumber('barGap');
         }

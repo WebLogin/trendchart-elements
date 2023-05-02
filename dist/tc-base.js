@@ -1,5 +1,5 @@
 import { __decorate } from "tslib";
-import { css, html, LitElement, nothing } from 'lit';
+import { LitElement, css, html, nothing } from 'lit';
 import { property, state } from 'lit/decorators.js';
 export class TcBase extends LitElement {
     constructor() {
