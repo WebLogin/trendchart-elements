@@ -22,6 +22,7 @@ export interface ShapeSlice {
 interface ValueShape {
     index: number;
     value: number;
+    label: string | null;
 }
 export interface ValueCircle extends ValueShape, ShapeCircle {
 }

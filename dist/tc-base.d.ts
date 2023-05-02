@@ -2,6 +2,7 @@ import { CSSResultGroup, HTMLTemplateResult, LitElement, TemplateResult } from '
 import { ValueCircle, ValueRectangle, ValueSlice } from './types.js';
 export declare abstract class TcBase extends LitElement {
     values: number[];
+    labels: string[];
     min: number | null;
     max: number | null;
     tooltipDisabled: boolean;
@@ -26,7 +27,7 @@ export declare abstract class TcBase extends LitElement {
     protected render(): HTMLTemplateResult;
     protected abstract templateChart(): TemplateResult | null;
     protected abstract templateTooltip(): TemplateResult | null;
-    protected tooltipTextFormatted(text: string): string;
+    protected tooltipTextFormatted(valueShape: ValueCircle | ValueRectangle | ValueSlice): string;
     protected validatePropertyAsPositiveNumber(propertyName: keyof this & string): void;
     protected onlyNegativeValues(): boolean;
 }

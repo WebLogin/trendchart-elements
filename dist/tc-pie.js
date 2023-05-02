@@ -50,10 +50,12 @@ let TcPie = class TcPie extends TcBase {
             radius: radius - Math.min((_a = this.sliceSize) !== null && _a !== void 0 ? _a : Infinity, radius),
         };
         this.values.forEach((value, index) => {
+            var _a;
             const slicePointCenter = slicePoint(valuesSum + (value / 2), radius - ((radius - this.cutoutCircle.radius) / 2));
             this.valueShapes.push({
                 index: index,
                 value: value,
+                label: (_a = this.labels[index]) !== null && _a !== void 0 ? _a : null,
                 center: slicePointCenter,
                 path: slicePath(value),
             });
@@ -85,7 +87,7 @@ let TcPie = class TcPie extends TcBase {
         if (changedProperties.has('sliceSize') && this.sliceSize !== null) {
             this.validatePropertyAsPositiveNumber('sliceSize');
         }
-        const propertiesUsedByChart = ['width', 'height', 'values', 'max', 'sliceGap', 'sliceSize'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'max', 'sliceGap', 'sliceSize'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property))) {
             this.computeChartProperties();
         }
@@ -142,7 +144,7 @@ let TcPie = class TcPie extends TcBase {
         };
         return html `
             <div class="tooltip" style="${styleMap(style)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused.value.toLocaleString())}
+                ${this.tooltipTextFormatted(this.valueShapeFocused)}
             </div>
         `;
     }
@@ -155,7 +157,6 @@ TcPie.styles = [
                 --slice-opacity: 1;
                 --slice-focused-opacity: 0.5;
                 --area-color: var(--slice-color);
-                --area-opacity: 0;
                 border-radius: 100%;
                 width: 60px;
                 height: 60px;
@@ -167,11 +168,6 @@ TcPie.styles = [
             }
             .chart .slice.is-focused {
                 opacity: var(--slice-focused-opacity);
-            }
-            .chart .area {
-                fill: var(--area-color);
-                opacity: var(--area-opacity);
-                stroke: none;
             }
         `,
 ];

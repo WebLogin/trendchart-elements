@@ -33,9 +33,11 @@ let TcLine = class TcLine extends TcBase {
             return y + (this.lineSize / 2);
         };
         this.values.forEach((value, index) => {
+            var _a;
             this.valueShapes.push({
                 index: index,
                 value: value,
+                label: (_a = this.labels[index]) !== null && _a !== void 0 ? _a : null,
                 center: {
                     x: pointPositionX(index),
                     y: pointPositionY(value),
@@ -55,7 +57,7 @@ let TcLine = class TcLine extends TcBase {
         if (changedProperties.has('lineSize')) {
             this.validatePropertyAsPositiveNumber('lineSize');
         }
-        const propertiesUsedByChart = ['width', 'height', 'values', 'min', 'max', 'lineSize'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'lineSize'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property))) {
             this.computeChartProperties();
         }
@@ -101,7 +103,7 @@ let TcLine = class TcLine extends TcBase {
         return html `
             <div class="point" style="${styleMap(pointStyle)}"></div>
             <div class="tooltip" style="${styleMap(tooltipStyle)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused.value.toLocaleString())}
+                ${this.tooltipTextFormatted(this.valueShapeFocused)}
             </div>
         `;
     }
@@ -113,7 +115,6 @@ TcLine.styles = [
                 --line-color: #597BFC;
                 --line-opacity: 1;
                 --area-color: var(--line-color);
-                --area-opacity: 0;
                 --point-color: var(--line-color);
                 --point-opacity: 1;
                 --point-shadow: none;
@@ -129,11 +130,6 @@ TcLine.styles = [
                 opacity: var(--point-opacity);
                 box-shadow: var(--point-shadow);
                 transform: translate(-50%, -50%);
-            }
-            .chart > .area {
-                fill: var(--area-color);
-                opacity: var(--area-opacity);
-                stroke: none;
             }
             .chart > .line {
                 fill: none;

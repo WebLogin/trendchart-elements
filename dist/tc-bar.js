@@ -25,6 +25,7 @@ let TcBar = class TcBar extends TcBase {
             return valueScale ? ((value - valueMin) / valueScale) * this.width : 1;
         };
         this.values.forEach((value, index) => {
+            var _a;
             let yTop = (barHeight + this.barGap) * index;
             let xLeft = (value < 0) ? barPositionX(value) : barPositionX(Math.max(valueMin, 0));
             let xRight = (value < 0) ? barPositionX(Math.min(valueMax, 0)) : barPositionX(value);
@@ -38,6 +39,7 @@ let TcBar = class TcBar extends TcBase {
             this.valueShapes.push({
                 index: index,
                 value: value,
+                label: (_a = this.labels[index]) !== null && _a !== void 0 ? _a : null,
                 origin: {
                     x: xLeft,
                     y: yTop,
@@ -54,7 +56,7 @@ let TcBar = class TcBar extends TcBase {
         if (changedProperties.has('barRadius')) {
             this.validatePropertyAsPositiveNumber('barRadius');
         }
-        const propertiesUsedByChart = ['width', 'height', 'values', 'min', 'max', 'barGap', 'barRadius'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'barGap', 'barRadius'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property))) {
             this.computeChartProperties();
         }
@@ -107,7 +109,7 @@ let TcBar = class TcBar extends TcBase {
         };
         return html `
             <div class="tooltip" style="${styleMap(style)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused.value.toLocaleString())}
+                ${this.tooltipTextFormatted(this.valueShapeFocused)}
             </div>
         `;
     }
@@ -120,7 +122,6 @@ TcBar.styles = [
                 --bar-opacity: 1;
                 --bar-focused-opacity: 0.5;
                 --area-color: var(--bar-color);
-                --area-opacity: 0;
                 width: 120px;
                 height: 60px;
             }
@@ -131,11 +132,6 @@ TcBar.styles = [
             }
             .chart > .bar.is-focused {
                 opacity: var(--bar-focused-opacity);
-            }
-            .chart > .area {
-                fill: var(--area-color);
-                opacity: var(--area-opacity);
-                stroke: none;
             }
         `,
 ];

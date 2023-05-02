@@ -5,10 +5,11 @@ export class TcBase extends LitElement {
     constructor() {
         super(...arguments);
         this.values = [];
+        this.labels = [];
         this.min = null;
         this.max = null;
         this.tooltipDisabled = false;
-        this.tooltipText = '%V%';
+        this.tooltipText = '@V';
         this.valueShapeFocused = null;
         this.width = 0;
         this.height = 0;
@@ -49,8 +50,10 @@ export class TcBase extends LitElement {
             </div>
         `;
     }
-    tooltipTextFormatted(text) {
-        return this.tooltipText.replace(/%V%/g, text);
+    tooltipTextFormatted(valueShape) {
+        const label = valueShape.label ? (valueShape.label + ' : ') : '';
+        const value = this.tooltipText.replace(/@V/g, valueShape.value.toLocaleString());
+        return label + value;
     }
     validatePropertyAsPositiveNumber(propertyName) {
         const property = this[propertyName];
@@ -64,6 +67,7 @@ export class TcBase extends LitElement {
 }
 TcBase.styles = css `
         :host {
+            --area-opacity: 0;
             --tooltip-font-color: white;
             --tooltip-font-size: 0.875em;
             --tooltip-font-weight: bold;
@@ -92,6 +96,11 @@ TcBase.styles = css `
             overflow: hidden;
             border-radius: inherit
         }
+        .chart .area {
+            fill: var(--area-color);
+            opacity: var(--area-opacity);
+            stroke: none;
+        }
         .tooltip {
             position: absolute;
             z-index: 10;
@@ -111,6 +120,9 @@ TcBase.styles = css `
 __decorate([
     property({ type: Array, reflect: true })
 ], TcBase.prototype, "values", void 0);
+__decorate([
+    property({ type: Array, reflect: true })
+], TcBase.prototype, "labels", void 0);
 __decorate([
     property({ type: Number, reflect: true })
 ], TcBase.prototype, "min", void 0);
