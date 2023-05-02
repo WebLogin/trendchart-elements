@@ -145,8 +145,12 @@ export class TcPie extends TcBase {
 
 
     protected findValueShapeAtPosition(x: number, y: number): ValueSlice | null {
-        const point = new DOMPoint(x, y);
-        const valueShapeFocusedIndex = Array.from(this.renderRoot.querySelectorAll<SVGPathElement>('.chart .slice')).findIndex((path) => {
+        const chart = this.renderRoot.querySelector('.chart') as SVGSVGElement;
+        const point = chart.createSVGPoint();
+        point.x = x;
+        point.y = y;
+
+        const valueShapeFocusedIndex = Array.from(chart.querySelectorAll<SVGPathElement>('.slice')).findIndex((path) => {
             return path.isPointInFill(point);
         });
 
