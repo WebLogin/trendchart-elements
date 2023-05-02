@@ -60,13 +60,14 @@
                 <div class="example-orders">
                     <div class="title">
                         <div class="count">3 275€</div>
-                        <div class="text">Orders (14 days)</div>
+                        <div class="text">Orders (18 days)</div>
                     </div>
                     <tc-column class="chart"
                         values="[120,100,120,110,130,160,140,100,120,110,170,180,160,170,200,140,150,130]"
+                        labels='["05/05/23","06/05/23","07/05/23","08/05/23","09/05/23","10/05/23","11/05/23","12/05/23","13/05/23","14/05/23","15/05/23","16/05/23","17/05/23","18/05/23","19/05/23","20/05/23","21/05/23","22/05/23"]'
                         min="0"
                         column-radius="2" column-gap="2"
-                        tooltip-text="%V%€">
+                        tooltip-text="@V€">
                     </tc-column>
                 </div>
                 <div class="example-sources">
@@ -134,7 +135,7 @@
                             <tc-bar values="[68]"
                                 min="0" max="100"
                                 bar-radius="4" bar-gap="0"
-                                tooltip-text="%V%%"
+                                tooltip-text="@V%"
                                 style="--bar-color: #54C430;">
                             </tc-bar>
                         </div>
@@ -146,7 +147,7 @@
                             <tc-bar values="[89]"
                                 min="0" max="100"
                                 bar-radius="4" bar-gap="0"
-                                tooltip-text="%V%%"
+                                tooltip-text="@V%"
                                 style="--bar-color: #54C430;">
                             </tc-bar>
                         </div>
@@ -158,7 +159,7 @@
                             <tc-bar values="[24]"
                                 min="0" max="100"
                                 bar-radius="4" bar-gap="0"
-                                tooltip-text="%V%%"
+                                tooltip-text="@V%"
                                 style="--bar-color: #F17A33;">
                             </tc-bar>
                         </div>
@@ -279,17 +280,6 @@
                     </div>
                     <div class="footer">
                         Container size + Max
-                    </div>
-                </div>
-                <div class="test">
-                    <div class="content">
-                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
-                            style="--line-color: #CAB641;"
-                            tooltip-disabled>
-                        </tc-line>
-                    </div>
-                    <div class="footer">
-                        Tooltip disabled
                     </div>
                 </div>
             </section>
@@ -427,17 +417,6 @@
                         Container size + Max
                     </div>
                 </div>
-                <div class="test">
-                    <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
-                            style="--column-color: #CAB641;"
-                            tooltip-disabled>
-                        </tc-column>
-                    </div>
-                    <div class="footer">
-                        Tooltip disabled
-                    </div>
-                </div>
             </section>
 
 
@@ -573,17 +552,6 @@
                         Container size + Max
                     </div>
                 </div>
-                <div class="test">
-                    <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
-                            style="--bar-color: #CAB641;"
-                            tooltip-disabled>
-                        </tc-bar>
-                    </div>
-                    <div class="footer">
-                        Tooltip disabled
-                    </div>
-                </div>
             </section>
 
 
@@ -670,15 +638,49 @@
                         Container size
                     </div>
                 </div>
+            </section>
+
+
+            <h2 class="layout-title">Tests : Tooltip</h2>
+            <section class="b-tests-grid">
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
+                            tooltip-text="Income @V€">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Format value
+                    </div>
+                </div>
                 <div class="test">
                     <div class="content">
                         <tc-pie values="[120,100,80]"
-                            style="--slice-color-1: #CAB641; --slice-color-2: #d5c567; --slice-color-3: #dfd38d;"
-                            tooltip-disabled>
+                            labels='["Lorem","Ipsum","Dolor"]'>
                         </tc-pie>
                     </div>
                     <div class="footer">
-                        Tooltip disabled
+                        With labels
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[14,12,7,15,17,19]"
+                            labels='["Lorem",null,"",false,"Ipsum","Dolor"]'>
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Some labels
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                            tooltip-disabled>
+                        </tc-column>
+                    </div>
+                    <div class="footer">
+                        Disabled
                     </div>
                 </div>
             </section>
