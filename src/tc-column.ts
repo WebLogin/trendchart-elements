@@ -75,6 +75,7 @@ export class TcColumn extends TcBase {
             this.valueShapes.push({
                 index: index,
                 value: value,
+                label: this.labels[index] ?? null,
                 origin: {
                     x: xLeft,
                     y: yTop,
@@ -95,7 +96,7 @@ export class TcColumn extends TcBase {
             this.validatePropertyAsPositiveNumber('columnRadius');
         }
 
-        const propertiesUsedByChart = ['width', 'height', 'values', 'min', 'max', 'columnGap', 'columnRadius'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'columnGap', 'columnRadius'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
             this.computeChartProperties();
         }
@@ -158,7 +159,7 @@ export class TcColumn extends TcBase {
 
         return html`
             <div class="tooltip" style="${styleMap(style)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused.value.toLocaleString())}
+                ${this.tooltipTextFormatted(this.valueShapeFocused)}
             </div>
         `;
     }

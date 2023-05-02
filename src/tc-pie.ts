@@ -92,6 +92,7 @@ export class TcPie extends TcBase {
             this.valueShapes.push({
                 index: index,
                 value: value,
+                label: this.labels[index] ?? null,
                 center: slicePointCenter,
                 path: slicePath(value),
             });
@@ -132,7 +133,7 @@ export class TcPie extends TcBase {
             this.validatePropertyAsPositiveNumber('sliceSize');
         }
 
-        const propertiesUsedByChart = ['width', 'height', 'values', 'max', 'sliceGap', 'sliceSize'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'max', 'sliceGap', 'sliceSize'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
             this.computeChartProperties();
         }
@@ -197,7 +198,7 @@ export class TcPie extends TcBase {
 
         return html`
             <div class="tooltip" style="${styleMap(style)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused.value.toLocaleString())}
+                ${this.tooltipTextFormatted(this.valueShapeFocused)}
             </div>
         `;
     }

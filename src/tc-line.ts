@@ -83,6 +83,7 @@ export class TcLine extends TcBase {
             this.valueShapes.push({
                 index: index,
                 value: value,
+                label: this.labels[index] ?? null,
                 center: {
                     x: pointPositionX(index),
                     y: pointPositionY(value),
@@ -107,7 +108,7 @@ export class TcLine extends TcBase {
             this.validatePropertyAsPositiveNumber('lineSize');
         }
 
-        const propertiesUsedByChart = ['width', 'height', 'values', 'min', 'max', 'lineSize'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'lineSize'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
             this.computeChartProperties();
         }
@@ -163,7 +164,7 @@ export class TcLine extends TcBase {
         return html`
             <div class="point" style="${styleMap(pointStyle)}"></div>
             <div class="tooltip" style="${styleMap(tooltipStyle)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused.value.toLocaleString())}
+                ${this.tooltipTextFormatted(this.valueShapeFocused)}
             </div>
         `;
     }

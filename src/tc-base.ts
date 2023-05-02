@@ -6,6 +6,8 @@ import { ValueCircle, ValueRectangle, ValueSlice } from './types.js';
 export abstract class TcBase extends LitElement {
     @property({type: Array, reflect: true})
     public values: number[] = [];
+    @property({type: Array, reflect: true})
+    public labels: string[] = [];
     @property({type: Number, reflect: true})
     public min: number | null = null;
     @property({type: Number, reflect: true})
@@ -13,7 +15,7 @@ export abstract class TcBase extends LitElement {
     @property({type: Boolean, reflect: true, attribute: 'tooltip-disabled'})
     public tooltipDisabled = false;
     @property({type: String, attribute: 'tooltip-text'})
-    public tooltipText = '%V%';
+    public tooltipText = '@V';
 
     @state()
     protected valueShapeFocused: ValueCircle | ValueRectangle | ValueSlice | null = null;
@@ -140,8 +142,11 @@ export abstract class TcBase extends LitElement {
     protected abstract templateTooltip(): TemplateResult | null;
 
 
-    protected tooltipTextFormatted(text: string): string {
-        return this.tooltipText.replace(/%V%/g, text);
+    protected tooltipTextFormatted(valueShape: ValueCircle | ValueRectangle | ValueSlice): string {
+        const label = valueShape.label ? (valueShape.label + ' : ') : '';
+        const value = this.tooltipText.replace(/@V/g, valueShape.value.toLocaleString());
+
+        return label + value;
     }
 
 

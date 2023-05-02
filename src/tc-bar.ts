@@ -75,6 +75,7 @@ export class TcBar extends TcBase {
             this.valueShapes.push({
                 index: index,
                 value: value,
+                label: this.labels[index] ?? null,
                 origin: {
                     x: xLeft,
                     y: yTop,
@@ -95,7 +96,7 @@ export class TcBar extends TcBase {
             this.validatePropertyAsPositiveNumber('barRadius');
         }
 
-        const propertiesUsedByChart = ['width', 'height', 'values', 'min', 'max', 'barGap', 'barRadius'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'barGap', 'barRadius'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
             this.computeChartProperties();
         }
@@ -154,7 +155,7 @@ export class TcBar extends TcBase {
 
         return html`
             <div class="tooltip" style="${styleMap(style)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused.value.toLocaleString())}
+                ${this.tooltipTextFormatted(this.valueShapeFocused)}
             </div>
         `;
     }
