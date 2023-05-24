@@ -37,37 +37,32 @@ import { TcLine } from "@weblogin/trendchart-elements";
     <img src="docs/demo.jpg" alt="Demo" width="1019">
 </p>
 
-**Check out the [demo page](https://weblogin.github.io/trendchart-elements/demo/)** for various charts, stylings and use cases. Configuration is made with HTML attributes and CSS variables.
+**Check out the [demo page](https://weblogin.github.io/trendchart-elements/demo/)** for various charts, stylings and use cases.
 
+Use CSS to change the `width` and `height` of the chart, because they are responsive you can use percentages. In some cases you'll need to have a radius around the chart if its container has one, for that just add a `border-radius` CSS rule to the chart.
 
-### Common configuration
+##### Common HTML attributes
 
-Use CSS to change the `width` and `height` of the chart, because they are responsive you can use percentages.
+- `values` - Required array of numbers for the values of the chart. Example `values="[12,10,11]"` - Default `[]`
+- `labels` - Optional array of strings for the labels corresponding to the values, it needs to be the same length as `values` array. Only usefull with tooltips not disabled. Example `labels='["Lorem","Ipsum","Dolor"]'` - Default `[]`
+- `min` - Optional number or null for the minimum `Y axis` value, in most cases you'll need to add it to `0`. When `null` the chart uses the smallest value - Default `null`
+- `max` - Optional number or null for the maximum `Y axis` value, usefull if you need to have multiple charts with the same scale. When `null` the chart uses the highest value - Default `null`
+- `tooltip-disabled` - Optional attribute to disable the tooltip, it doesn't need a value, just add the attribute - Default `false`
+- `tooltip-text` - Optional string to format of the tooltip text, `@V` being the current value and `@L` the current label if present - Default `@L&nbsp;@V`
 
-In some cases you'll need to have a radius around the chart if its container has one, for that just add a `border-radius` CSS rule to the chart.
+##### Common CSS variables
 
-| HTML&nbsp;Attribute | Default | Description |
-| --- | --- | --- |
-| `values` | [] | `Required` array of numbers. Values of the chart, for example `values="[12,10,11]"` |
-| `labels` | [] | `Optional` array of strings. Labels corresponding to the values. Needs to be the same length as `values` array, for example `labels='["Lorem","Ipsum","Dolor"]'`. Only usefull with tooltips not disabled |
-| `min` | null | `Optional` number or null. Minimum `Y axis` value, in most cases you'll need to add it to `0`. By default the chart uses the smallest value |
-| `max ` | null | `Optional` number or null. Maximum `Y axis` value, usefull if you need to have multiple charts with the same scale. By default the chart uses the highest value |
-| `tooltip-disabled` | false | `Optional` attribute to disable the tooltip. It doesn't need a value, just add the attribute |
-| `tooltip-text` | @L&nbsp;@V | `Optional` string. Format of the tooltip text, `@V` being the current value and `@L` the current label if present |
-
-| CSS&nbsp;variables | Default |
-| --- | --- |
-| `--shape-color` | #597BFC |
-| `--shape-opacity` | 1 |
-| `--area-color` | var(--shape-color) |
-| `--area-opacity` | 0 |
-| `--tooltip-font-color` | white |
-| `--tooltip-font-size` | 0.875em |
-| `--tooltip-font-weight` | bold |
-| `--tooltip-radius` | 3px |
-| `--tooltip-padding` | 3px 4px |
-| `--tooltip-background` | black |
-| `--tooltip-shadow` | none |
+- `--shape-color` - Default `#597BFC`
+- `--shape-opacity` - Default `1`
+- `--area-color` - Default `var(--shape-color)`
+- `--area-opacity` - Default `0`
+- `--tooltip-font-color` - Default `white`
+- `--tooltip-font-size` - Default `0.875em`
+- `--tooltip-font-weight` - Default `bold`
+- `--tooltip-radius` - Default `3px`
+- `--tooltip-padding` - Default `3px 4px`
+- `--tooltip-background` - Default `black`
+- `--tooltip-shadow` - Default `none`
 
 
 ### Line chart
@@ -76,17 +71,17 @@ In some cases you'll need to have a radius around the chart if its container has
 <tc-line values="[12,10,12,11,7,6,8,10,12]"></tc-line>
 ```
 
-See also [common configuration](#common-configuration)
+##### HTML attributes
 
-| HTML&nbsp;Attribute | Default | Description |
-| --- | --- | --- |
-| `shape-size` | 2 | `Optional` number. Line size |
+- [Common HTML attributes](#common-html-attributes)
+- `shape-size` - Optional number for the line size - Default `2`
 
-| CSS&nbsp;variables | Default |
-| --- | --- |
-| `--point-color` | var(--shape-color) |
-| `--point-opacity` | 1 |
-| `--point-shadow` | none |
+##### CSS variables
+
+- [Common CSS variables](#common-css-variables)
+- `--point-color` - Default `var(--shape-color)`
+- `--point-opacity ` - Default `1`
+- `--point-shadow ` - Default `none `
 
 
 ### Column / Bar chart
@@ -96,16 +91,16 @@ See also [common configuration](#common-configuration)
 <tc-bar values="[11,7,6,8,10,12,8,10,12]"></tc-bar>
 ```
 
-See also [common configuration](#common-configuration)
+##### HTML attributes
 
-| HTML&nbsp;Attribute | Default | Description |
-| --- | --- | --- |
-| `shape-radius` | 1 | `Optional` number. Columns / bars radius |
-| `shape-gap` | 1 | `Optional` number. Gap between columns / bars |
+- [Common HTML attributes](#common-html-attributes)
+- `shape-radius` - Optional number for the columns / bars radius - Default `1`
+- `shape-gap` - Optional number for the gap between columns / bars - Default `1`
 
-| CSS&nbsp;variables | Default |
-| --- | --- |
-| `--shape-focused-opacity` | 0.5 |
+##### CSS variables
+
+- [Common CSS variables](#common-css-variables)
+- `--shape-focused-opacity` - Column / Bar opacity on hover - Default `0.5`
 
 
 ### Pie chart
@@ -114,16 +109,16 @@ See also [common configuration](#common-configuration)
 <tc-pie values="[35,68,22,16]"></tc-pie>
 ```
 
-See also [common configuration](#common-configuration)
+##### HTML attributes
 
-| HTML&nbsp;Attribute | Default | Description |
-| --- | --- | --- |
-| `shape-size` | null | `Optional` number or null. Slice size, `null ` gives a pie and a `number ` create a donut |
-| `shape-gap` | 1 | `Optional` number. Gap between slices |
+- [Common HTML attributes](#common-html-attributes)
+- `shape-size` - Optional number or null for the slice size, `null ` gives a pie and a `number ` create a donut - Default `null`
+- `shape-gap` - Optional number for the gap between slices - Default `1`
 
-| CSS&nbsp;variables | Default |
-| --- | --- |
-| `--shape-focused-opacity` | 0.5 |
+##### CSS variables
+
+- [Common CSS variables](#common-css-variables)
+- `--shape-focused-opacity` - Slice opacity on hover - Default `0.5`
 
 
 ## License
