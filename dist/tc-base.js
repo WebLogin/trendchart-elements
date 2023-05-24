@@ -9,7 +9,7 @@ export class TcBase extends LitElement {
         this.min = null;
         this.max = null;
         this.tooltipDisabled = false;
-        this.tooltipText = '@V';
+        this.tooltipText = '@L @V';
         this.valueShapeFocused = null;
         this.width = 0;
         this.height = 0;
@@ -51,9 +51,10 @@ export class TcBase extends LitElement {
         `;
     }
     tooltipTextFormatted(valueShape) {
-        const label = valueShape.label ? (valueShape.label + ' : ') : '';
-        const value = this.tooltipText.replace(/@V/g, valueShape.value.toLocaleString());
-        return label + value;
+        return this.tooltipText
+            .replace(/@V/g, valueShape.value.toLocaleString())
+            .replace(/@L/g, valueShape.label ? valueShape.label : '')
+            .trim();
     }
     validatePropertyAsPositiveNumber(propertyName) {
         const property = this[propertyName];

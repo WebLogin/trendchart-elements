@@ -15,7 +15,7 @@ export abstract class TcBase extends LitElement {
     @property({type: Boolean, reflect: true, attribute: 'tooltip-disabled'})
     public tooltipDisabled = false;
     @property({type: String, attribute: 'tooltip-text'})
-    public tooltipText = '@V';
+    public tooltipText = '@L @V';
 
     @state()
     protected valueShapeFocused: ValueCircle | ValueRectangle | ValueSlice | null = null;
@@ -146,10 +146,10 @@ export abstract class TcBase extends LitElement {
 
 
     protected tooltipTextFormatted(valueShape: ValueCircle | ValueRectangle | ValueSlice): string {
-        const label = valueShape.label ? (valueShape.label + ' : ') : '';
-        const value = this.tooltipText.replace(/@V/g, valueShape.value.toLocaleString());
-
-        return label + value;
+        return this.tooltipText
+            .replace(/@V/g, valueShape.value.toLocaleString())
+            .replace(/@L/g, valueShape.label ? valueShape.label : '')
+            .trim();
     }
 
 
