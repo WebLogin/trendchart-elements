@@ -2,8 +2,8 @@ import { PropertyValues, TemplateResult } from 'lit';
 import { TcBase } from './tc-base.js';
 import { ValueRectangle } from './types.js';
 export declare class TcColumn extends TcBase {
-    columnGap: number;
-    columnRadius: number;
+    shapeGap: number;
+    shapeRadius: number;
     protected valueShapes: ValueRectangle[];
     protected valueShapeFocused: ValueRectangle;
     static styles: import("lit").CSSResultGroup[];

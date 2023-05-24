@@ -25,8 +25,8 @@
                         </div>
                         <tc-line class="chart"
                             values="[6,16,20,11,13,16,14,4,14,11,18,10,8,15,19,11,20,18,12,14]"
-                            line-size="1.5"
-                            style="--line-color:#54C430;">
+                            shape-size="1.5"
+                            style="--shape-color:#54C430;">
                         </tc-line>
                     </div>
                     <div class="row">
@@ -41,8 +41,8 @@
                         </div>
                         <tc-line class="chart"
                             values="[0,0,0,-2,0,-5,-8,0,0,0,0,-2,-2,-4,-5,0,0,0,-2,-4]"
-                            line-size="1.5"
-                            style="--line-color:#E60706;">
+                            shape-size="1.5"
+                            style="--shape-color:#E60706;">
                         </tc-line>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         values="[120,100,120,110,130,160,140,100,120,110,170,180,160,170,200,140,150,130]"
                         labels='["05/05/23","06/05/23","07/05/23","08/05/23","09/05/23","10/05/23","11/05/23","12/05/23","13/05/23","14/05/23","15/05/23","16/05/23","17/05/23","18/05/23","19/05/23","20/05/23","21/05/23","22/05/23"]'
                         min="0"
-                        column-radius="2" column-gap="2"
+                        shape-radius="2" shape-gap="2"
                         tooltip-text="@V€">
                     </tc-column>
                 </div>
@@ -74,8 +74,8 @@
                     <div class="chart">
                         <tc-pie class="pie"
                             values="[1200,800,400,200]"
-                            slice-size="10"
-                            slice-gap="6">
+                            shape-size="10"
+                            shape-gap="6">
                         </tc-pie>
                         <div class="title">
                             <span>Traffic<br>Sources</span>
@@ -100,28 +100,28 @@
                 <div class="example-health">
                     <div class="item">
                         <div class="chart">
-                            <tc-pie values="[7652]" slice-size="6" max="10000" tooltip-disabled></tc-pie>
+                            <tc-pie values="[7652]" shape-size="6" max="10000" tooltip-disabled></tc-pie>
                             <img src="./images/running.svg"/>
                         </div>
                         <div class="text">7,652<br>Steps</div>
                     </div>
                     <div class="item">
                         <div class="chart">
-                            <tc-pie values="[1608]" slice-size="6" max="2000" tooltip-disabled></tc-pie>
+                            <tc-pie values="[1608]" shape-size="6" max="2000" tooltip-disabled></tc-pie>
                             <img src="./images/fire.svg"/>
                         </div>
                         <div class="text">1,608<br>Cals</div>
                     </div>
                     <div class="item">
                         <div class="chart">
-                            <tc-pie values="[392]" slice-size="6" max="540" tooltip-disabled></tc-pie>
+                            <tc-pie values="[392]" shape-size="6" max="540" tooltip-disabled></tc-pie>
                             <img src="./images/moon.svg"/>
                         </div>
                         <div class="text">7h32m<br>Sleep</div>
                     </div>
                     <div class="item">
                         <div class="chart">
-                            <tc-pie values="[4]" slice-size="6" max="10" tooltip-disabled></tc-pie>
+                            <tc-pie values="[4]" shape-size="6" max="10" tooltip-disabled></tc-pie>
                             <img src="./images/drop.svg"/>
                         </div>
                         <div class="text">4<br>Glass</div>
@@ -134,9 +134,9 @@
                             <div>Nicolas</div>
                             <tc-bar values="[68]"
                                 min="0" max="100"
-                                bar-radius="4" bar-gap="0"
+                                shape-radius="4" shape-gap="0"
                                 tooltip-text="@V%"
-                                style="--bar-color: #54C430;">
+                                style="--shape-color: #54C430;">
                             </tc-bar>
                         </div>
                     </div>
@@ -146,9 +146,9 @@
                             <div>Caroline</div>
                             <tc-bar values="[89]"
                                 min="0" max="100"
-                                bar-radius="4" bar-gap="0"
+                                shape-radius="4" shape-gap="0"
                                 tooltip-text="@V%"
-                                style="--bar-color: #54C430;">
+                                style="--shape-color: #54C430;">
                             </tc-bar>
                         </div>
                     </div>
@@ -158,9 +158,9 @@
                             <div>James</div>
                             <tc-bar values="[24]"
                                 min="0" max="100"
-                                bar-radius="4" bar-gap="0"
+                                shape-radius="4" shape-gap="0"
                                 tooltip-text="@V%"
-                                style="--bar-color: #F17A33;">
+                                style="--shape-color: #F17A33;">
                             </tc-bar>
                         </div>
                     </div>
@@ -202,8 +202,8 @@
                 <div class="test">
                     <div class="content">
                         <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
-                            line-size="1"
-                            style="--area-opacity: 1; --point-color:black;">
+                            shape-size="1"
+                            style="--area-opacity: 1; --point-color: var(--tooltip-background);">
                         </tc-line>
                     </div>
                     <div class="footer">
@@ -213,7 +213,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
-                            line-size="4">
+                            shape-size="4">
                         </tc-line>
                     </div>
                     <div class="footer">
@@ -223,7 +223,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-line values="[12,10,12,11,7,6,8,-10,-12,-11,17,18,20,17,16,14,15,13,12,14]"
-                            style="--line-color: #784BD1; --area-opacity: 0.15;">
+                            style="--shape-color: #784BD1; --area-opacity: 0.15;">
                         </tc-line>
                     </div>
                     <div class="footer">
@@ -233,7 +233,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-line values="[-12,-10,-12,-11,-7,-6,-8,-10,-12,-11,-17,-18,-20,-17,-16,-14,-15,-13,-12,-14]"
-                            style="--line-color: #e2445c; --area-opacity: 0.15;">
+                            style="--shape-color: #e2445c; --area-opacity: 0.15;">
                         </tc-line>
                     </div>
                     <div class="footer">
@@ -243,7 +243,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
-                            style="width:40px; height:20px; --line-color: #7F5347;">
+                            style="width:40px; height:20px; --shape-color: #7F5347;">
                         </tc-line>
                     </div>
                     <div class="footer">
@@ -253,7 +253,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
-                            style="width:100%; height:100%; --line-color: #fdab3d; --area-opacity: 0.15;">
+                            style="width:100%; height:100%; --shape-color: #fdab3d; --area-opacity: 0.15;">
                         </tc-line>
                     </div>
                     <div class="footer">
@@ -264,7 +264,7 @@
                     <div class="content">
                         <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
                             min="0"
-                            style="width:100%; height:100%; --line-color: #fdab3d; --area-opacity: 0.15;">
+                            style="width:100%; height:100%; --shape-color: #fdab3d; --area-opacity: 0.15;">
                         </tc-line>
                     </div>
                     <div class="footer">
@@ -275,7 +275,7 @@
                     <div class="content">
                         <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
                             max="30"
-                            style="width:100%; height:100%; --line-color: #fdab3d; --area-opacity: 0.15;">
+                            style="width:100%; height:100%; --shape-color: #fdab3d; --area-opacity: 0.15;">
                         </tc-line>
                     </div>
                     <div class="footer">
@@ -316,7 +316,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
-                            column-gap="0">
+                            shape-gap="0">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -326,7 +326,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-column values="[14,12,7,15,17,19,13,9,10]"
-                            column-gap="6">
+                            shape-gap="6">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -336,7 +336,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
-                            column-radius="10">
+                            shape-radius="10">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -347,7 +347,7 @@
                     <div class="content">
                         <tc-column values="[65]"
                             min="0" max="100"
-                            column-gap="0" column-radius="3"
+                            shape-gap="0" shape-radius="3"
                             style="width:20px; --area-opacity:0.15;">
                         </tc-column>
                     </div>
@@ -358,7 +358,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-column values="[14,12,7,15,17,19,-13,-9,10,8,12,15]"
-                            style="--column-color: #784BD1;">
+                            style="--shape-color: #784BD1;">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -368,7 +368,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-column values="[-14,-12,-7,-15,-17,-19,-13,-9,-10,-8,-12,-15]"
-                            style="--column-color: #e2445c;">
+                            style="--shape-color: #e2445c;">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -378,7 +378,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
-                            style="width:40px; height:20px; --column-color:#7F5347;">
+                            style="width:40px; height:20px; --shape-color:#7F5347;">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -388,7 +388,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
-                            style="width:100%; height:100%; --column-color:#fdab3d;">
+                            style="width:100%; height:100%; --shape-color:#fdab3d;">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -399,7 +399,7 @@
                     <div class="content">
                         <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             min="0"
-                            style="width:100%; height:100%; --column-color:#fdab3d;">
+                            style="width:100%; height:100%; --shape-color:#fdab3d;">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -410,7 +410,7 @@
                     <div class="content">
                         <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             max="30"
-                            style="width:100%; height:100%; --column-color:#fdab3d;">
+                            style="width:100%; height:100%; --shape-color:#fdab3d;">
                         </tc-column>
                     </div>
                     <div class="footer">
@@ -451,7 +451,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-bar values="[14,12,7,15,17,19]"
-                            bar-gap="0">
+                            shape-gap="0">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -461,7 +461,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-bar values="[14,12,7,15,17,19]"
-                            bar-gap="6">
+                            shape-gap="6">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -471,7 +471,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-bar values="[14,12,7,15,17,19]"
-                            bar-radius="10">
+                            shape-radius="10">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -482,7 +482,7 @@
                     <div class="content">
                         <tc-bar values="[65]"
                             min="0" max="100"
-                            bar-gap="0" bar-radius="3"
+                            shape-gap="0" shape-radius="3"
                             style="height:20px; --area-opacity:0.15;">
                         </tc-bar>
                     </div>
@@ -493,7 +493,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-bar values="[14,12,7,-15,-17,19]"
-                            style="--bar-color: #784BD1;">
+                            style="--shape-color: #784BD1;">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -503,7 +503,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-bar values="[-14,-12,-7,-15,-17,-19]"
-                            style="--bar-color: #e2445c;">
+                            style="--shape-color: #e2445c;">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -513,7 +513,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-bar values="[14,12,7,15,17,19]"
-                            style="width:40px; height:20px; --bar-color:#7F5347;">
+                            style="width:40px; height:20px; --shape-color:#7F5347;">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -523,7 +523,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-bar values="[14,12,7,15,17,19]"
-                            style="width:100%; height:100%; --bar-color:#fdab3d;">
+                            style="width:100%; height:100%; --shape-color:#fdab3d;">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -534,7 +534,7 @@
                     <div class="content">
                         <tc-bar values="[14,12,7,15,17,19]"
                             min="0"
-                            style="width:100%; height:100%; --bar-color:#fdab3d;">
+                            style="width:100%; height:100%; --shape-color:#fdab3d;">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -545,7 +545,7 @@
                     <div class="content">
                         <tc-bar values="[14,12,7,15,17,19]"
                             max="30"
-                            style="width:100%; height:100%; --bar-color:#fdab3d;">
+                            style="width:100%; height:100%; --shape-color:#fdab3d;">
                         </tc-bar>
                     </div>
                     <div class="footer">
@@ -568,8 +568,8 @@
                 <div class="test">
                     <div class="content">
                         <tc-pie values="[120,100,80]"
-                            slice-gap="0"
-                            style="--slice-color-1: #597BFC; --slice-color-2: #e2445c; --slice-color-3: #9CD326;">
+                            shape-gap="0"
+                            style="--shape-color-1: #597BFC; --shape-color-2: #e2445c; --shape-color-3: #9CD326;">
                         </tc-pie>
                     </div>
                     <div class="footer">
@@ -579,8 +579,8 @@
                 <div class="test">
                     <div class="content">
                         <tc-pie values="[120,100,80]"
-                            slice-gap="4"
-                            style="--slice-color-1: #597BFC; --slice-color-2: #e2445c; --slice-color-3: #9CD326;">
+                            shape-gap="4"
+                            style="--shape-color-1: #597BFC; --shape-color-2: #e2445c; --shape-color-3: #9CD326;">
                         </tc-pie>
                     </div>
                     <div class="footer">
@@ -590,8 +590,8 @@
                 <div class="test">
                     <div class="content">
                         <tc-pie values="[120,100,80]"
-                            slice-size="15"
-                            style="--slice-color-1: #597BFC; --slice-color-2: #e2445c; --slice-color-3: #9CD326;">
+                            shape-size="15"
+                            style="--shape-color-1: #597BFC; --shape-color-2: #e2445c; --shape-color-3: #9CD326;">
                         </tc-pie>
                     </div>
                     <div class="footer">
@@ -601,7 +601,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-pie values="[100]"
-                            slice-size="15">
+                            shape-size="15">
                         </tc-pie>
                     </div>
                     <div class="footer">
@@ -610,7 +610,7 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-pie values="[70]" slice-size="15" max="100"
+                        <tc-pie values="[70]" shape-size="15" max="100"
                             style="--area-opacity: 0.15;">
                         </tc-pie>
                     </div>
@@ -621,7 +621,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-pie values="[120,100,80]"
-                            style="width:20px; height:20px; --slice-color-1: #9CD326; --slice-color-2: #597BFC; --slice-color-3: #e2445c;">
+                            style="width:20px; height:20px; --shape-color-1: #9CD326; --shape-color-2: #597BFC; --shape-color-3: #e2445c;">
                         </tc-pie>
                     </div>
                     <div class="footer">
@@ -631,7 +631,7 @@
                 <div class="test">
                     <div class="content">
                         <tc-pie values="[120,100,80]"
-                            style="width:100%; height:100%; --slice-color-1: #9CD326; --slice-color-2: #597BFC; --slice-color-3: #e2445c;">
+                            style="width:100%; height:100%; --shape-color-1: #9CD326; --shape-color-2: #597BFC; --shape-color-3: #e2445c;">
                         </tc-pie>
                     </div>
                     <div class="footer">

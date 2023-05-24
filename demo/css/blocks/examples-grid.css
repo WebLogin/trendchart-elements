@@ -26,7 +26,7 @@
     border-bottom: none;
 }
 .b-examples-grid > .example-repositories > .row > .chart {
-    --tooltip-background: var(--line-color);
+    --tooltip-background: var(--shape-color);
     flex: 0 0 auto;
     width: 12rem;
     height: 2.4rem;
@@ -107,7 +107,7 @@
     opacity: 0.5;
 }
 .b-examples-grid > .example-visitors > .chart {
-    --line-color: #FFFFFF;
+    --shape-color: #FFFFFF;
     --area-opacity: 0.15;
     --tooltip-font-color: #7346d3;
     --tooltip-background: #FFFFFF;
@@ -143,9 +143,9 @@
     margin: 0.3rem 0 0 0;
 }
 .b-examples-grid > .example-orders > .chart {
-    --column-color: #FFFFFF;
-    --column-opacity: 0.3;
-    --column-focused-opacity: 0.6;
+    --shape-color: #FFFFFF;
+    --shape-opacity: 0.3;
+    --shape-focused-opacity: 0.6;
     --tooltip-font-color: #FFFFFF;
     --tooltip-background: #333333;
     border-radius: 0 0 1rem 1rem;
@@ -177,11 +177,11 @@
     height: 12rem;
 }
 .b-examples-grid > .example-sources > .chart > .pie {
-    --slice-color-1: var(--color-1);
-    --slice-color-2: var(--color-2);
-    --slice-color-3: var(--color-3);
-    --slice-color-4: var(--color-4);
-    --slice-focused-opacity: 0.6;
+    --shape-color-1: var(--color-1);
+    --shape-color-2: var(--color-2);
+    --shape-color-3: var(--color-3);
+    --shape-color-4: var(--color-4);
+    --shape-focused-opacity: 0.6;
     --tooltip-font-color: #1C1E27;
     --tooltip-background: #D8D7DA;
     width: 100%;
@@ -250,7 +250,8 @@
     background-color: #FFFFFF;
 }
 .b-examples-grid > .example-contributions > .chart {
-    --line-color: #FD7549;
+    --shape-color: #FD7549;
+    --point-shadow: 0 0 0 2px white;
     --area-opacity: 0.12;
     width: 16rem;
 }
@@ -287,16 +288,16 @@
     height: 5.6rem;
 }
 .b-examples-grid > .example-health > .item > .chart > tc-pie {
-    --slice-color: #51A7E1;
+    --shape-color: #51A7E1;
     --area-color: #000000;
     --area-opacity: 0.1;
     width: 100%;
     height: 100%;
 }
-.b-examples-grid > .example-health > .item:nth-child(1) > .chart > tc-pie { --slice-color: #F17A33; }
-.b-examples-grid > .example-health > .item:nth-child(2) > .chart > tc-pie { --slice-color: #2DCD71; }
-.b-examples-grid > .example-health > .item:nth-child(3) > .chart > tc-pie { --slice-color: #7346D2; }
-.b-examples-grid > .example-health > .item:nth-child(4) > .chart > tc-pie { --slice-color: #51A7E1; }
+.b-examples-grid > .example-health > .item:nth-child(1) > .chart > tc-pie { --shape-color: #F17A33; }
+.b-examples-grid > .example-health > .item:nth-child(2) > .chart > tc-pie { --shape-color: #2DCD71; }
+.b-examples-grid > .example-health > .item:nth-child(3) > .chart > tc-pie { --shape-color: #7346D2; }
+.b-examples-grid > .example-health > .item:nth-child(4) > .chart > tc-pie { --shape-color: #51A7E1; }
 .b-examples-grid > .example-health > .item > .chart > img {
     position: absolute;
     top: 30%;

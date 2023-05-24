@@ -29,6 +29,9 @@ export abstract class TcBase extends LitElement {
 
     static styles = css`
         :host {
+            --shape-color: #597BFC;
+            --shape-opacity: 1;
+            --area-color: var(--shape-color);
             --area-opacity: 0;
             --tooltip-font-color: white;
             --tooltip-font-size: 0.875em;

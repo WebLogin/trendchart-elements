@@ -7,10 +7,10 @@ import { ValueRectangle } from './types.js';
 
 @customElement('tc-bar')
 export class TcBar extends TcBase {
-    @property({type: Number, reflect: true, attribute: 'bar-gap'})
-    public barGap = 1;
-    @property({type: Number, reflect: true, attribute: 'bar-radius'})
-    public barRadius = 1;
+    @property({type: Number, reflect: true, attribute: 'shape-gap'})
+    public shapeGap = 1;
+    @property({type: Number, reflect: true, attribute: 'shape-radius'})
+    public shapeRadius = 1;
 
     protected valueShapes!: ValueRectangle[];
     protected valueShapeFocused!: ValueRectangle;
@@ -19,20 +19,17 @@ export class TcBar extends TcBase {
         TcBase.styles,
         css`
             :host {
-                --bar-color: #597BFC;
-                --bar-opacity: 1;
-                --bar-focused-opacity: 0.5;
-                --area-color: var(--bar-color);
+                --shape-focused-opacity: 0.5;
                 width: 120px;
                 height: 60px;
             }
-            .chart > .bar {
-                fill: var(--bar-color);
-                opacity: var(--bar-opacity);
+            .chart > .shape {
+                fill: var(--shape-color);
+                opacity: var(--shape-opacity);
                 stroke: none;
             }
-            .chart > .bar.is-focused {
-                opacity: var(--bar-focused-opacity);
+            .chart > .shape.is-focused {
+                opacity: var(--shape-focused-opacity);
             }
         `,
     ];
@@ -53,14 +50,14 @@ export class TcBar extends TcBase {
 
         const valueScale = valueMax - valueMin;
 
-        const barHeight = (this.height - (this.barGap * (this.values.length - 1))) / this.values.length;
+        const barHeight = (this.height - (this.shapeGap * (this.values.length - 1))) / this.values.length;
 
         const barPositionX = (value: number): number => {
             return valueScale ? ((value - valueMin) / valueScale) * this.width : 1;
         };
 
         this.values.forEach((value, index) => {
-            let yTop = (barHeight + this.barGap) * index;
+            let yTop = (barHeight + this.shapeGap) * index;
             let xLeft = (value < 0) ? barPositionX(value) : barPositionX(Math.max(valueMin, 0));
             let xRight = (value < 0) ? barPositionX(Math.min(valueMax, 0)) : barPositionX(value);
 
@@ -92,15 +89,15 @@ export class TcBar extends TcBase {
             return;
         }
 
-        if (changedProperties.has('barGap')) {
-            this.validatePropertyAsPositiveNumber('barGap');
+        if (changedProperties.has('shapeGap')) {
+            this.validatePropertyAsPositiveNumber('shapeGap');
         }
 
-        if (changedProperties.has('barRadius')) {
-            this.validatePropertyAsPositiveNumber('barRadius');
+        if (changedProperties.has('shapeRadius')) {
+            this.validatePropertyAsPositiveNumber('shapeRadius');
         }
 
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'barGap', 'barRadius'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeGap', 'shapeRadius'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
             this.computeChartProperties();
         }
@@ -109,8 +106,8 @@ export class TcBar extends TcBase {
 
     protected findValueShapeAtPosition(x: number, y: number): ValueRectangle | null {
         return this.valueShapes.find((valueShape: ValueRectangle): boolean => {
-            const yMin = valueShape.origin.y - (this.barGap / 2);
-            const yMax = valueShape.origin.y + valueShape.height + (this.barGap / 2);
+            const yMin = valueShape.origin.y - (this.shapeGap / 2);
+            const yMax = valueShape.origin.y + valueShape.height + (this.shapeGap / 2);
             return y >= yMin && y <= yMax;
         }) ?? null;
     }
@@ -121,7 +118,7 @@ export class TcBar extends TcBase {
             return null;
         }
 
-        const barRadius = Math.min(this.barRadius, (this.valueShapes[0].height / 2));
+        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].height / 2));
 
         return html`
             <svg class="chart" width="100%" height="100%">
@@ -131,14 +128,14 @@ export class TcBar extends TcBase {
                         y="${valueShape.origin.y}"
                         width="100%"
                         height="${valueShape.height}"
-                        rx="${barRadius}" ry="${barRadius}"
+                        rx="${shapeRadius}" ry="${shapeRadius}"
                     />
-                    <rect class="bar ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                    <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
                         x="${valueShape.origin.x}"
                         y="${valueShape.origin.y}"
                         width="${valueShape.width}"
                         height="${valueShape.height}"
-                        rx="${barRadius}" ry="${barRadius}"
+                        rx="${shapeRadius}" ry="${shapeRadius}"
                     />
                 `)}
             </svg>

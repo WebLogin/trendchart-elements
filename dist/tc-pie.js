@@ -6,8 +6,8 @@ import { TcBase } from './tc-base.js';
 let TcPie = class TcPie extends TcBase {
     constructor() {
         super(...arguments);
-        this.sliceSize = null;
-        this.sliceGap = 1;
+        this.shapeSize = null;
+        this.shapeGap = 1;
     }
     computeChartProperties() {
         var _a;
@@ -47,7 +47,7 @@ let TcPie = class TcPie extends TcBase {
         };
         this.cutoutCircle = {
             center: center,
-            radius: radius - Math.min((_a = this.sliceSize) !== null && _a !== void 0 ? _a : Infinity, radius),
+            radius: radius - Math.min((_a = this.shapeSize) !== null && _a !== void 0 ? _a : Infinity, radius),
         };
         this.values.forEach((value, index) => {
             var _a;
@@ -84,13 +84,13 @@ let TcPie = class TcPie extends TcBase {
         if (!this.width || !this.height) {
             return;
         }
-        if (changedProperties.has('sliceGap')) {
-            this.validatePropertyAsPositiveNumber('sliceGap');
+        if (changedProperties.has('shapeGap')) {
+            this.validatePropertyAsPositiveNumber('shapeGap');
         }
-        if (changedProperties.has('sliceSize') && this.sliceSize !== null) {
-            this.validatePropertyAsPositiveNumber('sliceSize');
+        if (changedProperties.has('shapeSize') && this.shapeSize !== null) {
+            this.validatePropertyAsPositiveNumber('shapeSize');
         }
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'max', 'sliceGap', 'sliceSize'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'max', 'shapeGap', 'shapeSize'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property))) {
             this.computeChartProperties();
         }
@@ -100,7 +100,7 @@ let TcPie = class TcPie extends TcBase {
         const point = chart.createSVGPoint();
         point.x = x;
         point.y = y;
-        const valueShapeFocusedIndex = Array.from(chart.querySelectorAll('.slice')).findIndex((path) => {
+        const valueShapeFocusedIndex = Array.from(chart.querySelectorAll('.shape')).findIndex((path) => {
             return path.isPointInFill(point);
         });
         if (valueShapeFocusedIndex === -1) {
@@ -120,7 +120,7 @@ let TcPie = class TcPie extends TcBase {
                     ${this.gapLines.map((gapLine) => svg `
                         <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
                             x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                            stroke-width="${this.sliceGap}" stroke="#000000" stroke-linecap="round"
+                            stroke-width="${this.shapeGap}" stroke="#000000" stroke-linecap="round"
                         />
                     `)}
                 </mask>
@@ -129,9 +129,9 @@ let TcPie = class TcPie extends TcBase {
                     ${this.valueShapes.map((valueShape, index) => {
             var _a;
             return svg `
-                        <path class="slice ${(((_a = this.valueShapeFocused) === null || _a === void 0 ? void 0 : _a.index) === index) ? 'is-focused' : ''}"
+                        <path class="shape ${(((_a = this.valueShapeFocused) === null || _a === void 0 ? void 0 : _a.index) === index) ? 'is-focused' : ''}"
                             d="${valueShape.path}"
-                            style="fill: var(--slice-color-${index + 1}, var(--slice-color))"
+                            style="fill: var(--shape-color-${index + 1}, var(--shape-color))"
                         />
                     `;
         })}
@@ -159,30 +159,27 @@ TcPie.styles = [
     TcBase.styles,
     css `
             :host {
-                --slice-color: #597BFC;
-                --slice-opacity: 1;
-                --slice-focused-opacity: 0.5;
-                --area-color: var(--slice-color);
+                --shape-focused-opacity: 0.5;
                 border-radius: 100%;
                 width: 60px;
                 height: 60px;
             }
-            .chart .slice {
-                fill: var(--slice-color);
-                opacity: var(--slice-opacity);
+            .chart .shape {
+                fill: var(--shape-color);
+                opacity: var(--shape-opacity);
                 stroke: none;
             }
-            .chart .slice.is-focused {
-                opacity: var(--slice-focused-opacity);
+            .chart .shape.is-focused {
+                opacity: var(--shape-focused-opacity);
             }
         `,
 ];
 __decorate([
-    property({ type: Number, reflect: true, attribute: 'slice-size' })
-], TcPie.prototype, "sliceSize", void 0);
+    property({ type: Number, reflect: true, attribute: 'shape-size' })
+], TcPie.prototype, "shapeSize", void 0);
 __decorate([
-    property({ type: Number, reflect: true, attribute: 'slice-gap' })
-], TcPie.prototype, "sliceGap", void 0);
+    property({ type: Number, reflect: true, attribute: 'shape-gap' })
+], TcPie.prototype, "shapeGap", void 0);
 TcPie = __decorate([
     customElement('tc-pie')
 ], TcPie);

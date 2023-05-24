@@ -2,7 +2,7 @@ import { PropertyValues, TemplateResult } from 'lit';
 import { TcBase } from './tc-base.js';
 import { ValueCircle } from './types.js';
 export declare class TcLine extends TcBase {
-    lineSize: number;
+    shapeSize: number;
     protected valueShapes: ValueCircle[];
     protected valueShapeFocused: ValueCircle;
     private linePath;

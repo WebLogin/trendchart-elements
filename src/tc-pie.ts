@@ -7,10 +7,10 @@ import { ShapeCircle, ShapeLine, ShapePoint, ValueSlice } from './types.js';
 
 @customElement('tc-pie')
 export class TcPie extends TcBase {
-    @property({type: Number, reflect: true, attribute: 'slice-size'})
-    public sliceSize: number | null = null;
-    @property({type: Number, reflect: true, attribute: 'slice-gap'})
-    public sliceGap = 1;
+    @property({type: Number, reflect: true, attribute: 'shape-size'})
+    public shapeSize: number | null = null;
+    @property({type: Number, reflect: true, attribute: 'shape-gap'})
+    public shapeGap = 1;
 
     protected valueShapes!: ValueSlice[];
     protected valueShapeFocused!: ValueSlice;
@@ -22,21 +22,18 @@ export class TcPie extends TcBase {
         TcBase.styles,
         css`
             :host {
-                --slice-color: #597BFC;
-                --slice-opacity: 1;
-                --slice-focused-opacity: 0.5;
-                --area-color: var(--slice-color);
+                --shape-focused-opacity: 0.5;
                 border-radius: 100%;
                 width: 60px;
                 height: 60px;
             }
-            .chart .slice {
-                fill: var(--slice-color);
-                opacity: var(--slice-opacity);
+            .chart .shape {
+                fill: var(--shape-color);
+                opacity: var(--shape-opacity);
                 stroke: none;
             }
-            .chart .slice.is-focused {
-                opacity: var(--slice-focused-opacity);
+            .chart .shape.is-focused {
+                opacity: var(--shape-focused-opacity);
             }
         `,
     ];
@@ -84,7 +81,7 @@ export class TcPie extends TcBase {
 
         this.cutoutCircle = {
             center: center,
-            radius: radius - Math.min(this.sliceSize ?? Infinity, radius),
+            radius: radius - Math.min(this.shapeSize ?? Infinity, radius),
         };
 
         this.values.forEach((value, index) => {
@@ -129,15 +126,15 @@ export class TcPie extends TcBase {
             return;
         }
 
-        if (changedProperties.has('sliceGap')) {
-            this.validatePropertyAsPositiveNumber('sliceGap');
+        if (changedProperties.has('shapeGap')) {
+            this.validatePropertyAsPositiveNumber('shapeGap');
         }
 
-        if (changedProperties.has('sliceSize') && this.sliceSize !== null) {
-            this.validatePropertyAsPositiveNumber('sliceSize');
+        if (changedProperties.has('shapeSize') && this.shapeSize !== null) {
+            this.validatePropertyAsPositiveNumber('shapeSize');
         }
 
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'max', 'sliceGap', 'sliceSize'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'max', 'shapeGap', 'shapeSize'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
             this.computeChartProperties();
         }
@@ -150,7 +147,7 @@ export class TcPie extends TcBase {
         point.x = x;
         point.y = y;
 
-        const valueShapeFocusedIndex = Array.from(chart.querySelectorAll<SVGPathElement>('.slice')).findIndex((path) => {
+        const valueShapeFocusedIndex = Array.from(chart.querySelectorAll<SVGPathElement>('.shape')).findIndex((path) => {
             return path.isPointInFill(point);
         });
 
@@ -175,16 +172,16 @@ export class TcPie extends TcBase {
                     ${this.gapLines.map((gapLine) => svg`
                         <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
                             x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                            stroke-width="${this.sliceGap}" stroke="#000000" stroke-linecap="round"
+                            stroke-width="${this.shapeGap}" stroke="#000000" stroke-linecap="round"
                         />
                     `)}
                 </mask>
                 <g mask="url(#mask)">
                     <path class="area" d="${this.areaPath}"/>
                     ${this.valueShapes.map((valueShape, index) => svg`
-                        <path class="slice ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                        <path class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
                             d="${valueShape.path}"
-                            style="fill: var(--slice-color-${index + 1}, var(--slice-color))"
+                            style="fill: var(--shape-color-${index + 1}, var(--shape-color))"
                         />
                     `)}
                 </g>

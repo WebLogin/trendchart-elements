@@ -7,10 +7,10 @@ import { ValueRectangle } from './types.js';
 
 @customElement('tc-column')
 export class TcColumn extends TcBase {
-    @property({type: Number, reflect: true, attribute: 'column-gap'})
-    public columnGap = 1;
-    @property({type: Number, reflect: true, attribute: 'column-radius'})
-    public columnRadius = 1;
+    @property({type: Number, reflect: true, attribute: 'shape-gap'})
+    public shapeGap = 1;
+    @property({type: Number, reflect: true, attribute: 'shape-radius'})
+    public shapeRadius = 1;
 
     protected valueShapes!: ValueRectangle[];
     protected valueShapeFocused!: ValueRectangle;
@@ -19,20 +19,17 @@ export class TcColumn extends TcBase {
         TcBase.styles,
         css`
             :host {
-                --column-color: #597BFC;
-                --column-opacity: 1;
-                --column-focused-opacity: 0.5;
-                --area-color: var(--column-color);
+                --shape-focused-opacity: 0.5;
                 width: 120px;
                 height: 40px;
             }
-            .chart > .column {
-                fill: var(--column-color);
-                opacity: var(--column-opacity);
+            .chart > .shape {
+                fill: var(--shape-color);
+                opacity: var(--shape-opacity);
                 stroke: none;
             }
-            .chart > .column.is-focused {
-                opacity: var(--column-focused-opacity);
+            .chart > .shape.is-focused {
+                opacity: var(--shape-focused-opacity);
             }
         `,
     ];
@@ -53,14 +50,14 @@ export class TcColumn extends TcBase {
 
         const valueScale = valueMax - valueMin;
 
-        const columnWidth = (this.width - (this.columnGap * (this.values.length - 1))) / this.values.length;
+        const columnWidth = (this.width - (this.shapeGap * (this.values.length - 1))) / this.values.length;
 
         const columnPositionY = (value: number): number => {
             return this.height - (valueScale ? ((value - valueMin) / valueScale) * this.height : 1);
         };
 
         this.values.forEach((value, index) => {
-            let xLeft = (columnWidth + this.columnGap) * index;
+            let xLeft = (columnWidth + this.shapeGap) * index;
             let yTop = (value < 0) ? columnPositionY(Math.min(valueMax, 0)) : columnPositionY(value);
             let yBottom = (value < 0) ? columnPositionY(value) : columnPositionY(Math.max(valueMin, 0));
 
@@ -92,15 +89,15 @@ export class TcColumn extends TcBase {
             return;
         }
 
-        if (changedProperties.has('columnGap')) {
-            this.validatePropertyAsPositiveNumber('columnGap');
+        if (changedProperties.has('shapeGap')) {
+            this.validatePropertyAsPositiveNumber('shapeGap');
         }
 
-        if (changedProperties.has('columnRadius')) {
-            this.validatePropertyAsPositiveNumber('columnRadius');
+        if (changedProperties.has('shapeRadius')) {
+            this.validatePropertyAsPositiveNumber('shapeRadius');
         }
 
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'columnGap', 'columnRadius'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeGap', 'shapeRadius'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
             this.computeChartProperties();
         }
@@ -109,8 +106,8 @@ export class TcColumn extends TcBase {
 
     protected findValueShapeAtPosition(x: number, y: number): ValueRectangle | null {
         return this.valueShapes.find((valueShape: ValueRectangle): boolean => {
-            const xMin = valueShape.origin.x - (this.columnGap / 2);
-            const xMax = valueShape.origin.x + valueShape.width + (this.columnGap / 2);
+            const xMin = valueShape.origin.x - (this.shapeGap / 2);
+            const xMax = valueShape.origin.x + valueShape.width + (this.shapeGap / 2);
             return x >= xMin && x <= xMax;
         }) ?? null;
     }
@@ -121,7 +118,7 @@ export class TcColumn extends TcBase {
             return null;
         }
 
-        const columnRadius = Math.min(this.columnRadius, (this.valueShapes[0].width / 2));
+        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].width / 2));
 
         return html`
             <svg class="chart" width="100%" height="100%">
@@ -131,14 +128,14 @@ export class TcColumn extends TcBase {
                         y="0"
                         width="${valueShape.width}"
                         height="100%"
-                        rx="${columnRadius}" ry="${columnRadius}"
+                        rx="${shapeRadius}" ry="${shapeRadius}"
                     />
-                    <rect class="column ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                    <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
                         x="${valueShape.origin.x}"
                         y="${valueShape.origin.y}"
                         width="${valueShape.width}"
                         height="${valueShape.height}"
-                        rx="${columnRadius}" ry="${columnRadius}"
+                        rx="${shapeRadius}" ry="${shapeRadius}"
                     />
                 `)}
             </svg>

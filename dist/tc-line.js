@@ -6,7 +6,7 @@ import { TcBase } from './tc-base.js';
 let TcLine = class TcLine extends TcBase {
     constructor() {
         super(...arguments);
-        this.lineSize = 2;
+        this.shapeSize = 2;
     }
     computeChartProperties() {
         this.valueShapes = [];
@@ -20,17 +20,17 @@ let TcLine = class TcLine extends TcBase {
         }
         const valueScale = valueMax - valueMin;
         const pointPositionX = (value) => {
-            const width = this.width - this.lineSize;
+            const width = this.width - this.shapeSize;
             let x = value * (width / (this.values.length - 1));
-            return x + (this.lineSize / 2);
+            return x + (this.shapeSize / 2);
         };
         const pointPositionY = (value) => {
-            const height = this.height - this.lineSize;
+            const height = this.height - this.shapeSize;
             let y = height;
             if (valueScale) {
                 y -= ((value - valueMin) / valueScale) * height;
             }
-            return y + (this.lineSize / 2);
+            return y + (this.shapeSize / 2);
         };
         this.values.forEach((value, index) => {
             var _a;
@@ -42,7 +42,7 @@ let TcLine = class TcLine extends TcBase {
                     x: pointPositionX(index),
                     y: pointPositionY(value),
                 },
-                radius: Math.floor((this.lineSize + 6) / 2),
+                radius: Math.floor((this.shapeSize + 6) / 2),
             });
         });
         this.linePath = this.valueShapes
@@ -57,10 +57,10 @@ let TcLine = class TcLine extends TcBase {
         if (!this.width || !this.height) {
             return;
         }
-        if (changedProperties.has('lineSize')) {
-            this.validatePropertyAsPositiveNumber('lineSize');
+        if (changedProperties.has('shapeSize')) {
+            this.validatePropertyAsPositiveNumber('shapeSize');
         }
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'lineSize'];
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeSize'];
         if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property))) {
             this.computeChartProperties();
         }
@@ -77,10 +77,10 @@ let TcLine = class TcLine extends TcBase {
         return html `
             <svg class="chart" width="100%" height="100%">
                 <mask id="mask">
-                    <path d="${this.areaPath}" stroke-width="${this.lineSize}" stroke="#FFFFFF" fill="#FFFFFF" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="${this.areaPath}" stroke-width="${this.shapeSize}" stroke="#FFFFFF" fill="#FFFFFF" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
                 </mask>
                 <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
-                <path class="line" d="${this.linePath}" stroke-width="${this.lineSize}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                <path class="shape" d="${this.linePath}" stroke-width="${this.shapeSize}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         `;
     }
@@ -115,10 +115,7 @@ TcLine.styles = [
     TcBase.styles,
     css `
             :host {
-                --line-color: #597BFC;
-                --line-opacity: 1;
-                --area-color: var(--line-color);
-                --point-color: var(--line-color);
+                --point-color: var(--shape-color);
                 --point-opacity: 1;
                 --point-shadow: none;
                 width: 120px;
@@ -134,16 +131,16 @@ TcLine.styles = [
                 box-shadow: var(--point-shadow);
                 transform: translate(-50%, -50%);
             }
-            .chart > .line {
+            .chart > .shape {
                 fill: none;
-                stroke: var(--line-color);
-                opacity: var(--line-opacity);
+                stroke: var(--shape-color);
+                opacity: var(--shape-opacity);
             }
         `,
 ];
 __decorate([
-    property({ type: Number, attribute: 'line-size', reflect: true })
-], TcLine.prototype, "lineSize", void 0);
+    property({ type: Number, attribute: 'shape-size', reflect: true })
+], TcLine.prototype, "shapeSize", void 0);
 TcLine = __decorate([
     customElement('tc-line')
 ], TcLine);

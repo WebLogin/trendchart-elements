@@ -2,8 +2,8 @@ import { PropertyValues, TemplateResult } from 'lit';
 import { TcBase } from './tc-base.js';
 import { ValueSlice } from './types.js';
 export declare class TcPie extends TcBase {
-    sliceSize: number | null;
-    sliceGap: number;
+    shapeSize: number | null;
+    shapeGap: number;
     protected valueShapes: ValueSlice[];
     protected valueShapeFocused: ValueSlice;
     private cutoutCircle;
