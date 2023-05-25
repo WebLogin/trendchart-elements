@@ -57,15 +57,15 @@ Use CSS to change the `width` and `height` of the chart, because they are respon
 	- `labels` - Optional array of strings for the labels corresponding to the values, it needs to be the same length as `values` array. Only usefull with tooltips not disabled. Example `labels='["Foo","Bar","Baz"]'` - Default `[]`
 	- `min` - Optional number or null for the minimum `Y axis` value, in most cases you'll need to add it to `0`. When `null` the chart uses the smallest value - Default `null`
 	- `max` - Optional number or null for the maximum `Y axis` value, usefull if you need to have multiple charts with the same scale. When `null` the chart uses the highest value - Default `null`
-	- `tooltip-disabled` - Optional attribute to disable the tooltip, it doesn't need a value, just add the attribute - Default `false`
-	- `tooltip-text` - Optional string to format of the tooltip text, `@V` being the current value and `@L` the current label if present - Default `@L @V`
+	- `tooltip-disabled` - Optional attribute to disable the tooltip, it doesn't need a value, just add the attribute
+	- `tooltip-text` - Optional string to format the tooltip text. Two placeholders are available, `@V` being the current value and `@L` the current label if present - Default `@L @V`
 - Line chart
 	- `shape-size` - Optional number for the line size - Default `2`
 - Column / Bar chart
 	- `shape-radius` - Optional number for the columns / bars radius - Default `1`
 	- `shape-gap` - Optional number for the gap between columns / bars - Default `1`
 - Pie chart
-	- `shape-size` - Optional number or null for the slice size, `null ` gives a pie and a `number ` create a donut - Default `null`
+	- `shape-size` - Optional number or null for the slice size, `null` gives a pie and a `number` create a donut - Default `null`
 	- `shape-gap` - Optional number for the gap between slices - Default `1`
 
 #### CSS variables
