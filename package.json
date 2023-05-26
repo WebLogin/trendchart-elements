@@ -1,5 +1,5 @@
 {
-    "name": "trendchart-elements",
+    "name": "@weblogin/trendchart-elements",
     "description": "Web components to generate simple responsive charts representing trends",
     "license": "MIT",
     "author": "WebLogin",
