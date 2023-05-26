@@ -19,7 +19,7 @@
         "/dist"
       ],
     "scripts": {
-        "build": "rm -rf dist && tsc && rollup --config",
+        "build": "rm -rf dist && tsc",
         "demo": "concurrently --kill-others \"rollup --config --watch\" \"wds\""
     },
     "dependencies": {
