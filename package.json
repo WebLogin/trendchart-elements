@@ -11,6 +11,10 @@
         "trend"
     ],
     "homepage": "https://github.com/WebLogin/trendchart-elements",
+    "repository": {
+        "url": "https://github.com/WebLogin/trendchart-elements.git",
+        "type": "git"
+    },
     "type": "module",
     "main": "dist/index.js",
     "module": "dist/index.js",

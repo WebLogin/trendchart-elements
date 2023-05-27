@@ -3,7 +3,7 @@
 Web components to generate simple, light and responsive charts representing trends.
 
 <p align="center">
-    <img src="docs/banner.jpg" alt="Logo" width="1000">
+    <img src="./docs/banner.jpg" alt="Logo" width="1000">
 </p>
 
 It is often useful to display some simple charts to represent a data visualization trend without the need of a big chart library, TrendChart Elements is made for that. The aim was to be as plug-and-play as possible, like native HTML tags, so all the configuration is made with CSS variables and HTML attributes. It's fully responsive with built-in basic tooltip.
@@ -32,7 +32,7 @@ import { TcLine } from "@weblogin/trendchart-elements";
 ## Usage
 
 <p align="center">
-    <img src="docs/demo.jpg" alt="Demo" width="1019">
+    <img src="./docs/demo.jpg" alt="Demo" width="1019">
 </p>
 
 **Check out the [demo page](https://weblogin.github.io/trendchart-elements/demo/)** for various charts, stylings and use cases.
