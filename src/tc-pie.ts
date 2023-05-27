@@ -7,9 +7,9 @@ import { ShapeCircle, ShapeLine, ShapePoint, ValueSlice } from './types.js';
 
 @customElement('tc-pie')
 export class TcPie extends TcBase {
-    @property({type: Number, reflect: true, attribute: 'shape-size'})
+    @property({type: Number, attribute: 'shape-size'})
     public shapeSize: number | null = null;
-    @property({type: Number, reflect: true, attribute: 'shape-gap'})
+    @property({type: Number, attribute: 'shape-gap'})
     public shapeGap = 1;
 
     protected valueShapes!: ValueSlice[];

@@ -7,7 +7,7 @@ import { ValueCircle } from './types.js';
 
 @customElement('tc-line')
 export class TcLine extends TcBase {
-    @property({type: Number, attribute: 'shape-size', reflect: true})
+    @property({type: Number, attribute: 'shape-size'})
     public shapeSize = 2;
 
     protected valueShapes!: ValueCircle[];

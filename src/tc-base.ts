@@ -4,13 +4,13 @@ import { ValueCircle, ValueRectangle, ValueSlice } from './types.js';
 
 
 export abstract class TcBase extends LitElement {
-    @property({type: Array, reflect: true})
+    @property({type: Array})
     public values: number[] = [];
-    @property({type: Array, reflect: true})
+    @property({type: Array})
     public labels: string[] = [];
-    @property({type: Number, reflect: true})
+    @property({type: Number})
     public min: number | null = null;
-    @property({type: Number, reflect: true})
+    @property({type: Number})
     public max: number | null = null;
     @property({type: Boolean, reflect: true, attribute: 'tooltip-disabled'})
     public tooltipDisabled = false;

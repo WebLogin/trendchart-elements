@@ -7,9 +7,9 @@ import { ValueRectangle } from './types.js';
 
 @customElement('tc-bar')
 export class TcBar extends TcBase {
-    @property({type: Number, reflect: true, attribute: 'shape-gap'})
+    @property({type: Number, attribute: 'shape-gap'})
     public shapeGap = 1;
-    @property({type: Number, reflect: true, attribute: 'shape-radius'})
+    @property({type: Number, attribute: 'shape-radius'})
     public shapeRadius = 1;
 
     protected valueShapes!: ValueRectangle[];
