@@ -1,5 +1,3 @@
-⚠️ Work In Progress not ready to use ⚠️
-
 # TrendChart Elements
 
 Web components to generate simple, light and responsive charts representing trends.
