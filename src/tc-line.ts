@@ -101,12 +101,12 @@ export class TcLine extends TcBase {
 
 
     protected willUpdate(changedProperties: PropertyValues<this>) {
-        if (!this.width || !this.height) {
-            return;
-        }
-
         if (changedProperties.has('shapeSize')) {
             this.validatePropertyAsPositiveNumber('shapeSize');
+        }
+
+        if (!this.width || !this.height) {
+            return;
         }
 
         const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeSize'];

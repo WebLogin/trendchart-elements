@@ -85,16 +85,16 @@ export class TcColumn extends TcBase {
 
 
     protected willUpdate(changedProperties: PropertyValues<this>) {
-        if (!this.width || !this.height) {
-            return;
-        }
-
         if (changedProperties.has('shapeGap')) {
             this.validatePropertyAsPositiveNumber('shapeGap');
         }
 
         if (changedProperties.has('shapeRadius')) {
             this.validatePropertyAsPositiveNumber('shapeRadius');
+        }
+
+        if (!this.width || !this.height) {
+            return;
         }
 
         const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeGap', 'shapeRadius'];
