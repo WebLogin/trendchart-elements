@@ -85,6 +85,8 @@ export class TcColumn extends TcBase {
 
 
     protected willUpdate(changedProperties: PropertyValues<this>) {
+        super.willUpdate(changedProperties);
+
         if (changedProperties.has('shapeGap')) {
             this.validatePropertyAsPositiveNumber('shapeGap');
         }

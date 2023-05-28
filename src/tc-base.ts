@@ -1,4 +1,4 @@
-import { CSSResultGroup, HTMLTemplateResult, LitElement, TemplateResult, css, html, nothing } from 'lit';
+import { CSSResultGroup, HTMLTemplateResult, LitElement, PropertyValues, TemplateResult, css, html, nothing } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { ValueCircle, ValueRectangle, ValueSlice } from './types.js';
 
@@ -113,6 +113,13 @@ export abstract class TcBase extends LitElement {
             wrapperElement.addEventListener('mouseleave', () => {
                 this.valueShapeFocused = null;
             });
+        }
+    }
+
+
+    protected willUpdate(changedProperties: PropertyValues<this>) {
+        if (changedProperties.has('labels')) {
+            this.labels = this.labels.map((label) => (label != null) ? ''+label : '');
         }
     }
 
