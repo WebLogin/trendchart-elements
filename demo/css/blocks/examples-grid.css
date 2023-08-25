@@ -30,7 +30,7 @@
     flex: 0 0 auto;
     width: 12rem;
     height: 2.4rem;
-    margin: 2rem 0 0 0;
+    margin: 2rem auto 0 auto;
 }
 .b-examples-grid > .example-repositories > .row > .text {
     flex: 1 1 auto;
