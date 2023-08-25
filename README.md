@@ -52,10 +52,10 @@ Use CSS to change the `width` and `height` of the chart, because they are respon
 
 - Common
 	- `values` - Required array of numbers for the values. Example `values="[12,10,11]"` - Default `[]`
-	- `labels` - Optional array of strings for the labels corresponding to the values, it needs to be the same length as `values` array. Only usefull with tooltips not disabled. Example `labels='["Foo","Bar","Baz"]'` - Default `[]`
+	- `labels` - Optional array of strings for the labels corresponding to the values, it needs to be the same length as `values` array. Only usefull when chart not `static`. Example `labels='["Foo","Bar","Baz"]'` - Default `[]`
 	- `min` - Optional number or null for the minimum `Y axis` value, in most cases you'll need to add it to `0`. When `null` the chart uses the smallest value - Default `null`
 	- `max` - Optional number or null for the maximum `Y axis` value, usefull if you need to have multiple charts with the same scale. When `null` the chart uses the highest value - Default `null`
-	- `tooltip-disabled` - Optional attribute to disable the tooltip, it doesn't need a value, just add the attribute
+	- `static` - Optional attribute to disable tooltip and other hover styling, it doesn't need a value, just add the attribute
 	- `tooltip-text` - Optional string to format the tooltip text. Two placeholders are available, `@V` being the current value and `@L` the current label if present - Default `@L @V`
 - Line chart
 	- `shape-size` - Optional number for the line size - Default `2`

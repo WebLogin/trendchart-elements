@@ -13,8 +13,8 @@ export abstract class TcBase extends LitElement {
     public min: number | null = null;
     @property({type: Number})
     public max: number | null = null;
-    @property({type: Boolean, reflect: true, attribute: 'tooltip-disabled'})
-    public tooltipDisabled = false;
+    @property({type: Boolean, reflect: true})
+    public static = false;
     @property({type: String, attribute: 'tooltip-text'})
     public tooltipText = '@L @V';
 
@@ -128,7 +128,7 @@ export abstract class TcBase extends LitElement {
 
 
     protected firstUpdated() {
-        if (!this.tooltipDisabled) {
+        if (!this.static) {
             const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
             wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
                 this.valueShapeFocused = this.findValueShapeAtPosition(event.offsetX, event.offsetY);;
@@ -168,7 +168,7 @@ export abstract class TcBase extends LitElement {
 
 
     protected tooltipTemplate(): TemplateResult | null {
-        if (this.valueShapeFocused === null) {
+        if (!this.valueShapeFocused) {
             return null;
         }
 
