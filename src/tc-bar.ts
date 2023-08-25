@@ -1,8 +1,8 @@
 import { css, html, PropertyValues, svg, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { styleMap } from 'lit/directives/style-map.js';
+import { StyleInfo } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
-import { ValueRectangle } from './types.js';
+import { ValueShapeRectangle } from './types.js';
 
 
 @customElement('tc-bar')
@@ -12,8 +12,8 @@ export class TcBar extends TcBase {
     @property({type: Number, attribute: 'shape-radius'})
     public shapeRadius = 1;
 
-    protected valueShapes!: ValueRectangle[];
-    protected valueShapeFocused!: ValueRectangle;
+    protected valueShapes!: ValueShapeRectangle[];
+    protected valueShapeFocused!: ValueShapeRectangle;
 
     static styles = [
         TcBase.styles,
@@ -33,6 +33,58 @@ export class TcBar extends TcBase {
             }
         `,
     ];
+
+
+    protected willUpdate(changedProperties: PropertyValues<this>) {
+        super.willUpdate(changedProperties);
+
+        if (changedProperties.has('shapeGap')) {
+            this.validatePropertyAsPositiveNumber('shapeGap');
+        }
+
+        if (changedProperties.has('shapeRadius')) {
+            this.validatePropertyAsPositiveNumber('shapeRadius');
+        }
+
+        if (!this.width || !this.height) {
+            return;
+        }
+
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeGap', 'shapeRadius'];
+        if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
+            this.computeChartProperties();
+        }
+    }
+
+
+    protected chartTemplate(): TemplateResult | null {
+        if (this.valueShapes.length < 1) {
+            return null;
+        }
+
+        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].height / 2));
+
+        return html`
+            <svg class="chart" width="100%" height="100%">
+                ${this.valueShapes.map((valueShape, index) => svg`
+                    <rect class="area"
+                        x="0"
+                        y="${valueShape.origin.y}"
+                        width="100%"
+                        height="${valueShape.height}"
+                        rx="${shapeRadius}" ry="${shapeRadius}"
+                    />
+                    <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                        x="${valueShape.origin.x}"
+                        y="${valueShape.origin.y}"
+                        width="${valueShape.width}"
+                        height="${valueShape.height}"
+                        rx="${shapeRadius}" ry="${shapeRadius}"
+                    />
+                `)}
+            </svg>
+        `;
+    }
 
 
     protected computeChartProperties(): void {
@@ -84,30 +136,8 @@ export class TcBar extends TcBase {
     }
 
 
-    protected willUpdate(changedProperties: PropertyValues<this>) {
-        super.willUpdate(changedProperties);
-
-        if (changedProperties.has('shapeGap')) {
-            this.validatePropertyAsPositiveNumber('shapeGap');
-        }
-
-        if (changedProperties.has('shapeRadius')) {
-            this.validatePropertyAsPositiveNumber('shapeRadius');
-        }
-
-        if (!this.width || !this.height) {
-            return;
-        }
-
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeGap', 'shapeRadius'];
-        if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
-            this.computeChartProperties();
-        }
-    }
-
-
-    protected findValueShapeAtPosition(x: number, y: number): ValueRectangle | null {
-        return this.valueShapes.find((valueShape: ValueRectangle): boolean => {
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | null {
+        return this.valueShapes.find((valueShape: ValueShapeRectangle): boolean => {
             const yMin = valueShape.origin.y - (this.shapeGap / 2);
             const yMax = valueShape.origin.y + valueShape.height + (this.shapeGap / 2);
             return y >= yMin && y <= yMax;
@@ -115,51 +145,17 @@ export class TcBar extends TcBase {
     }
 
 
-    protected templateChart(): TemplateResult | null {
-        if (this.valueShapes.length < 1) {
-            return null;
-        }
-
-        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].height / 2));
-
-        return html`
-            <svg class="chart" width="100%" height="100%">
-                ${this.valueShapes.map((valueShape, index) => svg`
-                    <rect class="area"
-                        x="0"
-                        y="${valueShape.origin.y}"
-                        width="100%"
-                        height="${valueShape.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
-                    />
-                    <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
-                        x="${valueShape.origin.x}"
-                        y="${valueShape.origin.y}"
-                        width="${valueShape.width}"
-                        height="${valueShape.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
-                    />
-                `)}
-            </svg>
-        `;
-    }
-
-
-    protected templateTooltip(): TemplateResult | null {
-        if (this.valueShapeFocused === null) {
-            return null;
-        }
-
-        const style = {
-            left: ((this.valueShapeFocused.value < 0) ? this.valueShapeFocused.origin.x : (this.valueShapeFocused.origin.x + this.valueShapeFocused.width)) + 'px',
-            top: (this.valueShapeFocused.origin.y - 2) + 'px',
+    protected tooltipAnchorPositionFor(valueShape: ValueShapeRectangle): StyleInfo {
+        const style: StyleInfo = {
+            left: (valueShape.origin.x + valueShape.width) + 'px',
+            top: (valueShape.origin.y - 2) + 'px',
             transform: 'translate(-50%, -100%)',
         };
 
-        return html`
-            <div class="tooltip" style="${styleMap(style)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused)}
-            </div>
-        `;
+        if ((valueShape.value < 0 || Math.max(...this.values) === 0)) {
+            style.left = valueShape.origin.x + 'px';
+        }
+
+        return style;
     }
 }

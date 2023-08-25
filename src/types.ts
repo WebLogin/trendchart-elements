@@ -1,3 +1,4 @@
+// Shapes
 export interface ShapeCircle {
     center: ShapePoint,
     radius: number,
@@ -21,11 +22,13 @@ export interface ShapeSlice {
 }
 
 
-interface ValueShape {
+// ValueShapes
+interface BaseValueShape {
     index: number,
     value: number,
     label: string | null,
 }
-export interface ValueCircle extends ValueShape, ShapeCircle {}
-export interface ValueRectangle extends ValueShape, ShapeRectangle {}
-export interface ValueSlice extends ValueShape, ShapeSlice {}
+export interface ValueShapeCircle extends BaseValueShape, ShapeCircle {}
+export interface ValueShapeRectangle extends BaseValueShape, ShapeRectangle {}
+export interface ValueShapeSlice extends BaseValueShape, ShapeSlice {}
+export type ValueShape = ValueShapeCircle | ValueShapeRectangle | ValueShapeSlice

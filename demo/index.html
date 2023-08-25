@@ -641,8 +641,18 @@
             </section>
 
 
-            <h2 class="layout-title">Tests : Tooltip</h2>
+            <h2 class="layout-title">Tests : Others</h2>
             <section class="b-tests-grid">
+                <div class="test">
+                    <div class="content">
+                        <tc-bar values="[140,120,70,150,170,190]"
+                            tooltip-disabled>
+                        </tc-bar>
+                    </div>
+                    <div class="footer">
+                        Tooltip disabled
+                    </div>
+                </div>
                 <div class="test">
                     <div class="content">
                         <tc-line values="[12,10,12,11,7,6,8,10,12,11,17,18,20,17,16,14,15,13,12,14]"
@@ -650,7 +660,7 @@
                         </tc-line>
                     </div>
                     <div class="footer">
-                        Format text
+                        Format tooltip text
                     </div>
                 </div>
                 <div class="test">
@@ -661,17 +671,7 @@
                         </tc-pie>
                     </div>
                     <div class="footer">
-                        With labels
-                    </div>
-                </div>
-                <div class="test">
-                    <div class="content">
-                        <tc-bar values="[140,120,70,150,170,190]"
-                            tooltip-disabled>
-                        </tc-bar>
-                    </div>
-                    <div class="footer">
-                        Disabled
+                        Tooltip with labels
                     </div>
                 </div>
                 <div class="test">
@@ -685,7 +685,18 @@
                         </tc-column>
                     </div>
                     <div class="footer">
-                        Styling
+                        Tooltip styling
+                    </div>
+                </div>
+                <div class="test">
+                    <div class="content">
+                        <tc-line values="[10,30,20]"
+                            tooltip-text="Et non vitae non debitis et deleniti lorem : @V"
+                            style="--area-opacity: 0.15;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Tooltip screen overflow
                     </div>
                 </div>
             </section>

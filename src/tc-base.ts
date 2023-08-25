@@ -1,6 +1,7 @@
 import { CSSResultGroup, HTMLTemplateResult, LitElement, PropertyValues, TemplateResult, css, html, nothing } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { ValueCircle, ValueRectangle, ValueSlice } from './types.js';
+import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
+import { ValueShape } from './types.js';
 
 
 export abstract class TcBase extends LitElement {
@@ -18,13 +19,13 @@ export abstract class TcBase extends LitElement {
     public tooltipText = '@L @V';
 
     @state()
-    protected valueShapeFocused: ValueCircle | ValueRectangle | ValueSlice | null = null;
+    protected valueShapeFocused: ValueShape | null = null;
     @state()
     protected width = 0;
     @state()
     protected height = 0;
 
-    protected valueShapes: (ValueCircle | ValueRectangle | ValueSlice)[] = [];
+    protected valueShapes: ValueShape[] = [];
     private resizeObserver!: ResizeObserver;
 
     static styles = css`
@@ -47,7 +48,6 @@ export abstract class TcBase extends LitElement {
             width: 100%;
             height: 100%;
             position: relative;
-            z-index: 1;
             box-sizing: border-box;
             border-radius: inherit;
         }
@@ -58,12 +58,19 @@ export abstract class TcBase extends LitElement {
             display: block;
             position: relative;
             z-index: 1;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
             border-radius: inherit
         }
         .chart .area {
             fill: var(--area-color);
             opacity: var(--area-opacity);
+            stroke: none;
+        }
+        .chart > .shape {
+            fill: var(--shape-color);
+            opacity: var(--shape-opacity);
             stroke: none;
         }
         .tooltip {
@@ -103,10 +110,26 @@ export abstract class TcBase extends LitElement {
     }
 
 
-    protected firstUpdated() {
-        const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
+    protected willUpdate(changedProperties: PropertyValues<this>) {
+        if (changedProperties.has('labels')) {
+            this.labels = this.labels.map((label) => (label != null) ? ''+label : '');
+        }
+    }
 
+
+    protected render(): HTMLTemplateResult {
+        return html`
+            <div class="wrapper">
+                ${this.chartTemplate() ?? nothing}
+                ${this.tooltipTemplate() ?? nothing}
+            </div>
+        `;
+    }
+
+
+    protected firstUpdated() {
         if (!this.tooltipDisabled) {
+            const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
             wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
                 this.valueShapeFocused = this.findValueShapeAtPosition(event.offsetX, event.offsetY);;
             });
@@ -117,47 +140,52 @@ export abstract class TcBase extends LitElement {
     }
 
 
-    protected willUpdate(changedProperties: PropertyValues<this>) {
-        if (changedProperties.has('labels')) {
-            this.labels = this.labels.map((label) => (label != null) ? ''+label : '');
+    protected updated() {
+        if (this.valueShapeFocused) {
+            const screenOffset = 10;
+            const tooltipElement = this.renderRoot.querySelector('.tooltip') as HTMLElement;
+            const tooltipRect = tooltipElement.getBoundingClientRect();
+
+            let left = parseFloat(tooltipElement.style.left);
+            if (tooltipRect.left < screenOffset) {
+                left += screenOffset - Math.floor(tooltipRect.left);
+            } else if (tooltipRect.right > (document.documentElement.offsetWidth - screenOffset)) {
+                left += (document.documentElement.offsetWidth - screenOffset - Math.ceil(tooltipRect.right));
+            }
+
+            tooltipElement.style.left = `${left}px`;
         }
     }
 
 
-    /**
-     * Compute the propeties used to create the chart
-     */
+    protected abstract chartTemplate(): TemplateResult | null;
+
+
     protected abstract computeChartProperties(): void;
 
 
-    /**
-     * Find the ValueShape at given position
-     */
-    protected abstract findValueShapeAtPosition(x: number, y: number): ValueCircle | ValueRectangle | ValueSlice | null;
+    protected abstract findValueShapeAtPosition(x: number, y: number): ValueShape | null;
 
 
-    protected render(): HTMLTemplateResult {
+    protected tooltipTemplate(): TemplateResult | null {
+        if (this.valueShapeFocused === null) {
+            return null;
+        }
+
+        const style = this.tooltipAnchorPositionFor(this.valueShapeFocused);
+
+        const text = this.tooltipText
+            .replace(/@V/g, this.valueShapeFocused.value.toLocaleString())
+            .replace(/@L/g, this.valueShapeFocused.label ? this.valueShapeFocused.label : '')
+            .trim();
+
         return html`
-            <div class="wrapper">
-                ${this.templateChart() ?? nothing}
-                ${this.templateTooltip() ?? nothing}
-            </div>
+            <div class="tooltip" style="${styleMap(style)}">${text}</div>
         `;
     }
 
 
-    protected abstract templateChart(): TemplateResult | null;
-
-
-    protected abstract templateTooltip(): TemplateResult | null;
-
-
-    protected tooltipTextFormatted(valueShape: ValueCircle | ValueRectangle | ValueSlice): string {
-        return this.tooltipText
-            .replace(/@V/g, valueShape.value.toLocaleString())
-            .replace(/@L/g, valueShape.label ? valueShape.label : '')
-            .trim();
-    }
+    protected abstract tooltipAnchorPositionFor(valueShape: ValueShape): StyleInfo;
 
 
     protected validatePropertyAsPositiveNumber(propertyName: keyof this & string): void {
@@ -165,10 +193,5 @@ export abstract class TcBase extends LitElement {
         if (!Number.isFinite(property) || property < 0) {
             throw new Error(`The property ${propertyName} must be a positive number`);
         }
-    }
-
-
-    protected onlyNegativeValues(): boolean {
-        return (Math.max(...this.values) === 0);
     }
 }

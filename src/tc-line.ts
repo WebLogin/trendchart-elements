@@ -1,8 +1,8 @@
-import { css, html, PropertyValues, TemplateResult } from 'lit';
+import { PropertyValues, TemplateResult, css, html, svg } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { styleMap } from 'lit/directives/style-map.js';
+import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
-import { ValueCircle } from './types.js';
+import { ValueShapeCircle } from './types.js';
 
 
 @customElement('tc-line')
@@ -10,8 +10,8 @@ export class TcLine extends TcBase {
     @property({type: Number, attribute: 'shape-size'})
     public shapeSize = 2;
 
-    protected valueShapes!: ValueCircle[];
-    protected valueShapeFocused!: ValueCircle;
+    protected valueShapes!: ValueShapeCircle[];
+    protected valueShapeFocused!: ValueShapeCircle;
     private linePath!: string;
     private areaPath!: string;
 
@@ -38,10 +38,54 @@ export class TcLine extends TcBase {
             .chart > .shape {
                 fill: none;
                 stroke: var(--shape-color);
-                opacity: var(--shape-opacity);
             }
         `,
     ];
+
+
+    protected willUpdate(changedProperties: PropertyValues<this>) {
+        super.willUpdate(changedProperties);
+
+        if (changedProperties.has('shapeSize')) {
+            this.validatePropertyAsPositiveNumber('shapeSize');
+        }
+
+        if (!this.width || !this.height) {
+            return;
+        }
+
+        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeSize'];
+        if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
+            this.computeChartProperties();
+        }
+    }
+
+
+    protected chartTemplate(): TemplateResult | null {
+        if (this.valueShapes.length < 2) {
+            return null;
+        }
+
+        const pointStyle: StyleInfo = { display: 'none' };
+        if (this.valueShapeFocused) {
+            pointStyle.display = 'block';
+            pointStyle.left = this.valueShapeFocused.center.x + 'px';
+            pointStyle.top = this.valueShapeFocused.center.y + 'px';
+            pointStyle.width = (this.valueShapeFocused.radius * 2) + 'px';
+            pointStyle.height = (this.valueShapeFocused.radius * 2) + 'px';
+        }
+
+        return html`
+            <svg class="chart">
+                <mask id="mask">
+                    <path d="${this.areaPath}" stroke-width="${this.shapeSize}" stroke="#FFFFFF" fill="#FFFFFF" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                </mask>
+                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
+                <path class="shape" d="${this.linePath}" stroke-width="${this.shapeSize}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="point" style="${styleMap(pointStyle)}"></div>
+        `;
+    }
 
 
     protected computeChartProperties(): void {
@@ -100,75 +144,25 @@ export class TcLine extends TcBase {
     }
 
 
-    protected willUpdate(changedProperties: PropertyValues<this>) {
-        super.willUpdate(changedProperties);
-
-        if (changedProperties.has('shapeSize')) {
-            this.validatePropertyAsPositiveNumber('shapeSize');
-        }
-
-        if (!this.width || !this.height) {
-            return;
-        }
-
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeSize'];
-        if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
-            this.computeChartProperties();
-        }
-    }
-
-
-    protected findValueShapeAtPosition(x: number, y: number): ValueCircle {
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle {
         return this.valueShapes.reduce((previous, current) => {
             return (Math.abs(current.center.x - x) < Math.abs(previous.center.x - x) ? current : previous);
         });
     }
 
 
-    protected templateChart(): TemplateResult | null {
-        if (this.valueShapes.length < 2) {
-            return null;
-        }
-
-        return html`
-            <svg class="chart" width="100%" height="100%">
-                <mask id="mask">
-                    <path d="${this.areaPath}" stroke-width="${this.shapeSize}" stroke="#FFFFFF" fill="#FFFFFF" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
-                </mask>
-                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
-                <path class="shape" d="${this.linePath}" stroke-width="${this.shapeSize}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        `;
-    }
-
-
-    protected templateTooltip(): TemplateResult | null {
-        if (this.valueShapeFocused === null) {
-            return null;
-        }
-
-        const pointStyle = {
-            left: this.valueShapeFocused.center.x + 'px',
-            top: this.valueShapeFocused.center.y + 'px',
-            width: (this.valueShapeFocused.radius * 2) + 'px',
-            height: (this.valueShapeFocused.radius * 2) + 'px',
-        };
-
-        let tooltipStyle = {
-            left: this.valueShapeFocused.center.x + 'px',
-            top: (this.valueShapeFocused.center.y - this.valueShapeFocused.radius - 2) + 'px',
+    protected tooltipAnchorPositionFor(valueShape: ValueShapeCircle): StyleInfo {
+        const style: StyleInfo = {
+            left: valueShape.center.x + 'px',
+            top: (valueShape.center.y - valueShape.radius - 2) + 'px',
             transform: 'translate(-50%, -100%)',
         };
-        if (this.valueShapeFocused.value < 0 || this.onlyNegativeValues()) {
-            tooltipStyle.top = (this.valueShapeFocused.center.y + this.valueShapeFocused.radius + 2) + 'px';
-            tooltipStyle.transform = 'translate(-50%, 0%)';
+
+        if ((valueShape.value < 0 || Math.max(...this.values) === 0)) {
+            style.top = (valueShape.center.y + valueShape.radius + 2) + 'px';
+            style.transform = 'translate(-50%, 0%)';
         }
 
-        return html`
-            <div class="point" style="${styleMap(pointStyle)}"></div>
-            <div class="tooltip" style="${styleMap(tooltipStyle)}">
-                ${this.tooltipTextFormatted(this.valueShapeFocused)}
-            </div>
-        `;
+        return style;
     }
 }
