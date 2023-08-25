@@ -15,8 +15,8 @@ export abstract class TcBase extends LitElement {
     public max: number | null = null;
     @property({type: Boolean, reflect: true})
     public static = false;
-    @property({type: String, attribute: 'tooltip-text'})
-    public tooltipText = '@L @V';
+    @property({type: String})
+    public tooltip = '@L @V';
 
     @state()
     protected valueShapeFocused: ValueShape | null = null;
@@ -174,7 +174,7 @@ export abstract class TcBase extends LitElement {
 
         const style = this.tooltipAnchorPositionFor(this.valueShapeFocused);
 
-        const text = this.tooltipText
+        const text = this.tooltip
             .replace(/@V/g, this.valueShapeFocused.value.toLocaleString())
             .replace(/@L/g, this.valueShapeFocused.label ? this.valueShapeFocused.label : '')
             .trim();
