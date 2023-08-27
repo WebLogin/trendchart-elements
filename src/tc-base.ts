@@ -19,11 +19,11 @@ export abstract class TcBase extends LitElement {
     public tooltip = '@L @V';
 
     @state()
+    public width = 0;
+    @state()
+    public height = 0;
+    @state()
     protected valueShapeFocused: ValueShape | null = null;
-    @state()
-    protected width = 0;
-    @state()
-    protected height = 0;
 
     protected valueShapes: ValueShape[] = [];
     private resizeObserver!: ResizeObserver;
@@ -111,10 +111,22 @@ export abstract class TcBase extends LitElement {
 
 
     protected willUpdate(changedProperties: PropertyValues<this>) {
+        if (!this.width || !this.height) {
+            return;
+        }
+
         if (changedProperties.has('labels')) {
-            this.labels = this.labels.map((label) => (label != null) ? ''+label : '');
+            this.labels = this.labels.map((label) => (label != null) ? '' + label : '');
+        }
+
+        const propertiesRelatedToChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeSize', 'shapeGap', 'shapeRadius'];
+        if (propertiesRelatedToChart.some((property) => changedProperties.has(property as any))) {
+            this.computeChartData();
         }
     }
+
+
+    protected abstract computeChartData(): void;
 
 
     protected render(): HTMLTemplateResult {
@@ -127,44 +139,7 @@ export abstract class TcBase extends LitElement {
     }
 
 
-    protected firstUpdated() {
-        if (!this.static) {
-            const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
-            wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
-                this.valueShapeFocused = this.findValueShapeAtPosition(event.offsetX, event.offsetY);;
-            });
-            wrapperElement.addEventListener('mouseleave', () => {
-                this.valueShapeFocused = null;
-            });
-        }
-    }
-
-
-    protected updated() {
-        if (this.valueShapeFocused) {
-            const screenOffset = 10;
-            const tooltipElement = this.renderRoot.querySelector('.tooltip') as HTMLElement;
-            const tooltipRect = tooltipElement.getBoundingClientRect();
-
-            let left = parseFloat(tooltipElement.style.left);
-            if (tooltipRect.left < screenOffset) {
-                left += screenOffset - Math.floor(tooltipRect.left);
-            } else if (tooltipRect.right > (document.documentElement.offsetWidth - screenOffset)) {
-                left += (document.documentElement.offsetWidth - screenOffset - Math.ceil(tooltipRect.right));
-            }
-
-            tooltipElement.style.left = `${left}px`;
-        }
-    }
-
-
     protected abstract chartTemplate(): TemplateResult | null;
-
-
-    protected abstract computeChartProperties(): void;
-
-
-    protected abstract findValueShapeAtPosition(x: number, y: number): ValueShape | null;
 
 
     protected tooltipTemplate(): TemplateResult | null {
@@ -188,10 +163,36 @@ export abstract class TcBase extends LitElement {
     protected abstract tooltipAnchorPositionFor(valueShape: ValueShape): StyleInfo;
 
 
-    protected validatePropertyAsPositiveNumber(propertyName: keyof this & string): void {
-        const property = this[propertyName] as any;
-        if (!Number.isFinite(property) || property < 0) {
-            throw new Error(`The property ${propertyName} must be a positive number`);
+    protected firstUpdated() {
+        if (!this.static) {
+            const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
+            wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
+                this.valueShapeFocused = this.findValueShapeAtPosition(event.offsetX, event.offsetY);;
+            });
+            wrapperElement.addEventListener('mouseleave', () => {
+                this.valueShapeFocused = null;
+            });
+        }
+    }
+
+
+    protected abstract findValueShapeAtPosition(x: number, y: number): ValueShape | null;
+
+
+    protected updated() {
+        if (this.valueShapeFocused) {
+            const screenOffset = 10;
+            const tooltipElement = this.renderRoot.querySelector('.tooltip') as HTMLElement;
+            const tooltipRect = tooltipElement.getBoundingClientRect();
+
+            let left = parseFloat(tooltipElement.style.left);
+            if (tooltipRect.left < screenOffset) {
+                left += screenOffset - Math.floor(tooltipRect.left);
+            } else if (tooltipRect.right > (document.documentElement.offsetWidth - screenOffset)) {
+                left += (document.documentElement.offsetWidth - screenOffset - Math.ceil(tooltipRect.right));
+            }
+
+            tooltipElement.style.left = `${left}px`;
         }
     }
 }

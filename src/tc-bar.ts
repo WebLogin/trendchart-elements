@@ -35,59 +35,7 @@ export class TcBar extends TcBase {
     ];
 
 
-    protected willUpdate(changedProperties: PropertyValues<this>) {
-        super.willUpdate(changedProperties);
-
-        if (changedProperties.has('shapeGap')) {
-            this.validatePropertyAsPositiveNumber('shapeGap');
-        }
-
-        if (changedProperties.has('shapeRadius')) {
-            this.validatePropertyAsPositiveNumber('shapeRadius');
-        }
-
-        if (!this.width || !this.height) {
-            return;
-        }
-
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeGap', 'shapeRadius'];
-        if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
-            this.computeChartProperties();
-        }
-    }
-
-
-    protected chartTemplate(): TemplateResult | null {
-        if (this.valueShapes.length < 1) {
-            return null;
-        }
-
-        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].height / 2));
-
-        return html`
-            <svg class="chart" width="100%" height="100%">
-                ${this.valueShapes.map((valueShape, index) => svg`
-                    <rect class="area"
-                        x="0"
-                        y="${valueShape.origin.y}"
-                        width="100%"
-                        height="${valueShape.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
-                    />
-                    <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
-                        x="${valueShape.origin.x}"
-                        y="${valueShape.origin.y}"
-                        width="${valueShape.width}"
-                        height="${valueShape.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
-                    />
-                `)}
-            </svg>
-        `;
-    }
-
-
-    protected computeChartProperties(): void {
+    protected computeChartData(): void {
         this.valueShapes = [];
 
         let valueMin = Math.min(...this.values);
@@ -136,12 +84,33 @@ export class TcBar extends TcBase {
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | null {
-        return this.valueShapes.find((valueShape: ValueShapeRectangle): boolean => {
-            const yMin = valueShape.origin.y - (this.shapeGap / 2);
-            const yMax = valueShape.origin.y + valueShape.height + (this.shapeGap / 2);
-            return y >= yMin && y <= yMax;
-        }) ?? null;
+    protected chartTemplate(): TemplateResult | null {
+        if (this.valueShapes.length < 1) {
+            return null;
+        }
+
+        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].height / 2));
+
+        return html`
+            <svg class="chart" width="100%" height="100%">
+                ${this.valueShapes.map((valueShape, index) => svg`
+                    <rect class="area"
+                        x="0"
+                        y="${valueShape.origin.y}"
+                        width="100%"
+                        height="${valueShape.height}"
+                        rx="${shapeRadius}" ry="${shapeRadius}"
+                    />
+                    <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                        x="${valueShape.origin.x}"
+                        y="${valueShape.origin.y}"
+                        width="${valueShape.width}"
+                        height="${valueShape.height}"
+                        rx="${shapeRadius}" ry="${shapeRadius}"
+                    />
+                `)}
+            </svg>
+        `;
     }
 
 
@@ -157,5 +126,14 @@ export class TcBar extends TcBase {
         }
 
         return style;
+    }
+
+
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | null {
+        return this.valueShapes.find((valueShape: ValueShapeRectangle): boolean => {
+            const yMin = valueShape.origin.y - (this.shapeGap / 2);
+            const yMax = valueShape.origin.y + valueShape.height + (this.shapeGap / 2);
+            return y >= yMin && y <= yMax;
+        }) ?? null;
     }
 }

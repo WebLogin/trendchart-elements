@@ -39,60 +39,7 @@ export class TcPie extends TcBase {
     ];
 
 
-    protected willUpdate(changedProperties: PropertyValues<this>) {
-        super.willUpdate(changedProperties);
-
-        if (changedProperties.has('shapeGap')) {
-            this.validatePropertyAsPositiveNumber('shapeGap');
-        }
-
-        if (changedProperties.has('shapeSize') && this.shapeSize !== null) {
-            this.validatePropertyAsPositiveNumber('shapeSize');
-        }
-
-        if (!this.width || !this.height) {
-            return;
-        }
-
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'max', 'shapeGap', 'shapeSize'];
-        if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
-            this.computeChartProperties();
-        }
-    }
-
-
-    protected chartTemplate(): TemplateResult | null {
-        if (this.valueShapes.length < 1) {
-            return null;
-        }
-
-        return html`
-            <svg class="chart" width="100%" height="100%">
-                <mask id="mask">
-                    <rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF" stroke="none"/>
-                    <circle cx="${this.cutoutCircle.center.x}" cy="${this.cutoutCircle.center.y}" r="${this.cutoutCircle.radius}" fill="#000000"/>
-                    ${this.gapLines.map((gapLine) => svg`
-                        <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
-                            x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                            stroke-width="${this.shapeGap}" stroke="#000000" stroke-linecap="round"
-                        />
-                    `)}
-                </mask>
-                <g mask="url(#mask)">
-                    <path class="area" d="${this.areaPath}"/>
-                    ${this.valueShapes.map((valueShape, index) => svg`
-                        <path class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
-                            d="${valueShape.path}"
-                            style="fill: var(--shape-color-${index + 1}, var(--shape-color))"
-                        />
-                    `)}
-                </g>
-            </svg>
-        `;
-    }
-
-
-    protected computeChartProperties(): void {
+    protected computeChartData(): void {
         this.valueShapes = [];
         this.gapLines = [];
         this.areaPath = '';
@@ -174,6 +121,48 @@ export class TcPie extends TcBase {
     }
 
 
+    protected chartTemplate(): TemplateResult | null {
+        if (this.valueShapes.length < 1) {
+            return null;
+        }
+
+        return html`
+            <svg class="chart" width="100%" height="100%">
+                <mask id="mask">
+                    <rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF" stroke="none"/>
+                    <circle cx="${this.cutoutCircle.center.x}" cy="${this.cutoutCircle.center.y}" r="${this.cutoutCircle.radius}" fill="#000000"/>
+                    ${this.gapLines.map((gapLine) => svg`
+                        <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
+                            x2="${gapLine.end.x}" y2="${gapLine.end.y}"
+                            stroke-width="${this.shapeGap}" stroke="#000000" stroke-linecap="round"
+                        />
+                    `)}
+                </mask>
+                <g mask="url(#mask)">
+                    <path class="area" d="${this.areaPath}"/>
+                    ${this.valueShapes.map((valueShape, index) => svg`
+                        <path class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                            d="${valueShape.path}"
+                            style="fill: var(--shape-color-${index + 1}, var(--shape-color))"
+                        />
+                    `)}
+                </g>
+            </svg>
+        `;
+    }
+
+
+    protected tooltipAnchorPositionFor(valueShape: ValueShapeSlice): StyleInfo {
+        const style: StyleInfo = {
+            left: valueShape.center.x + 'px',
+            top: valueShape.center.y + 'px',
+            transform: 'translate(-50%, -50%)',
+        };
+
+        return style;
+    }
+
+
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeSlice | null {
         const chart = this.renderRoot.querySelector('.chart') as SVGSVGElement;
         const point = chart.createSVGPoint();
@@ -189,16 +178,5 @@ export class TcPie extends TcBase {
         }
 
         return this.valueShapes[valueShapeFocusedIndex];
-    }
-
-
-    protected tooltipAnchorPositionFor(valueShape: ValueShapeSlice): StyleInfo {
-        const style: StyleInfo = {
-            left: valueShape.center.x + 'px',
-            top: valueShape.center.y + 'px',
-            transform: 'translate(-50%, -50%)',
-        };
-
-        return style;
     }
 }

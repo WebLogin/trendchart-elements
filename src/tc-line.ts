@@ -1,4 +1,4 @@
-import { PropertyValues, TemplateResult, css, html, svg } from 'lit';
+import { PropertyValues, TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
@@ -43,52 +43,7 @@ export class TcLine extends TcBase {
     ];
 
 
-    protected willUpdate(changedProperties: PropertyValues<this>) {
-        super.willUpdate(changedProperties);
-
-        if (changedProperties.has('shapeSize')) {
-            this.validatePropertyAsPositiveNumber('shapeSize');
-        }
-
-        if (!this.width || !this.height) {
-            return;
-        }
-
-        const propertiesUsedByChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeSize'];
-        if ([...changedProperties.keys()].some((property) => propertiesUsedByChart.includes(property as string))) {
-            this.computeChartProperties();
-        }
-    }
-
-
-    protected chartTemplate(): TemplateResult | null {
-        if (this.valueShapes.length < 2) {
-            return null;
-        }
-
-        const pointStyle: StyleInfo = { display: 'none' };
-        if (this.valueShapeFocused) {
-            pointStyle.display = 'block';
-            pointStyle.left = this.valueShapeFocused.center.x + 'px';
-            pointStyle.top = this.valueShapeFocused.center.y + 'px';
-            pointStyle.width = (this.valueShapeFocused.radius * 2) + 'px';
-            pointStyle.height = (this.valueShapeFocused.radius * 2) + 'px';
-        }
-
-        return html`
-            <svg class="chart">
-                <mask id="mask">
-                    <path d="${this.areaPath}" stroke-width="${this.shapeSize}" stroke="#FFFFFF" fill="#FFFFFF" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
-                </mask>
-                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
-                <path class="shape" d="${this.linePath}" stroke-width="${this.shapeSize}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <div class="point" style="${styleMap(pointStyle)}"></div>
-        `;
-    }
-
-
-    protected computeChartProperties(): void {
+    protected computeChartData(): void {
         this.valueShapes = [];
 
         let valueMin = Math.min(...this.values);
@@ -144,10 +99,30 @@ export class TcLine extends TcBase {
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle {
-        return this.valueShapes.reduce((previous, current) => {
-            return (Math.abs(current.center.x - x) < Math.abs(previous.center.x - x) ? current : previous);
-        });
+    protected chartTemplate(): TemplateResult | null {
+        if (this.valueShapes.length < 2) {
+            return null;
+        }
+
+        const pointStyle: StyleInfo = { display: 'none' };
+        if (this.valueShapeFocused) {
+            pointStyle.display = 'block';
+            pointStyle.left = this.valueShapeFocused.center.x + 'px';
+            pointStyle.top = this.valueShapeFocused.center.y + 'px';
+            pointStyle.width = (this.valueShapeFocused.radius * 2) + 'px';
+            pointStyle.height = (this.valueShapeFocused.radius * 2) + 'px';
+        }
+
+        return html`
+            <svg class="chart">
+                <mask id="mask">
+                    <path d="${this.areaPath}" stroke-width="${this.shapeSize}" stroke="#FFFFFF" fill="#FFFFFF" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                </mask>
+                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
+                <path class="shape" d="${this.linePath}" stroke-width="${this.shapeSize}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="point" style="${styleMap(pointStyle)}"></div>
+        `;
     }
 
 
@@ -164,5 +139,12 @@ export class TcLine extends TcBase {
         }
 
         return style;
+    }
+
+
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle {
+        return this.valueShapes.reduce((previous, current) => {
+            return (Math.abs(current.center.x - x) < Math.abs(previous.center.x - x) ? current : previous);
+        });
     }
 }
