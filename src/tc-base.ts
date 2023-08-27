@@ -32,6 +32,7 @@ export abstract class TcBase extends LitElement {
         :host {
             --shape-color: #597BFC;
             --shape-opacity: 1;
+            --shape-focused-opacity: 0.5;
             --area-color: var(--shape-color);
             --area-opacity: 0;
             --tooltip-font-color: white;
@@ -42,6 +43,8 @@ export abstract class TcBase extends LitElement {
             --tooltip-background: black;
             --tooltip-shadow: none;
             display: inline-block;
+            width: 120px;
+            height: 60px;
         }
         .wrapper {
             display: block;
@@ -72,6 +75,9 @@ export abstract class TcBase extends LitElement {
             fill: var(--shape-color);
             opacity: var(--shape-opacity);
             stroke: none;
+        }
+        .chart .shape.is-focused {
+            opacity: var(--shape-focused-opacity);
         }
         .tooltip {
             position: absolute;

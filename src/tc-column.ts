@@ -17,21 +17,7 @@ export class TcColumn extends TcBase {
 
     static styles = [
         TcBase.styles,
-        css`
-            :host {
-                --shape-focused-opacity: 0.5;
-                width: 120px;
-                height: 40px;
-            }
-            .chart > .shape {
-                fill: var(--shape-color);
-                opacity: var(--shape-opacity);
-                stroke: none;
-            }
-            .chart > .shape.is-focused {
-                opacity: var(--shape-focused-opacity);
-            }
-        `,
+        css``,
     ];
 
 

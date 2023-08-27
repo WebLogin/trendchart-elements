@@ -22,8 +22,6 @@ export class TcLine extends TcBase {
                 --point-color: var(--shape-color);
                 --point-opacity: 1;
                 --point-shadow: none;
-                width: 120px;
-                height: 40px;
             }
             .point {
                 position: absolute;

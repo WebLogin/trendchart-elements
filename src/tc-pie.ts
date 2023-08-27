@@ -22,18 +22,8 @@ export class TcPie extends TcBase {
         TcBase.styles,
         css`
             :host {
-                --shape-focused-opacity: 0.5;
-                border-radius: 100%;
                 width: 60px;
-                height: 60px;
-            }
-            .chart .shape {
-                fill: var(--shape-color);
-                opacity: var(--shape-opacity);
-                stroke: none;
-            }
-            .chart .shape.is-focused {
-                opacity: var(--shape-focused-opacity);
+                border-radius: 100%;
             }
         `,
     ];
