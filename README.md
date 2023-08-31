@@ -10,6 +10,8 @@ It is often useful to display some simple charts to represent a data visualizati
 
 Tested on modern browsers : `Chrome >= 73`, `Firefox >= 63`, `Edge >= 79`, `Safari >= 12`
 
+No dependency except [Lit](https://github.com/lit/lit/) to create web components.
+
 
 ## Installation
 
