@@ -94,4 +94,4 @@ Use CSS to change the `width` and `height` of the chart, because they are respon
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+TrendChart Elements is licensed under the [MIT license](https://opensource.org/licenses/MIT).
