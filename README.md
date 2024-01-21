@@ -92,6 +92,24 @@ Use CSS to change the `width` and `height` of the chart, because they are respon
 	- `--shape-focused-opacity` - Slice opacity on hover - Default `0.5`
 
 
+## React
+
+The library has a React wrapper made with @lit/react package.
+
+### Usage
+
+```jsx
+import { TcPieReact, TcLineReact,TcBarReact, TcColumnReact } from "@weblogin/trendchart-elements";
+
+<TcPieReact 
+	values={[12,10]}
+	className="[--shape-color-1:#A838FF] [--shape-color-2:#19D6BF]"
+/>
+<TcColumnReact values={[11,7,6,8,10,12,8,10,12]} />
+<TcBarReact values={[11,7,6,8,10,12,8,10,12]} />
+<TcLineReact values={[35,68,22,16]} />
+```
+
 ## License
 
 TrendChart Elements is licensed under the [MIT license](https://opensource.org/licenses/MIT).
