@@ -3,7 +3,7 @@
     "description": "Web components to generate simple responsive charts representing trends",
     "license": "MIT",
     "author": "WebLogin",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "keywords": [
         "web-component",
         "lit-element",
