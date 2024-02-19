@@ -13,6 +13,17 @@ Tested on modern browsers : `Chrome >= 73`, `Firefox >= 63`, `Edge >= 79`, `Safa
 No dependency except [Lit](https://github.com/lit/lit/) to create web components.
 
 
+## Upcoming V2
+
+New major version (will change the markup) work in progress, with the following features :
+
+- [ ] Stacked bar values
+- [ ] Stacked column values
+- [ ] Extract tooltip to reduce size
+- [ ] Emit events on hover for better third party integration
+- [ ] Lit 3 compatibility
+
+
 ## Installation
 
 Install the package with NPM :
