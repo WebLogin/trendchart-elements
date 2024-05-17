@@ -346,7 +346,7 @@
 .b-examples-grid > .example-users > .item > .chart > div {
     font-size: 1.4rem;
 }
-.b-examples-grid > .example-users > .item > .chart > tc-bar {
+.b-examples-grid > .example-users > .item > .chart > tc-bars {
     --area-color: #000000;
     --area-opacity: 0.06;
     display: block;

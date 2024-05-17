@@ -5,8 +5,8 @@ import { TcBase } from './tc-base.js';
 import { ValueShapeRectangle } from './types.js';
 
 
-@customElement('tc-bar')
-export class TcBar extends TcBase {
+@customElement('tc-columns')
+export class TcColumns extends TcBase {
     @property({type: Number, attribute: 'shape-gap'})
     public shapeGap = 1;
     @property({type: Number, attribute: 'shape-radius'})
@@ -36,22 +36,22 @@ export class TcBar extends TcBase {
 
         const valueScale = valueMax - valueMin;
 
-        const barHeight = (this.height - (this.shapeGap * (this.values.length - 1))) / this.values.length;
+        const columnWidth = (this.width - (this.shapeGap * (this.values.length - 1))) / this.values.length;
 
-        const barPositionX = (value: number): number => {
-            return valueScale ? ((value - valueMin) / valueScale) * this.width : 1;
+        const columnPositionY = (value: number): number => {
+            return this.height - (valueScale ? ((value - valueMin) / valueScale) * this.height : 1);
         };
 
         this.values.forEach((value, index) => {
-            let yTop = (barHeight + this.shapeGap) * index;
-            let xLeft = (value < 0) ? barPositionX(value) : barPositionX(Math.max(valueMin, 0));
-            let xRight = (value < 0) ? barPositionX(Math.min(valueMax, 0)) : barPositionX(value);
+            let xLeft = (columnWidth + this.shapeGap) * index;
+            let yTop = (value < 0) ? columnPositionY(Math.min(valueMax, 0)) : columnPositionY(value);
+            let yBottom = (value < 0) ? columnPositionY(value) : columnPositionY(Math.max(valueMin, 0));
 
-            let width = xRight - xLeft;
-            if (width == 0) {
-                width = 1;
-                if (valueMax < 0 && valueScale) {
-                    xLeft--;
+            let height = yBottom - yTop;
+            if (height == 0) {
+                height = 1;
+                if (valueMax > 0 && valueScale) {
+                    yTop--;
                 }
             }
 
@@ -63,8 +63,8 @@ export class TcBar extends TcBase {
                     x: xLeft,
                     y: yTop,
                 },
-                width: width,
-                height: barHeight,
+                width: columnWidth,
+                height: height,
             });
         });
     }
@@ -75,16 +75,16 @@ export class TcBar extends TcBase {
             return null;
         }
 
-        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].height / 2));
+        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].width / 2));
 
         return html`
             <svg class="chart" width="100%" height="100%">
                 ${this.valueShapes.map((valueShape, index) => svg`
                     <rect class="area"
-                        x="0"
-                        y="${valueShape.origin.y}"
-                        width="100%"
-                        height="${valueShape.height}"
+                        x="${valueShape.origin.x}"
+                        y="0"
+                        width="${valueShape.width}"
+                        height="100%"
                         rx="${shapeRadius}" ry="${shapeRadius}"
                     />
                     <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
@@ -102,13 +102,14 @@ export class TcBar extends TcBase {
 
     protected tooltipAnchorPositionFor(valueShape: ValueShapeRectangle): StyleInfo {
         const style: StyleInfo = {
-            left: (valueShape.origin.x + valueShape.width) + 'px',
+            left: (valueShape.origin.x + (valueShape.width / 2)) + 'px',
             top: (valueShape.origin.y - 2) + 'px',
             transform: 'translate(-50%, -100%)',
         };
 
         if ((valueShape.value < 0 || Math.max(...this.values) === 0)) {
-            style.left = valueShape.origin.x + 'px';
+            style.top = (valueShape.origin.y + valueShape.height + 2) + 'px';
+            style.transform = 'translate(-50%, 0%)';
         }
 
         return style;
@@ -117,9 +118,9 @@ export class TcBar extends TcBase {
 
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | null {
         return this.valueShapes.find((valueShape: ValueShapeRectangle): boolean => {
-            const yMin = valueShape.origin.y - (this.shapeGap / 2);
-            const yMax = valueShape.origin.y + valueShape.height + (this.shapeGap / 2);
-            return y >= yMin && y <= yMax;
+            const xMin = valueShape.origin.x - (this.shapeGap / 2);
+            const xMax = valueShape.origin.x + valueShape.width + (this.shapeGap / 2);
+            return x >= xMin && x <= xMax;
         }) ?? null;
     }
 }

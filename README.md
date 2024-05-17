@@ -41,9 +41,9 @@ import { TcLine } from "@weblogin/trendchart-elements";
 
 ```html
 <tc-line values="[12,10,12,11,7,6,8,10,12]"></tc-line>
-<tc-column values="[11,7,6,8,10,12,8,10,12]"></tc-column>
-<tc-bar values="[11,7,6,8,10,12,8,10,12]"></tc-bar>
 <tc-pie values="[35,68,22,16]"></tc-pie>
+<tc-columns values="[11,7,6,8,10,12,8,10,12]"></tc-columns>
+<tc-bars values="[11,7,6,8,10,12,8,10,12]"></tc-bars>
 ```
 
 Charts configuration is made with CSS variables and HTML attributes.
@@ -61,7 +61,7 @@ Use CSS to change the `width` and `height` of the chart, because they are respon
 	- `tooltip` - Optional string to format the tooltip text. Two placeholders are available, `@V` being the current value and `@L` the current label if present - Default `@L @V`
 - Line chart
 	- `shape-size` - Optional number for the line size - Default `2`
-- Column / Bar chart
+- Columns / Bars chart
 	- `shape-radius` - Optional number for the columns / bars radius - Default `1`
 	- `shape-gap` - Optional number for the gap between columns / bars - Default `1`
 - Pie chart
@@ -86,7 +86,7 @@ Use CSS to change the `width` and `height` of the chart, because they are respon
 	- `--point-color` - Default `var(--shape-color)`
 	- `--point-opacity ` - Default `1`
 	- `--point-shadow ` - Default `none `
-- Column / Bar chart
+- Columns / Bars chart
 	- `--shape-focused-opacity` - Column / Bar opacity on hover - Default `0.5`
 - Pie chart
 	- `--shape-focused-opacity` - Slice opacity on hover - Default `0.5`

@@ -62,13 +62,13 @@
                         <div class="count">3 275€</div>
                         <div class="text">Orders (18 days)</div>
                     </div>
-                    <tc-column class="chart"
+                    <tc-columns class="chart"
                         values="[120,100,120,110,130,160,140,100,120,110,170,180,160,170,200,140,150,130]"
                         labels='["05/05/23","06/05/23","07/05/23","08/05/23","09/05/23","10/05/23","11/05/23","12/05/23","13/05/23","14/05/23","15/05/23","16/05/23","17/05/23","18/05/23","19/05/23","20/05/23","21/05/23","22/05/23"]'
                         min="0"
                         shape-radius="2" shape-gap="2"
                         tooltip="@L : @V€">
-                    </tc-column>
+                    </tc-columns>
                 </div>
                 <div class="example-sources">
                     <div class="chart">
@@ -132,36 +132,36 @@
                         <img src="./images/portrait-1.jpg"/>
                         <div class="chart">
                             <div>Nicolas</div>
-                            <tc-bar values="[68]"
+                            <tc-bars values="[68]"
                                 min="0" max="100"
                                 shape-radius="4" shape-gap="0"
                                 tooltip="@V%"
                                 style="--shape-color: #54C430;">
-                            </tc-bar>
+                            </tc-bars>
                         </div>
                     </div>
                     <div class="item">
                         <img src="./images/portrait-2.jpg"/>
                         <div class="chart">
                             <div>Caroline</div>
-                            <tc-bar values="[89]"
+                            <tc-bars values="[89]"
                                 min="0" max="100"
                                 shape-radius="4" shape-gap="0"
                                 tooltip="@V%"
                                 style="--shape-color: #54C430;">
-                            </tc-bar>
+                            </tc-bars>
                         </div>
                     </div>
                     <div class="item">
                         <img src="./images/portrait-3.jpg"/>
                         <div class="chart">
                             <div>James</div>
-                            <tc-bar values="[24]"
+                            <tc-bars values="[24]"
                                 min="0" max="100"
                                 shape-radius="4" shape-gap="0"
                                 tooltip="@V%"
                                 style="--shape-color: #F17A33;">
-                            </tc-bar>
+                            </tc-bars>
                         </div>
                     </div>
                 </div>
@@ -285,11 +285,11 @@
             </section>
 
 
-            <h2 class="layout-title">Tests : Column chart</h2>
+            <h2 class="layout-title">Tests : Columns chart</h2>
             <section class="b-tests-grid">
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"></tc-column>
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"></tc-columns>
                     </div>
                     <div class="footer">
                         Default
@@ -297,7 +297,7 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]" min="0"></tc-column>
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]" min="0"></tc-columns>
                     </div>
                     <div class="footer">
                         Default + Min
@@ -305,9 +305,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             style="--area-opacity: 0.15;">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         With area
@@ -315,9 +315,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             shape-gap="0">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         No gap
@@ -325,9 +325,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10]"
                             shape-gap="6">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Large gap
@@ -335,9 +335,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             shape-radius="10">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Rounded corners
@@ -345,11 +345,11 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[65]"
+                        <tc-columns values="[65]"
                             min="0" max="100"
                             shape-gap="0" shape-radius="3"
                             style="width:20px; --area-opacity:0.15;">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         One value + Min + Max + Area
@@ -357,9 +357,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,-13,-9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,-13,-9,10,8,12,15]"
                             style="--shape-color: #784BD1;">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Some negative values
@@ -367,9 +367,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[-14,-12,-7,-15,-17,-19,-13,-9,-10,-8,-12,-15]"
+                        <tc-columns values="[-14,-12,-7,-15,-17,-19,-13,-9,-10,-8,-12,-15]"
                             style="--shape-color: #e2445c;">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Only negative values
@@ -377,9 +377,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             style="width:40px; height:20px; --shape-color:#7F5347;">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Tiny size
@@ -387,9 +387,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             style="width:100%; height:100%; --shape-color:#fdab3d;">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Container size
@@ -397,10 +397,10 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             min="0"
                             style="width:100%; height:100%; --shape-color:#fdab3d;">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Container size + Min
@@ -408,10 +408,10 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             max="30"
                             style="width:100%; height:100%; --shape-color:#fdab3d;">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Container size + Max
@@ -420,11 +420,11 @@
             </section>
 
 
-            <h2 class="layout-title">Tests : Bar chart</h2>
+            <h2 class="layout-title">Tests : Bars chart</h2>
             <section class="b-tests-grid">
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"></tc-bar>
+                        <tc-bars values="[14,12,7,15,17,19]"></tc-bars>
                     </div>
                     <div class="footer">
                         Default
@@ -432,7 +432,7 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]" min="0"></tc-bar>
+                        <tc-bars values="[14,12,7,15,17,19]" min="0"></tc-bars>
                     </div>
                     <div class="footer">
                         Default + Min
@@ -440,9 +440,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
+                        <tc-bars values="[14,12,7,15,17,19]"
                             style="--area-opacity: 0.15;">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         With area
@@ -450,9 +450,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
+                        <tc-bars values="[14,12,7,15,17,19]"
                             shape-gap="0">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         No gap
@@ -460,9 +460,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
+                        <tc-bars values="[14,12,7,15,17,19]"
                             shape-gap="6">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Large gap
@@ -470,9 +470,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
+                        <tc-bars values="[14,12,7,15,17,19]"
                             shape-radius="10">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Rounded corners
@@ -480,11 +480,11 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[65]"
+                        <tc-bars values="[65]"
                             min="0" max="100"
                             shape-gap="0" shape-radius="3"
                             style="height:20px; --area-opacity:0.15;">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         One value + Min + Max + Area
@@ -492,9 +492,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,-15,-17,19]"
+                        <tc-bars values="[14,12,7,-15,-17,19]"
                             style="--shape-color: #784BD1;">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Some negative values
@@ -502,9 +502,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[-14,-12,-7,-15,-17,-19]"
+                        <tc-bars values="[-14,-12,-7,-15,-17,-19]"
                             style="--shape-color: #e2445c;">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Only negative values
@@ -512,9 +512,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
+                        <tc-bars values="[14,12,7,15,17,19]"
                             style="width:40px; height:20px; --shape-color:#7F5347;">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Tiny size
@@ -522,9 +522,9 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
+                        <tc-bars values="[14,12,7,15,17,19]"
                             style="width:100%; height:100%; --shape-color:#fdab3d;">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Container size
@@ -532,10 +532,10 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
+                        <tc-bars values="[14,12,7,15,17,19]"
                             min="0"
                             style="width:100%; height:100%; --shape-color:#fdab3d;">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Container size + Min
@@ -543,10 +543,10 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[14,12,7,15,17,19]"
+                        <tc-bars values="[14,12,7,15,17,19]"
                             max="30"
                             style="width:100%; height:100%; --shape-color:#fdab3d;">
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Container size + Max
@@ -645,9 +645,9 @@
             <section class="b-tests-grid">
                 <div class="test">
                     <div class="content">
-                        <tc-bar values="[140,120,70,150,170,190]"
+                        <tc-bars values="[140,120,70,150,170,190]"
                             static>
-                        </tc-bar>
+                        </tc-bars>
                     </div>
                     <div class="footer">
                         Static
@@ -676,13 +676,13 @@
                 </div>
                 <div class="test">
                     <div class="content">
-                        <tc-column values="[14,12,7,15,17,19,13,9,10,8,12,15]"
+                        <tc-columns values="[14,12,7,15,17,19,13,9,10,8,12,15]"
                             style="--tooltip-font-color: var(--shape-color);
                                 --tooltip-radius: 100px;
                                 --tooltip-padding: 4px 8px;
                                 --tooltip-background: white;
                                 --tooltip-shadow: inset 0 0 0 2px var(--shape-color);">
-                        </tc-column>
+                        </tc-columns>
                     </div>
                     <div class="footer">
                         Tooltip styling
