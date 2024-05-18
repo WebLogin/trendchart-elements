@@ -1,4 +1,4 @@
-import { PropertyValues, TemplateResult, css, html } from 'lit';
+import { TemplateResult, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
@@ -10,6 +10,7 @@ export class TcLine extends TcBase {
     @property({type: Number, attribute: 'shape-size'})
     public shapeSize = 2;
 
+    protected valuesMinCount = 2;
     protected valueShapes!: ValueShapeCircle[];
     protected valueShapeFocused!: ValueShapeCircle;
     private linePath!: string;
@@ -97,11 +98,7 @@ export class TcLine extends TcBase {
     }
 
 
-    protected chartTemplate(): TemplateResult | null {
-        if (this.valueShapes.length < 2) {
-            return null;
-        }
-
+    protected chartTemplate(): TemplateResult {
         const pointStyle: StyleInfo = { display: 'none' };
         if (this.valueShapeFocused) {
             pointStyle.display = 'block';

@@ -25,6 +25,7 @@ export abstract class TcBase extends LitElement {
     @state()
     protected valueShapeFocused: ValueShape | null = null;
 
+    protected valuesMinCount = 1;
     protected valueShapes: ValueShape[] = [];
     private resizeObserver!: ResizeObserver;
 
@@ -136,16 +137,18 @@ export abstract class TcBase extends LitElement {
 
 
     protected render(): HTMLTemplateResult {
+        const shouldRender = this.hasEnoughValues() && this.valueShapes.length;
+
         return html`
             <div class="wrapper">
-                ${this.chartTemplate() ?? nothing}
-                ${this.tooltipTemplate() ?? nothing}
+                ${shouldRender ? this.chartTemplate() : nothing}
+                ${shouldRender ? this.tooltipTemplate() : nothing}
             </div>
         `;
     }
 
 
-    protected abstract chartTemplate(): TemplateResult | null;
+    protected abstract chartTemplate(): TemplateResult;
 
 
     protected tooltipTemplate(): TemplateResult | null {
@@ -170,15 +173,21 @@ export abstract class TcBase extends LitElement {
 
 
     protected firstUpdated() {
-        if (!this.static) {
-            const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
-            wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
-                this.valueShapeFocused = this.findValueShapeAtPosition(event.offsetX, event.offsetY);;
-            });
-            wrapperElement.addEventListener('mouseleave', () => {
-                this.valueShapeFocused = null;
-            });
+        if (this.static) {
+            return;
         }
+
+        const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
+        wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
+            if (!this.hasEnoughValues()) {
+                return;
+            }
+
+            this.valueShapeFocused = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
+        });
+        wrapperElement.addEventListener('mouseleave', () => {
+            this.valueShapeFocused = null;
+        });
     }
 
 
@@ -200,5 +209,10 @@ export abstract class TcBase extends LitElement {
 
             tooltipElement.style.left = `${left}px`;
         }
+    }
+
+
+    protected hasEnoughValues() {
+        return (this.values.length >= this.valuesMinCount);
     }
 }

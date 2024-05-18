@@ -1,4 +1,4 @@
-import { css, html, PropertyValues, svg, TemplateResult } from 'lit';
+import { css, html, svg, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { StyleInfo } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
@@ -111,11 +111,7 @@ export class TcPie extends TcBase {
     }
 
 
-    protected chartTemplate(): TemplateResult | null {
-        if (this.valueShapes.length < 1) {
-            return null;
-        }
-
+    protected chartTemplate(): TemplateResult {
         return html`
             <svg class="chart" width="100%" height="100%">
                 <mask id="mask">

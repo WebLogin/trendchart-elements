@@ -1,4 +1,4 @@
-import { css, html, PropertyValues, svg, TemplateResult } from 'lit';
+import { css, html, svg, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { StyleInfo } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
@@ -12,6 +12,7 @@ export class TcColumns extends TcBase {
     @property({type: Number, attribute: 'shape-radius'})
     public shapeRadius = 1;
 
+    protected valuesMinCount = 2;
     protected valueShapes!: ValueShapeRectangle[];
     protected valueShapeFocused!: ValueShapeRectangle;
 
@@ -70,11 +71,7 @@ export class TcColumns extends TcBase {
     }
 
 
-    protected chartTemplate(): TemplateResult | null {
-        if (this.valueShapes.length < 1) {
-            return null;
-        }
-
+    protected chartTemplate(): TemplateResult {
         const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].width / 2));
 
         return html`
