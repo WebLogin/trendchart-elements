@@ -7,10 +7,10 @@ import { ShapeCircle, ShapeLine, ShapePoint, ValueShapeSlice } from './types.js'
 
 @customElement('tc-pie')
 export class TcPie extends TcBase {
-    @property({type: Number, attribute: 'shape-size'})
-    public shapeSize: number | null = null;
-    @property({type: Number, attribute: 'shape-gap'})
-    public shapeGap = 1;
+    @property({type: Number})
+    public gap = 1;
+    @property({type: Number})
+    public donut: number | null = null;
 
     protected valueShapes!: ValueShapeSlice[];
     protected valueShapeFocused!: ValueShapeSlice;
@@ -71,7 +71,7 @@ export class TcPie extends TcBase {
 
         this.cutoutCircle = {
             center: center,
-            radius: radius - Math.min(this.shapeSize ?? Infinity, radius),
+            radius: radius - Math.min(this.donut ?? Infinity, radius),
         };
 
         this.values.forEach((value, index) => {
@@ -120,7 +120,7 @@ export class TcPie extends TcBase {
                     ${this.gapLines.map((gapLine) => svg`
                         <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
                             x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                            stroke-width="${this.shapeGap}" stroke="#000000" stroke-linecap="round"
+                            stroke-width="${this.gap}" stroke="#000000" stroke-linecap="round"
                         />
                     `)}
                 </mask>

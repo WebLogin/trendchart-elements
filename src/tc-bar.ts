@@ -7,10 +7,10 @@ import { ValueShapeRectangle } from './types.js';
 
 @customElement('tc-bar')
 export class TcBar extends TcBase {
-    @property({type: Number, attribute: 'shape-gap'})
-    public shapeGap = 1;
-    @property({type: Number, attribute: 'shape-radius'})
-    public shapeRadius = 2;
+    @property({type: Number})
+    public gap = 1;
+    @property({type: Number})
+    public radius = 2;
     @property({type: Boolean, reflect: true})
     public horizontal = false;
 
@@ -26,7 +26,7 @@ export class TcBar extends TcBase {
         const valueMax = (this.max === null) ? Math.max(...this.values) : Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
-        const inlineSize = ((this.horizontal ? this.height : this.width) - (this.shapeGap * (this.values.length - 1))) / this.values.length;
+        const inlineSize = ((this.horizontal ? this.height : this.width) - (this.gap * (this.values.length - 1))) / this.values.length;
         const blockPosition = (value: number): number => {
             const size = this.horizontal ? this.width : this.height;
             const position = valueScale ? ((value - valueMin) / valueScale) * size : 1;
@@ -35,7 +35,7 @@ export class TcBar extends TcBase {
         };
 
         this.values.forEach((value, index) => {
-            let inlineStart = (inlineSize + this.shapeGap) * index;
+            let inlineStart = (inlineSize + this.gap) * index;
             let blockStart = (value < 0) ? blockPosition(Math.min(valueMax, 0)) : blockPosition(value);
             let blockEnd = (value < 0) ? blockPosition(value) : blockPosition(Math.max(valueMin, 0));
             if (this.horizontal) {
@@ -66,7 +66,7 @@ export class TcBar extends TcBase {
 
 
     protected chartTemplate(): TemplateResult {
-        const shapeRadius = Math.min(this.shapeRadius, (this.horizontal ? this.valueShapes[0].height : this.valueShapes[0].width) / 2);
+        const radius = Math.min(this.radius, (this.horizontal ? this.valueShapes[0].height : this.valueShapes[0].width) / 2);
 
         return html`
             <svg class="chart" width="100%" height="100%">
@@ -76,14 +76,14 @@ export class TcBar extends TcBase {
                         y="${this.horizontal ? valueShape.origin.y : 0}"
                         width="${this.horizontal ? this.width : valueShape.width}"
                         height="${this.horizontal ? valueShape.height : this.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
+                        rx="${radius}" ry="${radius}"
                     />
                     <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
                         x="${valueShape.origin.x}"
                         y="${valueShape.origin.y}"
                         width="${valueShape.width}"
                         height="${valueShape.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
+                        rx="${radius}" ry="${radius}"
                     />
                 `)}
             </svg>
@@ -113,8 +113,8 @@ export class TcBar extends TcBase {
         return this.valueShapes.find((valueShape: ValueShapeRectangle): boolean => {
             const shapeOrigin = this.horizontal ? valueShape.origin.y : valueShape.origin.x;
             const shapeSize = this.horizontal ? valueShape.height : valueShape.width;
-            const positionMin = shapeOrigin - (this.shapeGap / 2);
-            const positionMax = shapeOrigin + shapeSize + (this.shapeGap / 2);
+            const positionMin = shapeOrigin - (this.gap / 2);
+            const positionMax = shapeOrigin + shapeSize + (this.gap / 2);
 
             return position >= positionMin && position <= positionMax;
         }) ?? null;

@@ -7,10 +7,10 @@ import { ShapeLine, ShapeRectangle, ValueShapeRectangle } from './types.js';
 
 @customElement('tc-stack')
 export class TcStack extends TcBase {
-    @property({type: Number, attribute: 'shape-gap'})
-    public shapeGap = 1;
-    @property({type: Number, attribute: 'shape-radius'})
-    public shapeRadius = 2;
+    @property({type: Number})
+    public gap = 1;
+    @property({type: Number})
+    public radius = 2;
     @property({type: Boolean, reflect: true})
     public horizontal = false;
 
@@ -74,7 +74,7 @@ export class TcStack extends TcBase {
 
 
     protected chartTemplate(): TemplateResult {
-        const shapeRadius = Math.min(this.shapeRadius, (this.horizontal ? this.width : this.height) / 2);
+        const radius = Math.min(this.radius, (this.horizontal ? this.width : this.height) / 2);
         const mask:ShapeRectangle = {
             origin: { x: 0, y: 0 },
             width: this.width,
@@ -94,20 +94,20 @@ export class TcStack extends TcBase {
                     <rect
                         x="${mask.origin.x}" y="${mask.origin.y}"
                         width="${mask.width}" height="${mask.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
+                        rx="${radius}" ry="${radius}"
                         fill="#FFFFFF" stroke="none"
                     />
                     ${this.gapLines.map((gapLine) => svg`
                         <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
                             x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                            stroke-width="${this.shapeGap}" stroke="#000000" stroke-linecap="round"
+                            stroke-width="${this.gap}" stroke="#000000" stroke-linecap="round"
                         />
                     `)}
                 </mask>
                 <rect class="area"
                     x="0" y="0"
                     width="100%" height="100%"
-                    rx="${shapeRadius}" ry="${shapeRadius}"
+                    rx="${radius}" ry="${radius}"
                 />
                 <g mask="url(#mask)">
                     ${this.valueShapes.map((valueShape, index) => svg`
@@ -146,8 +146,8 @@ export class TcStack extends TcBase {
         return this.valueShapes.find((valueShape: ValueShapeRectangle): boolean => {
             const shapeOrigin = this.horizontal ? valueShape.origin.x : valueShape.origin.y;
             const shapeSize = this.horizontal ? valueShape.width : valueShape.height;
-            const positionMin = shapeOrigin - (this.shapeGap / 2);
-            const positionMax = shapeOrigin + shapeSize + (this.shapeGap / 2);
+            const positionMin = shapeOrigin - (this.gap / 2);
+            const positionMax = shapeOrigin + shapeSize + (this.gap / 2);
 
             return position >= positionMin && position <= positionMax;
         }) ?? null;
