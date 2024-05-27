@@ -8,6 +8,8 @@ import { ValueShapeRectangle } from './types.js';
 @customElement('tc-bar')
 export class TcBar extends TcBase {
     @property({type: Number})
+    public min: number | null = null;
+    @property({type: Number})
     public gap = 1;
     @property({type: Number})
     public radius = 2;

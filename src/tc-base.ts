@@ -10,8 +10,6 @@ export abstract class TcBase extends LitElement {
     @property({type: Array})
     public labels: string[] = [];
     @property({type: Number})
-    public min: number | null = null;
-    @property({type: Number})
     public max: number | null = null;
     @property({type: Boolean, reflect: true})
     public static = false;

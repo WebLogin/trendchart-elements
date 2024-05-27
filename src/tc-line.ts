@@ -8,6 +8,8 @@ import { ValueShapeCircle } from './types.js';
 @customElement('tc-line')
 export class TcLine extends TcBase {
     @property({type: Number})
+    public min: number | null = null;
+    @property({type: Number})
     public depth = 2;
 
     protected valuesMinCount = 2;
