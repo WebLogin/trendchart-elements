@@ -150,6 +150,10 @@ export class TcPie extends TcBase {
 
 
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeSlice | null {
+        if (this.valueShapes.length === 1) {
+            return this.valueShapes[0];
+        }
+
         const chart = this.renderRoot.querySelector('.chart') as SVGSVGElement;
         const point = chart.createSVGPoint();
         point.x = x;
