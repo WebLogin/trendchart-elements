@@ -15,7 +15,7 @@ export class TcStack extends TcBase {
     public horizontal = false;
 
     protected valueShapes!: ValueShapeRectangle[];
-    protected valueShapeFocused!: ValueShapeRectangle;
+    protected valueShapeActive!: ValueShapeRectangle;
     private gapLines!: ShapeLine[];
 
     static styles = [
@@ -111,12 +111,12 @@ export class TcStack extends TcBase {
                 />
                 <g mask="url(#mask)">
                     ${this.valueShapes.map((valueShape, index) => svg`
-                        <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                        <rect class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"
                             x="${valueShape.origin.x}"
                             y="${valueShape.origin.y}"
                             width="${valueShape.width}"
                             height="${valueShape.height}"
-                            style="fill: var(--shape-color-${index + 1}, var(--shape-color))"
+                            style="fill: var(--color-${index + 1}, var(--color))"
                         />
                     `)}
                 </g>

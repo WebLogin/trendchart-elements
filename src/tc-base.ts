@@ -23,7 +23,7 @@ export abstract class TcBase extends LitElement {
     @state()
     public height = 0;
     @state()
-    protected valueShapeFocused: ValueShape | null = null;
+    protected valueShapeActive: ValueShape | null = null;
 
     protected valuesMinCount = 1;
     protected valueShapes: ValueShape[] = [];
@@ -31,10 +31,10 @@ export abstract class TcBase extends LitElement {
 
     static styles = css`
         :host {
-            --shape-color: #597BFC;
-            --shape-opacity: 1;
-            --shape-focused-opacity: 0.5;
-            --area-color: var(--shape-color);
+            --color: #597BFC;
+            --opacity: 1;
+            --active-opacity: 0.5;
+            --area-color: var(--color);
             --area-opacity: 0;
             --tooltip-font-color: white;
             --tooltip-font-size: 0.875em;
@@ -72,13 +72,13 @@ export abstract class TcBase extends LitElement {
             opacity: var(--area-opacity);
             stroke: none;
         }
-        .chart > .shape {
-            fill: var(--shape-color);
-            opacity: var(--shape-opacity);
+        .chart .shape {
+            fill: var(--color);
+            opacity: var(--opacity);
             stroke: none;
         }
-        .chart .shape.is-focused {
-            opacity: var(--shape-focused-opacity);
+        .chart .shape.is-active {
+            opacity: var(--active-opacity);
         }
         .tooltip {
             position: absolute;
@@ -152,15 +152,15 @@ export abstract class TcBase extends LitElement {
 
 
     protected tooltipTemplate(): TemplateResult | null {
-        if (!this.valueShapeFocused) {
+        if (!this.valueShapeActive) {
             return null;
         }
 
-        const style = this.tooltipAnchorPositionFor(this.valueShapeFocused);
+        const style = this.tooltipAnchorPositionFor(this.valueShapeActive);
 
         const text = this.tooltip
-            .replace(/@V/g, this.valueShapeFocused.value.toLocaleString())
-            .replace(/@L/g, this.valueShapeFocused.label ? this.valueShapeFocused.label : '')
+            .replace(/@V/g, this.valueShapeActive.value.toLocaleString())
+            .replace(/@L/g, this.valueShapeActive.label ? this.valueShapeActive.label : '')
             .trim();
 
         return html`
@@ -183,10 +183,10 @@ export abstract class TcBase extends LitElement {
                 return;
             }
 
-            this.valueShapeFocused = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
+            this.valueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
         });
         wrapperElement.addEventListener('mouseleave', () => {
-            this.valueShapeFocused = null;
+            this.valueShapeActive = null;
         });
     }
 
@@ -195,7 +195,7 @@ export abstract class TcBase extends LitElement {
 
 
     protected updated() {
-        if (this.valueShapeFocused) {
+        if (this.valueShapeActive) {
             const screenOffset = 10;
             const tooltipElement = this.renderRoot.querySelector('.tooltip') as HTMLElement;
             const tooltipRect = tooltipElement.getBoundingClientRect();

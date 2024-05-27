@@ -13,7 +13,7 @@ export class TcPie extends TcBase {
     public donut: number | null = null;
 
     protected valueShapes!: ValueShapeSlice[];
-    protected valueShapeFocused!: ValueShapeSlice;
+    protected valueShapeActive!: ValueShapeSlice;
     private cutoutCircle!: ShapeCircle;
     private gapLines!: ShapeLine[];
     private areaPath!: string;
@@ -127,9 +127,9 @@ export class TcPie extends TcBase {
                 <g mask="url(#mask)">
                     <path class="area" d="${this.areaPath}"/>
                     ${this.valueShapes.map((valueShape, index) => svg`
-                        <path class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                        <path class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"
                             d="${valueShape.path}"
-                            style="fill: var(--shape-color-${index + 1}, var(--shape-color))"
+                            style="fill: var(--color-${index + 1}, var(--color))"
                         />
                     `)}
                 </g>
@@ -155,14 +155,14 @@ export class TcPie extends TcBase {
         point.x = x;
         point.y = y;
 
-        const valueShapeFocusedIndex = Array.from(chart.querySelectorAll<SVGPathElement>('.shape')).findIndex((path) => {
+        const valueShapeActiveIndex = Array.from(chart.querySelectorAll<SVGPathElement>('.shape')).findIndex((path) => {
             return path.isPointInFill(point);
         });
 
-        if (valueShapeFocusedIndex === -1) {
+        if (valueShapeActiveIndex === -1) {
             return null;
         }
 
-        return this.valueShapes[valueShapeFocusedIndex];
+        return this.valueShapes[valueShapeActiveIndex];
     }
 }

@@ -12,7 +12,7 @@ export class TcLine extends TcBase {
 
     protected valuesMinCount = 2;
     protected valueShapes!: ValueShapeCircle[];
-    protected valueShapeFocused!: ValueShapeCircle;
+    protected valueShapeActive!: ValueShapeCircle;
     private linePath!: string;
     private areaPath!: string;
 
@@ -20,23 +20,21 @@ export class TcLine extends TcBase {
         TcBase.styles,
         css`
             :host {
-                --point-color: var(--shape-color);
-                --point-opacity: 1;
-                --point-shadow: none;
+                --active-point-color: var(--color);
+                --active-point-shadow: none;
             }
             .point {
                 position: absolute;
                 z-index: 2;
                 pointer-events: none;
                 border-radius: 100%;
-                background-color: var(--point-color);
-                opacity: var(--point-opacity);
-                box-shadow: var(--point-shadow);
+                background-color: var(--active-point-color);
+                box-shadow: var(--active-point-shadow);
                 transform: translate(-50%, -50%);
             }
-            .chart > .shape {
+            .chart .shape {
                 fill: none;
-                stroke: var(--shape-color);
+                stroke: var(--color);
             }
         `,
     ];
@@ -100,12 +98,12 @@ export class TcLine extends TcBase {
 
     protected chartTemplate(): TemplateResult {
         const pointStyle: StyleInfo = { display: 'none' };
-        if (this.valueShapeFocused) {
+        if (this.valueShapeActive) {
             pointStyle.display = 'block';
-            pointStyle.left = this.valueShapeFocused.center.x + 'px';
-            pointStyle.top = this.valueShapeFocused.center.y + 'px';
-            pointStyle.width = (this.valueShapeFocused.radius * 2) + 'px';
-            pointStyle.height = (this.valueShapeFocused.radius * 2) + 'px';
+            pointStyle.left = this.valueShapeActive.center.x + 'px';
+            pointStyle.top = this.valueShapeActive.center.y + 'px';
+            pointStyle.width = (this.valueShapeActive.radius * 2) + 'px';
+            pointStyle.height = (this.valueShapeActive.radius * 2) + 'px';
         }
 
         return html`

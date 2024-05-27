@@ -16,7 +16,7 @@ export class TcBar extends TcBase {
 
     protected valuesMinCount = 2;
     protected valueShapes!: ValueShapeRectangle[];
-    protected valueShapeFocused!: ValueShapeRectangle;
+    protected valueShapeActive!: ValueShapeRectangle;
 
 
     protected computeChartData(): void {
@@ -78,7 +78,7 @@ export class TcBar extends TcBase {
                         height="${this.horizontal ? valueShape.height : this.height}"
                         rx="${radius}" ry="${radius}"
                     />
-                    <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
+                    <rect class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"
                         x="${valueShape.origin.x}"
                         y="${valueShape.origin.y}"
                         width="${valueShape.width}"
