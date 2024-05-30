@@ -1,6 +1,6 @@
 import { CSSResultGroup, HTMLTemplateResult, LitElement, PropertyValues, TemplateResult, css, html, nothing } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { ValueShape } from './types.js';
+import { ValueShape, ValueShapeEvent } from './types.js';
 
 
 export abstract class TcBase extends LitElement {
@@ -172,10 +172,35 @@ export abstract class TcBase extends LitElement {
     private registerEvents() {
         const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
 
+        // Click on shape
+        wrapperElement.addEventListener('click', (event: MouseEvent) => {
+            event.stopPropagation();
+
+            const valueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
+            if (valueShapeActive) {
+                this.dispatchValueShapeEvent('shape-click', valueShapeActive);
+            }
+        });
+
+        // Mouse enter/leave shape
         wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
-            this.valueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
+            event.stopPropagation();
+
+            const newValueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
+            if (this.valueShapeActive && (!newValueShapeActive || newValueShapeActive.index !== this.valueShapeActive.index)) {
+                this.dispatchValueShapeEvent('shape-leave', this.valueShapeActive);
+            }
+            if (newValueShapeActive && (!this.valueShapeActive || newValueShapeActive.index !== this.valueShapeActive.index)) {
+                this.dispatchValueShapeEvent('shape-enter', newValueShapeActive);
+            }
+            this.valueShapeActive = newValueShapeActive;
         });
         wrapperElement.addEventListener('mouseleave', (event: MouseEvent) => {
+            event.stopPropagation();
+
+            if (this.valueShapeActive) {
+                this.dispatchValueShapeEvent('shape-leave', this.valueShapeActive);
+            }
             this.valueShapeActive = null;
         });
     }
@@ -208,5 +233,18 @@ export abstract class TcBase extends LitElement {
         }
 
         tooltip.style.left = `${left}px`;
+    }
+
+
+    private dispatchValueShapeEvent(type: string, valueShape: ValueShape): void {
+        this.dispatchEvent(new CustomEvent<ValueShapeEvent>(type, {
+            detail: {
+                index: valueShape.index,
+                value: valueShape.value,
+                label: valueShape.label,
+            },
+            bubbles: false,
+            composed: false,
+          }));
     }
 }

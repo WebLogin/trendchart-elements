@@ -32,3 +32,7 @@ export interface ValueShapeCircle extends BaseValueShape, ShapeCircle {}
 export interface ValueShapeRectangle extends BaseValueShape, ShapeRectangle {}
 export interface ValueShapeSlice extends BaseValueShape, ShapeSlice {}
 export type ValueShape = ValueShapeCircle | ValueShapeRectangle | ValueShapeSlice;
+
+
+// Events
+export interface ValueShapeEvent extends BaseValueShape {}
