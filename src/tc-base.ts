@@ -88,6 +88,7 @@ export abstract class TcBase extends LitElement {
             color: var(--tooltip-font-color);
             padding: var(--tooltip-padding);
             pointer-events: none;
+            user-select: none;
             border-radius: var(--tooltip-radius);
             background-color: var(--tooltip-background);
             box-shadow: var(--tooltip-shadow);
