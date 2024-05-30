@@ -1,6 +1,6 @@
 import { css, html, svg, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { StyleInfo } from 'lit/directives/style-map.js';
+import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
 import { ShapeLine, ShapeRectangle, ValueShapeRectangle } from './types.js';
 
@@ -125,18 +125,24 @@ export class TcStack extends TcBase {
     }
 
 
-    protected tooltipAnchorPositionFor(valueShape: ValueShapeRectangle): StyleInfo {
+    protected tooltipTemplate(): TemplateResult {
+        if (!this.valueShapeActive) return html``;
+
         const style: StyleInfo = {
-            left: (valueShape.origin.x + (valueShape.width / 2)) + 'px',
-            top: (valueShape.origin.y - 2) + 'px',
+            left: (this.valueShapeActive.origin.x + (this.valueShapeActive.width / 2)) + 'px',
+            top: (this.valueShapeActive.origin.y - 2) + 'px',
             transform: 'translate(-50%, -100%)',
         };
 
-        return style;
+        return html`
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText()}</div>
+        `;
     }
 
 
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | null {
+        if (!this.hasEnoughValues()) return null;
+
         if (this.valueShapes.length === 1) {
             return this.valueShapes[0];
         }

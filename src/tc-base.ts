@@ -1,6 +1,5 @@
 import { CSSResultGroup, HTMLTemplateResult, LitElement, PropertyValues, TemplateResult, css, html, nothing } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { ValueShape } from './types.js';
 
 
@@ -131,9 +130,6 @@ export abstract class TcBase extends LitElement {
     }
 
 
-    protected abstract computeChartData(): void;
-
-
     protected render(): HTMLTemplateResult {
         const shouldRender = this.hasEnoughValues() && this.valueShapes.length;
 
@@ -146,71 +142,71 @@ export abstract class TcBase extends LitElement {
     }
 
 
+    protected firstUpdated() {
+        this.registerEvents();
+    }
+
+
+    protected updated() {
+        this.fixTooltipOverflow();
+    }
+
+
+    protected abstract computeChartData(): void;
+
+
     protected abstract chartTemplate(): TemplateResult;
 
 
-    protected tooltipTemplate(): TemplateResult | null {
-        if (!this.valueShapeActive) {
-            return null;
-        }
-
-        const style = this.tooltipAnchorPositionFor(this.valueShapeActive);
-
-        const text = this.tooltip
-            .replace(/@V/g, this.valueShapeActive.value.toLocaleString())
-            .replace(/@L/g, this.valueShapeActive.label ? this.valueShapeActive.label : '')
-            .trim();
-
-        return html`
-            <div class="tooltip" style="${styleMap(style)}">${text}</div>
-        `;
-    }
-
-
-    protected abstract tooltipAnchorPositionFor(valueShape: ValueShape): StyleInfo;
-
-
-    protected firstUpdated() {
-        if (this.static) {
-            return;
-        }
-
-        const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
-        wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
-            if (!this.hasEnoughValues()) {
-                return;
-            }
-
-            this.valueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
-        });
-        wrapperElement.addEventListener('mouseleave', () => {
-            this.valueShapeActive = null;
-        });
-    }
+    protected abstract tooltipTemplate(): TemplateResult;
 
 
     protected abstract findValueShapeAtPosition(x: number, y: number): ValueShape | null;
 
 
-    protected updated() {
-        if (this.valueShapeActive) {
-            const screenOffset = 10;
-            const tooltipElement = this.renderRoot.querySelector('.tooltip') as HTMLElement;
-            const tooltipRect = tooltipElement.getBoundingClientRect();
-
-            let left = parseFloat(tooltipElement.style.left);
-            if (tooltipRect.left < screenOffset) {
-                left += screenOffset - Math.floor(tooltipRect.left);
-            } else if (tooltipRect.right > (document.documentElement.offsetWidth - screenOffset)) {
-                left += (document.documentElement.offsetWidth - screenOffset - Math.ceil(tooltipRect.right));
-            }
-
-            tooltipElement.style.left = `${left}px`;
-        }
+    protected hasEnoughValues() {
+        return (this.values.length >= this.valuesMinCount);
     }
 
 
-    protected hasEnoughValues() {
-        return (this.values.length >= this.valuesMinCount);
+    private registerEvents() {
+        const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
+
+        wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
+            this.valueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
+        });
+        wrapperElement.addEventListener('mouseleave', (event: MouseEvent) => {
+            this.valueShapeActive = null;
+        });
+    }
+
+
+    protected tooltipText(): string {
+        if (!this.valueShapeActive) return '';
+
+        return this.tooltip
+            .replace(/@V/g, this.valueShapeActive.value.toLocaleString())
+            .replace(/@L/g, this.valueShapeActive.label ? this.valueShapeActive.label : '')
+            .trim();
+    }
+
+
+    private fixTooltipOverflow(): void {
+        const tooltip = this.renderRoot.querySelector<HTMLElement>('.tooltip');
+        if (!tooltip) {
+            return;
+        }
+
+        const screenOffset = 10;
+        const tooltipRect = tooltip.getBoundingClientRect();
+
+        let left = parseFloat(tooltip.style.left);
+        if (tooltipRect.left < screenOffset) {
+            left += screenOffset - Math.floor(tooltipRect.left);
+        } else if (tooltipRect.right > (document.documentElement.offsetWidth - screenOffset)) {
+            left += (document.documentElement.offsetWidth - screenOffset - Math.ceil(tooltipRect.right));
+        }
+
+        tooltip.style.left = `${left}px`;
     }
 }

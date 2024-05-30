@@ -1,6 +1,6 @@
 import { css, html, svg, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { StyleInfo } from 'lit/directives/style-map.js';
+import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
 import { ShapeCircle, ShapeLine, ShapePoint, ValueShapeSlice } from './types.js';
 
@@ -138,18 +138,24 @@ export class TcPie extends TcBase {
     }
 
 
-    protected tooltipAnchorPositionFor(valueShape: ValueShapeSlice): StyleInfo {
+    protected tooltipTemplate(): TemplateResult {
+        if (!this.valueShapeActive) return html``;
+
         const style: StyleInfo = {
-            left: valueShape.center.x + 'px',
-            top: valueShape.center.y + 'px',
+            left: this.valueShapeActive.center.x + 'px',
+            top: this.valueShapeActive.center.y + 'px',
             transform: 'translate(-50%, -50%)',
         };
 
-        return style;
+        return html`
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText()}</div>
+        `;
     }
 
 
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeSlice | null {
+        if (!this.hasEnoughValues()) return null;
+
         if (this.valueShapes.length === 1) {
             return this.valueShapes[0];
         }
@@ -163,9 +169,7 @@ export class TcPie extends TcBase {
             return path.isPointInFill(point);
         });
 
-        if (valueShapeActiveIndex === -1) {
-            return null;
-        }
+        if (valueShapeActiveIndex === -1) return null;
 
         return this.valueShapes[valueShapeActiveIndex];
     }

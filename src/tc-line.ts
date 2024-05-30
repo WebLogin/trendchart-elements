@@ -45,16 +45,8 @@ export class TcLine extends TcBase {
     protected computeChartData(): void {
         this.valueShapes = [];
 
-        let valueMin = Math.min(...this.values);
-        if (this.min !== null) {
-            valueMin = Math.min(valueMin, this.min);
-        }
-
-        let valueMax = Math.max(...this.values);
-        if (this.max !== null) {
-            valueMax = Math.max(valueMax, this.max);
-        }
-
+        const valueMin = (this.min === null) ? Math.min(...this.values) : Math.min(...this.values, this.min);
+        const valueMax = (this.max === null) ? Math.max(...this.values) : Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
         const pointPositionX = (value: number): number => {
@@ -99,15 +91,6 @@ export class TcLine extends TcBase {
 
 
     protected chartTemplate(): TemplateResult {
-        const pointStyle: StyleInfo = { display: 'none' };
-        if (this.valueShapeActive) {
-            pointStyle.display = 'block';
-            pointStyle.left = this.valueShapeActive.center.x + 'px';
-            pointStyle.top = this.valueShapeActive.center.y + 'px';
-            pointStyle.width = (this.valueShapeActive.radius * 2) + 'px';
-            pointStyle.height = (this.valueShapeActive.radius * 2) + 'px';
-        }
-
         return html`
             <svg class="chart">
                 <mask id="mask">
@@ -116,28 +99,41 @@ export class TcLine extends TcBase {
                 <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
                 <path class="shape" d="${this.linePath}" stroke-width="${this.depth}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <div class="point" style="${styleMap(pointStyle)}"></div>
         `;
     }
 
 
-    protected tooltipAnchorPositionFor(valueShape: ValueShapeCircle): StyleInfo {
-        const style: StyleInfo = {
-            left: valueShape.center.x + 'px',
-            top: (valueShape.center.y - valueShape.radius - 2) + 'px',
+    protected tooltipTemplate(): TemplateResult {
+        if (!this.valueShapeActive) return html``;
+
+        const pointStyle: StyleInfo = {
+            left: this.valueShapeActive.center.x + 'px',
+            top: this.valueShapeActive.center.y + 'px',
+            width: (this.valueShapeActive.radius * 2) + 'px',
+            height: (this.valueShapeActive.radius * 2) + 'px',
+        };
+
+        const tooltipStyle: StyleInfo = {
+            left: this.valueShapeActive.center.x + 'px',
+            top: (this.valueShapeActive.center.y - this.valueShapeActive.radius - 2) + 'px',
             transform: 'translate(-50%, -100%)',
         };
 
-        if ((valueShape.value < 0 || Math.max(...this.values) === 0)) {
-            style.top = (valueShape.center.y + valueShape.radius + 2) + 'px';
-            style.transform = 'translate(-50%, 0%)';
+        if ((this.valueShapeActive.value < 0 || Math.max(...this.values) === 0)) {
+            tooltipStyle.top = (this.valueShapeActive.center.y + this.valueShapeActive.radius + 2) + 'px';
+            tooltipStyle.transform = 'translate(-50%, 0%)';
         }
 
-        return style;
+        return html`
+            <div class="point" style="${styleMap(pointStyle)}"></div>
+            <div class="tooltip" style="${styleMap(tooltipStyle)}">${this.tooltipText()}</div>
+        `;
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle {
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle | null {
+        if (!this.hasEnoughValues()) return null;
+
         return this.valueShapes.reduce((previous, current) => {
             return (Math.abs(current.center.x - x) < Math.abs(previous.center.x - x) ? current : previous);
         });
