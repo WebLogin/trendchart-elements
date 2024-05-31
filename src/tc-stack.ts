@@ -8,7 +8,7 @@ import { ShapeLine, ShapeRectangle, ValueShapeRectangle } from './types.js';
 @customElement('tc-stack')
 export class TcStack extends TcBase {
     @property({type: Number})
-    public gap = 1;
+    public gap = 2;
     @property({type: Number})
     public radius = 2;
     @property({type: Boolean, reflect: true})

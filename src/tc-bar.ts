@@ -10,7 +10,7 @@ export class TcBar extends TcBase {
     @property({type: Number})
     public min?: number;
     @property({type: Number})
-    public gap = 1;
+    public gap = 2;
     @property({type: Number})
     public radius = 2;
     @property({type: Boolean, reflect: true})

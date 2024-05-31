@@ -8,7 +8,7 @@ import { ShapeCircle, ShapeLine, ShapePoint, ValueShapeSlice } from './types.js'
 @customElement('tc-pie')
 export class TcPie extends TcBase {
     @property({type: Number})
-    public gap = 1;
+    public gap = 2;
     @property({type: Number})
     public donut?: number;
 
