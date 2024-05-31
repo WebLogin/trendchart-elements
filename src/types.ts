@@ -26,7 +26,7 @@ export interface ShapeSlice {
 interface BaseValueShape {
     index: number,
     value: number,
-    label: string | null,
+    label?: string,
 }
 export interface ValueShapeCircle extends BaseValueShape, ShapeCircle {}
 export interface ValueShapeRectangle extends BaseValueShape, ShapeRectangle {}

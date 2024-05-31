@@ -8,7 +8,7 @@ import { ValueShapeRectangle } from './types.js';
 @customElement('tc-bar')
 export class TcBar extends TcBase {
     @property({type: Number})
-    public min: number | null = null;
+    public min?: number;
     @property({type: Number})
     public gap = 1;
     @property({type: Number})
@@ -17,15 +17,15 @@ export class TcBar extends TcBase {
     public horizontal = false;
 
     protected valuesMinCount = 2;
-    protected valueShapes!: ValueShapeRectangle[];
-    protected valueShapeActive!: ValueShapeRectangle;
+    protected valueShapes: ValueShapeRectangle[] = [];
+    protected valueShapeActive?: ValueShapeRectangle;
 
 
     protected computeChartData(): void {
         this.valueShapes = [];
 
-        const valueMin = (this.min === null) ? Math.min(...this.values) : Math.min(...this.values, this.min);
-        const valueMax = (this.max === null) ? Math.max(...this.values) : Math.max(...this.values, this.max);
+        const valueMin = (this.min === undefined) ? Math.min(...this.values) : Math.min(...this.values, this.min);
+        const valueMax = (this.max === undefined) ? Math.max(...this.values) : Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
         const inlineSize = ((this.horizontal ? this.height : this.width) - (this.gap * (this.values.length - 1))) / this.values.length;
@@ -55,7 +55,7 @@ export class TcBar extends TcBase {
             this.valueShapes.push({
                 index: index,
                 value: value,
-                label: this.labels[index] ?? null,
+                label: this.labels[index],
                 origin: {
                     x: this.horizontal ? blockStart : inlineStart,
                     y: this.horizontal ? inlineStart : blockStart,
@@ -113,8 +113,8 @@ export class TcBar extends TcBase {
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | null {
-        if (!this.hasEnoughValues()) return null;
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | undefined {
+        if (!this.hasEnoughValues()) return;
 
         const position = this.horizontal ? y : x;
 
@@ -125,6 +125,6 @@ export class TcBar extends TcBase {
             const positionMax = shapeOrigin + shapeSize + (this.gap / 2);
 
             return position >= positionMin && position <= positionMax;
-        }) ?? null;
+        });
     }
 }

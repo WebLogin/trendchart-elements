@@ -8,13 +8,13 @@ import { ValueShapeCircle } from './types.js';
 @customElement('tc-line')
 export class TcLine extends TcBase {
     @property({type: Number})
-    public min: number | null = null;
+    public min?: number;
     @property({type: Number})
     public depth = 2;
 
     protected valuesMinCount = 2;
-    protected valueShapes!: ValueShapeCircle[];
-    protected valueShapeActive!: ValueShapeCircle;
+    protected valueShapes: ValueShapeCircle[] = [];
+    protected valueShapeActive?: ValueShapeCircle;
     private linePath!: string;
     private areaPath!: string;
 
@@ -45,8 +45,8 @@ export class TcLine extends TcBase {
     protected computeChartData(): void {
         this.valueShapes = [];
 
-        const valueMin = (this.min === null) ? Math.min(...this.values) : Math.min(...this.values, this.min);
-        const valueMax = (this.max === null) ? Math.max(...this.values) : Math.max(...this.values, this.max);
+        const valueMin = (this.min === undefined) ? Math.min(...this.values) : Math.min(...this.values, this.min);
+        const valueMax = (this.max === undefined) ? Math.max(...this.values) : Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
         const pointPositionX = (value: number): number => {
@@ -70,7 +70,7 @@ export class TcLine extends TcBase {
             this.valueShapes.push({
                 index: index,
                 value: value,
-                label: this.labels[index] ?? null,
+                label: this.labels[index],
                 center: {
                     x: pointPositionX(index),
                     y: pointPositionY(value),
@@ -132,8 +132,8 @@ export class TcLine extends TcBase {
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle | null {
-        if (!this.hasEnoughValues()) return null;
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle | undefined {
+        if (!this.hasEnoughValues()) return;
 
         return this.valueShapes.reduce((previous, current) => {
             return (Math.abs(current.center.x - x) < Math.abs(previous.center.x - x) ? current : previous);

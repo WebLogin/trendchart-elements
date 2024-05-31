@@ -9,7 +9,7 @@ export abstract class TcBase extends LitElement {
     @property({type: Array})
     public labels: string[] = [];
     @property({type: Number})
-    public max: number | null = null;
+    public max?: number;
     @property({type: String})
     public tooltip = '@L @V';
 
@@ -18,7 +18,7 @@ export abstract class TcBase extends LitElement {
     @state()
     protected height = 0;
     @state()
-    protected valueShapeActive: ValueShape | null = null;
+    protected valueShapeActive?: ValueShape;
 
     protected valuesMinCount = 1;
     protected valueShapes: ValueShape[] = [];
@@ -119,7 +119,7 @@ export abstract class TcBase extends LitElement {
         }
 
         if (changedProperties.has('labels')) {
-            this.labels = this.labels.map((label) => (label != null) ? '' + label : '');
+            this.labels = this.labels.map((label) => (label != null) ? ('' + label).trim() : '');
         }
 
         const propertiesRelatedToChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'gap', 'depth', 'donut', 'radius'];
@@ -160,15 +160,15 @@ export abstract class TcBase extends LitElement {
     protected abstract tooltipTemplate(): TemplateResult;
 
 
-    protected abstract findValueShapeAtPosition(x: number, y: number): ValueShape | null;
+    protected abstract findValueShapeAtPosition(x: number, y: number): ValueShape | undefined;
 
 
-    protected hasEnoughValues() {
+    protected hasEnoughValues(): boolean {
         return (this.values.length >= this.valuesMinCount);
     }
 
 
-    private registerEvents() {
+    private registerEvents(): void {
         const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
 
         // Click on shape
@@ -200,7 +200,7 @@ export abstract class TcBase extends LitElement {
             if (this.valueShapeActive) {
                 this.dispatchValueShapeEvent('shape-leave', this.valueShapeActive);
             }
-            this.valueShapeActive = null;
+            this.valueShapeActive = undefined;
         });
     }
 

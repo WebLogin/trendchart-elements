@@ -10,10 +10,10 @@ export class TcPie extends TcBase {
     @property({type: Number})
     public gap = 1;
     @property({type: Number})
-    public donut: number | null = null;
+    public donut?: number;
 
-    protected valueShapes!: ValueShapeSlice[];
-    protected valueShapeActive!: ValueShapeSlice;
+    protected valueShapes: ValueShapeSlice[] = [];
+    protected valueShapeActive?: ValueShapeSlice;
     private cutoutCircle!: ShapeCircle;
     private gapLines!: ShapeLine[];
     private areaPath!: string;
@@ -40,7 +40,7 @@ export class TcPie extends TcBase {
         }
         const radius = Math.min(center.x, center.y);
         const valueTotal = this.values.reduce((a, b) => a + b, 0);
-        const valueMax = (this.max !== null) ? Math.max(valueTotal, this.max) : valueTotal;
+        const valueMax = (this.max === undefined) ? valueTotal : Math.max(valueTotal, this.max);
         let valuesSum = 0;
 
         const slicePoint = (value: number, radius: number): ShapePoint => {
@@ -75,17 +75,17 @@ export class TcPie extends TcBase {
         };
 
         this.values.forEach((value, index) => {
-            const slicePointCenter = slicePoint(valuesSum + (value / 2), radius - ((radius - this.cutoutCircle.radius) / 2));
+            const slicePointCenter = slicePoint(valuesSum + (value / 2), radius - ((radius - this.cutoutCircle!.radius) / 2));
             this.valueShapes.push({
                 index: index,
                 value: value,
-                label: this.labels[index] ?? null,
+                label: this.labels[index],
                 center: slicePointCenter,
                 path: slicePath(value),
             });
 
             const slicePointStart = slicePoint(valuesSum, radius);
-            this.gapLines.push({
+            this.gapLines!.push({
                 start: slicePointStart,
                 end: center,
             });
@@ -153,8 +153,8 @@ export class TcPie extends TcBase {
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeSlice | null {
-        if (!this.hasEnoughValues()) return null;
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeSlice | undefined {
+        if (!this.hasEnoughValues()) return;
 
         if (this.valueShapes.length === 1) {
             return this.valueShapes[0];
@@ -169,7 +169,7 @@ export class TcPie extends TcBase {
             return path.isPointInFill(point);
         });
 
-        if (valueShapeActiveIndex === -1) return null;
+        if (valueShapeActiveIndex < 0) return;
 
         return this.valueShapes[valueShapeActiveIndex];
     }

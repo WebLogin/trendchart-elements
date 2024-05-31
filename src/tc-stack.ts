@@ -14,8 +14,8 @@ export class TcStack extends TcBase {
     @property({type: Boolean, reflect: true})
     public horizontal = false;
 
-    protected valueShapes!: ValueShapeRectangle[];
-    protected valueShapeActive!: ValueShapeRectangle;
+    protected valueShapes: ValueShapeRectangle[] = [];
+    protected valueShapeActive?: ValueShapeRectangle;
     private gapLines!: ShapeLine[];
 
     static styles = [
@@ -31,10 +31,9 @@ export class TcStack extends TcBase {
         this.valueShapes = [];
         this.gapLines = [];
 
-        let valueMax = this.values.reduce((a, b) => a + b, 0);
-        if (this.max !== null) {
-            valueMax = Math.max(valueMax, this.max);
-        }
+        const valueMax = (this.max === undefined)
+            ? this.values.reduce((a, b) => a + b, 0)
+            : Math.max(this.values.reduce((a, b) => a + b, 0), this.max);
 
         let inlineStart = this.horizontal ? 0 : this.height;
         const blockStart = 0;
@@ -46,7 +45,7 @@ export class TcStack extends TcBase {
             this.valueShapes.push({
                 index: index,
                 value: value,
-                label: this.labels[index] ?? null,
+                label: this.labels[index],
                 origin: {
                     x: this.horizontal ? inlineStart : blockStart,
                     y: this.horizontal ? blockStart : (inlineStart - inlineSize),
@@ -140,8 +139,8 @@ export class TcStack extends TcBase {
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | null {
-        if (!this.hasEnoughValues()) return null;
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | undefined {
+        if (!this.hasEnoughValues()) return;
 
         if (this.valueShapes.length === 1) {
             return this.valueShapes[0];
@@ -156,6 +155,6 @@ export class TcStack extends TcBase {
             const positionMax = shapeOrigin + shapeSize + (this.gap / 2);
 
             return position >= positionMin && position <= positionMax;
-        }) ?? null;
+        });
     }
 }
