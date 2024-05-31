@@ -94,7 +94,7 @@ export class TcBar extends TcBase {
 
 
     protected tooltipTemplate(): TemplateResult {
-        if (!this.valueShapeActive) return html``;
+        if (!this.valueShapeActive || !this.tooltipText()) return html``;
 
         const style: StyleInfo = {
             left: (this.valueShapeActive.origin.x + (this.valueShapeActive.width / 2)) + 'px',

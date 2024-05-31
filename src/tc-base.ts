@@ -10,8 +10,6 @@ export abstract class TcBase extends LitElement {
     public labels: string[] = [];
     @property({type: Number})
     public max: number | null = null;
-    @property({type: Boolean, reflect: true})
-    public static = false;
     @property({type: String})
     public tooltip = '@L @V';
 

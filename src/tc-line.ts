@@ -91,6 +91,14 @@ export class TcLine extends TcBase {
 
 
     protected chartTemplate(): TemplateResult {
+        const pointStyle: StyleInfo = {
+            display: this.valueShapeActive ? 'block' : 'none',
+            left: (this.valueShapeActive ? this.valueShapeActive.center.x : 0) + 'px',
+            top: (this.valueShapeActive ? this.valueShapeActive.center.y : 0) + 'px',
+            width: (this.valueShapeActive ? (this.valueShapeActive.radius * 2) : 0) + 'px',
+            height: (this.valueShapeActive ? (this.valueShapeActive.radius * 2) : 0) + 'px',
+        };
+
         return html`
             <svg class="chart">
                 <mask id="mask">
@@ -99,34 +107,27 @@ export class TcLine extends TcBase {
                 <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
                 <path class="shape" d="${this.linePath}" stroke-width="${this.depth}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
+            <div class="point" style="${styleMap(pointStyle)}"></div>
         `;
     }
 
 
     protected tooltipTemplate(): TemplateResult {
-        if (!this.valueShapeActive) return html``;
+        if (!this.valueShapeActive || !this.tooltipText()) return html``;
 
-        const pointStyle: StyleInfo = {
-            left: this.valueShapeActive.center.x + 'px',
-            top: this.valueShapeActive.center.y + 'px',
-            width: (this.valueShapeActive.radius * 2) + 'px',
-            height: (this.valueShapeActive.radius * 2) + 'px',
-        };
-
-        const tooltipStyle: StyleInfo = {
+        const style: StyleInfo = {
             left: this.valueShapeActive.center.x + 'px',
             top: (this.valueShapeActive.center.y - this.valueShapeActive.radius - 2) + 'px',
             transform: 'translate(-50%, -100%)',
         };
 
         if ((this.valueShapeActive.value < 0 || Math.max(...this.values) === 0)) {
-            tooltipStyle.top = (this.valueShapeActive.center.y + this.valueShapeActive.radius + 2) + 'px';
-            tooltipStyle.transform = 'translate(-50%, 0%)';
+            style.top = (this.valueShapeActive.center.y + this.valueShapeActive.radius + 2) + 'px';
+            style.transform = 'translate(-50%, 0%)';
         }
 
         return html`
-            <div class="point" style="${styleMap(pointStyle)}"></div>
-            <div class="tooltip" style="${styleMap(tooltipStyle)}">${this.tooltipText()}</div>
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText()}</div>
         `;
     }
 

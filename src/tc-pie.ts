@@ -139,7 +139,7 @@ export class TcPie extends TcBase {
 
 
     protected tooltipTemplate(): TemplateResult {
-        if (!this.valueShapeActive) return html``;
+        if (!this.valueShapeActive || !this.tooltipText()) return html``;
 
         const style: StyleInfo = {
             left: this.valueShapeActive.center.x + 'px',
