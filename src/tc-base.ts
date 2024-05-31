@@ -14,9 +14,9 @@ export abstract class TcBase extends LitElement {
     public tooltip = '@L @V';
 
     @state()
-    public width = 0;
+    protected width = 0;
     @state()
-    public height = 0;
+    protected height = 0;
     @state()
     protected valueShapeActive: ValueShape | null = null;
 
