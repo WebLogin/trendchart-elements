@@ -101,10 +101,12 @@ export class TcLine extends TcBase {
 
         return html`
             <svg class="chart">
-                <mask id="mask">
-                    <path d="${this.areaPath}" stroke-width="${this.depth}" stroke="#FFFFFF" fill="#FFFFFF" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
-                </mask>
-                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
+                <defs>
+                    <mask id="area-mask">
+                        <path d="${this.areaPath}" stroke-width="${this.depth}" stroke="white" fill="white" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                    </mask>
+                </defs>
+                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#area-mask)"/>
                 <path class="shape" d="${this.linePath}" stroke-width="${this.depth}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div class="point" style="${styleMap(pointStyle)}"></div>

@@ -109,7 +109,7 @@ export class TcStack extends TcBase {
                         <rect x="0" y="0"
                             width="100%" height="100%"
                             rx="${radius}" ry="${radius}"
-                            fill="white" stroke="none"
+                            fill="white"
                         />
                         <use xlink:href="#values-rectangle" x="0" y="0" fill="black"/>
                     </mask>

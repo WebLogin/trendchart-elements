@@ -114,16 +114,18 @@ export class TcPie extends TcBase {
     protected chartTemplate(): TemplateResult {
         return html`
             <svg class="chart" width="100%" height="100%">
-                <mask id="mask">
-                    <rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF" stroke="none"/>
-                    <circle cx="${this.cutoutCircle.center.x}" cy="${this.cutoutCircle.center.y}" r="${this.cutoutCircle.radius}" fill="#000000"/>
-                    ${this.gapLines.map((gapLine) => svg`
-                        <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
-                            x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                            stroke-width="${this.gap}" stroke="#000000" stroke-linecap="round"
-                        />
-                    `)}
-                </mask>
+                <defs>
+                    <mask id="mask">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        <circle cx="${this.cutoutCircle.center.x}" cy="${this.cutoutCircle.center.y}" r="${this.cutoutCircle.radius}" fill="black"/>
+                        ${this.gapLines.map((gapLine) => svg`
+                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
+                                x2="${gapLine.end.x}" y2="${gapLine.end.y}"
+                                stroke-width="${this.gap}" stroke="black" stroke-linecap="round"
+                            />
+                        `)}
+                    </mask>
+                </defs>
                 <g mask="url(#mask)">
                     <path class="area" d="${this.areaPath}"/>
                     ${this.valueShapes.map((valueShape, index) => svg`
