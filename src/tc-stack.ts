@@ -17,6 +17,7 @@ export class TcStack extends TcBase {
     protected valueShapes: ValueShapeRectangle[] = [];
     protected valueShapeActive?: ValueShapeRectangle;
     private gapLines!: ShapeLine[];
+    private valuesRectangle!: ShapeRectangle;
 
     static styles = [
         TcBase.styles,
@@ -69,52 +70,60 @@ export class TcStack extends TcBase {
 
             inlineStart = this.horizontal ? (inlineStart + inlineSize) : (inlineStart - inlineSize);
         });
+
+        this.valuesRectangle = {
+            origin: { x: 0, y: 0 },
+            width: this.width,
+            height: this.height,
+        };
+        if (this.horizontal) {
+            this.valuesRectangle.width = this.valueShapes.reduce((a, valueShape) => a + valueShape.width, 0);
+        } else {
+            this.valuesRectangle.height = this.valueShapes.reduce((a, valueShape) => a + valueShape.height, 0);
+            this.valuesRectangle.origin.y = this.height - this.valuesRectangle.height;
+        }
     }
 
 
     protected chartTemplate(): TemplateResult {
         const radius = Math.min(this.radius, (this.horizontal ? this.width : this.height) / 2);
-        const mask:ShapeRectangle = {
-            origin: { x: 0, y: 0 },
-            width: this.width,
-            height: this.height,
-        };
-
-        if (this.horizontal) {
-            mask.width = this.valueShapes.reduce((a, valueShape) => a + valueShape.width, 0);
-        } else {
-            mask.height = this.valueShapes.reduce((a, valueShape) => a + valueShape.height, 0);
-            mask.origin.y = this.height - mask.height;
-        }
 
         return html`
             <svg class="chart" width="100%" height="100%">
-                <mask id="mask">
-                    <rect
-                        x="${mask.origin.x}" y="${mask.origin.y}"
-                        width="${mask.width}" height="${mask.height}"
+                <defs>
+                    <rect id="values-rectangle"
+                        x="${this.valuesRectangle.origin.x}" y="${this.valuesRectangle.origin.y}"
+                        width="${this.valuesRectangle.width}" height="${this.valuesRectangle.height}"
                         rx="${radius}" ry="${radius}"
-                        fill="#FFFFFF" stroke="none"
                     />
-                    ${this.gapLines.map((gapLine) => svg`
-                        <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
-                            x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                            stroke-width="${this.gap}" stroke="#000000" stroke-linecap="round"
+                    <mask id="values-mask">
+                        <use xlink:href="#values-rectangle" x="0" y="0" fill="white"/>
+                        ${this.gapLines.map((gapLine) => svg`
+                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
+                                x2="${gapLine.end.x}" y2="${gapLine.end.y}"
+                                stroke-width="${this.gap}" stroke="black" stroke-linecap="round"
+                            />
+                        `)}
+                    </mask>
+                    <mask id="area-mask">
+                        <rect x="0" y="0"
+                            width="100%" height="100%"
+                            rx="${radius}" ry="${radius}"
+                            fill="white" stroke="none"
                         />
-                    `)}
-                </mask>
+                        <use xlink:href="#values-rectangle" x="0" y="0" fill="black"/>
+                    </mask>
+                </defs>
                 <rect class="area"
                     x="0" y="0"
                     width="100%" height="100%"
-                    rx="${radius}" ry="${radius}"
+                    mask="url(#area-mask)"
                 />
-                <g mask="url(#mask)">
+                <g mask="url(#values-mask)">
                     ${this.valueShapes.map((valueShape, index) => svg`
                         <rect class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"
-                            x="${valueShape.origin.x}"
-                            y="${valueShape.origin.y}"
-                            width="${valueShape.width}"
-                            height="${valueShape.height}"
+                            x="${valueShape.origin.x}" y="${valueShape.origin.y}"
+                            width="${valueShape.width}" height="${valueShape.height}"
                             style="fill: var(--color-${index + 1}, var(--color))"
                         />
                     `)}
