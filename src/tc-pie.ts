@@ -84,29 +84,21 @@ export class TcPie extends TcBase {
                 path: slicePath(value),
             });
 
-            const slicePointStart = slicePoint(valuesSum, radius);
+            valuesSum += value;
+
             this.gapLines!.push({
-                start: slicePointStart,
+                start: slicePoint(valuesSum, radius),
                 end: center,
             });
-
-            valuesSum += value;
         });
 
         const valueResidual = valueMax - valueTotal;
         if (valueResidual) {
             this.areaPath = slicePath(valueResidual);
-
-            const slicePointStart = slicePoint(valuesSum, radius);
-            this.gapLines.push({
-                start: slicePointStart,
-                end: center,
-            });
         }
 
-        // Reset gapLines if there is only one value and it's full
-        if (this.values.length === 1 && !valueResidual) {
-            this.gapLines = [];
+        if (this.values.length === 1 || valueResidual) {
+            this.gapLines.pop();
         }
     }
 
