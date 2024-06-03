@@ -86,7 +86,7 @@ export class TcStack extends TcBase {
 
 
     protected chartTemplate(): TemplateResult {
-        const radius = Math.min(this.radius, (this.horizontal ? this.width : this.height) / 2);
+        const radius = Math.min(this.radius, (this.height / 2), (this.width / 2));
 
         return html`
             <svg class="chart" width="100%" height="100%">
