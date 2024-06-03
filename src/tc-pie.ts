@@ -10,6 +10,8 @@ export class TcPie extends TcBase {
     @property({type: Number})
     public gap = 2;
     @property({type: Number})
+    public rotate = 0;
+    @property({type: Number})
     public donut?: number;
 
     protected valueShapes: ValueShapeSlice[] = [];
@@ -44,7 +46,7 @@ export class TcPie extends TcBase {
         let valuesSum = 0;
 
         const slicePoint = (value: number, radius: number): ShapePoint => {
-            const radians = (value / valueMax) * Math.PI * 2 - Math.PI / 2;
+            const radians = (value / valueMax * Math.PI * 2) - (Math.PI / 2) + (this.rotate * Math.PI * 2 / 360);
             return {
                 x: radius * Math.cos(radians) + center.x,
                 y: radius * Math.sin(radians) + center.y,
@@ -54,15 +56,11 @@ export class TcPie extends TcBase {
         const slicePath = (value: number): string => {
             const percentage = (value / valueMax) * 100;
             const pointStart = slicePoint(valuesSum, radius);
-            const pointEnd = slicePoint(valuesSum + value, radius);
+            const pointEnd = slicePoint((valuesSum + value) * (percentage === 100 ? 0.99999 : 1), radius);
 
             let slice = '';
             slice += 'M' + pointStart.x + ',' + pointStart.y + ' ';
-            if (percentage === 100) {
-                slice += 'A' + [radius, radius, '0', '1', '1', (pointEnd.x - 0.001), pointEnd.y].join(',') + ' ';
-            } else {
-                slice += 'A' + [radius, radius, '0', (percentage > 50 ? '1' : '0'), '1', pointEnd.x, pointEnd.y].join(',') + ' ';
-            }
+            slice += 'A' + [radius, radius, '0', (percentage > 50 ? '1' : '0'), '1', pointEnd.x, pointEnd.y].join(',') + ' ';
             slice += 'L' + [center.x, center.y].join(',') + ' ';
             slice += 'Z';
 
