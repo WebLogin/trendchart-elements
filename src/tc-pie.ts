@@ -42,7 +42,7 @@ export class TcPie extends TcBase {
         }
         const radius = Math.min(center.x, center.y);
         const valueTotal = this.values.reduce((a, b) => a + b, 0);
-        const valueMax = (this.max === undefined) ? valueTotal : Math.max(valueTotal, this.max);
+        const valueMax = Number.isFinite(this.max) ? Math.max(valueTotal, this.max!) : valueTotal;
         let valuesSum = 0;
 
         const slicePoint = (value: number, radius: number): ShapePoint => {

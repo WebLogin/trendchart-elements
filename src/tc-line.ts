@@ -45,8 +45,8 @@ export class TcLine extends TcBase {
     protected computeChartData(): void {
         this.valueShapes = [];
 
-        const valueMin = (this.min === undefined) ? Math.min(...this.values) : Math.min(...this.values, this.min);
-        const valueMax = (this.max === undefined) ? Math.max(...this.values) : Math.max(...this.values, this.max);
+        const valueMin = Number.isFinite(this.min) ? Math.min(...this.values, this.min!) : Math.min(...this.values);
+        const valueMax = Number.isFinite(this.max) ? Math.max(...this.values, this.max!) : Math.max(...this.values);
         const valueScale = valueMax - valueMin;
 
         const pointPositionX = (value: number): number => {

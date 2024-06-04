@@ -32,9 +32,9 @@ export class TcStack extends TcBase {
         this.valueShapes = [];
         this.gapLines = [];
 
-        const valueMax = (this.max === undefined)
-            ? this.values.reduce((a, b) => a + b, 0)
-            : Math.max(this.values.reduce((a, b) => a + b, 0), this.max);
+        const valueMax = Number.isFinite(this.max)
+            ? Math.max(this.values.reduce((a, b) => a + b, 0), this.max!)
+            : this.values.reduce((a, b) => a + b, 0);
 
         let inlineStart = this.horizontal ? 0 : this.height;
         const blockStart = 0;
