@@ -122,7 +122,7 @@ export abstract class TcBase extends LitElement {
             this.labels = this.labels.map((label) => (label != null) ? ('' + label).trim() : '');
         }
 
-        const propertiesRelatedToChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'gap', 'depth', 'donut', 'radius'];
+        const propertiesRelatedToChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'gap', 'weight', 'donut', 'radius'];
         if (propertiesRelatedToChart.some((property) => changedProperties.has(property as any))) {
             this.computeChartData();
         }

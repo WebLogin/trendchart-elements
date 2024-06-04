@@ -10,7 +10,7 @@ export class TcLine extends TcBase {
     @property({type: Number})
     public min?: number;
     @property({type: Number})
-    public depth = 2;
+    public weight = 2;
 
     protected valuesMinCount = 2;
     protected valueShapes: ValueShapeCircle[] = [];
@@ -50,20 +50,20 @@ export class TcLine extends TcBase {
         const valueScale = valueMax - valueMin;
 
         const pointPositionX = (value: number): number => {
-            const width = this.width - this.depth;
+            const width = this.width - this.weight;
             let x = value * (width / (this.values.length - 1));
 
-            return x + (this.depth / 2);
+            return x + (this.weight / 2);
         };
 
         const pointPositionY = (value: number): number => {
-            const height = this.height - this.depth;
+            const height = this.height - this.weight;
             let y = height;
             if (valueScale) {
                 y -= ((value - valueMin) / valueScale) * height;
             }
 
-            return y + (this.depth / 2);
+            return y + (this.weight / 2);
         };
 
         this.values.forEach((value, index) => {
@@ -75,7 +75,7 @@ export class TcLine extends TcBase {
                     x: pointPositionX(index),
                     y: pointPositionY(value),
                 },
-                radius: Math.floor((this.depth + 6) / 2),
+                radius: Math.floor((this.weight + 6) / 2),
             });
         });
 
@@ -103,11 +103,11 @@ export class TcLine extends TcBase {
             <svg class="chart">
                 <defs>
                     <mask id="area-mask">
-                        <path d="${this.areaPath}" stroke-width="${this.depth}" stroke="white" fill="white" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="${this.areaPath}" stroke-width="${this.weight}" stroke="white" fill="white" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
                     </mask>
                 </defs>
                 <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#area-mask)"/>
-                <path class="shape" d="${this.linePath}" stroke-width="${this.depth}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                <path class="shape" d="${this.linePath}" stroke-width="${this.weight}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div class="point" style="${styleMap(pointStyle)}"></div>
         `;
