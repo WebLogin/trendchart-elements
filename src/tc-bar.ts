@@ -28,8 +28,8 @@ export class TcBar extends TcBase {
         const valueMax = Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
-        const inlineSize = ((this.horizontal ? this.height : this.width) - (this.gap * (this.values.length - 1))) / this.values.length;
-        const blockPosition = (value: number): number => {
+        const crossSize = ((this.horizontal ? this.height : this.width) - (this.gap * (this.values.length - 1))) / this.values.length;
+        const flowPosition = (value: number): number => {
             const size = this.horizontal ? this.width : this.height;
             const position = valueScale ? ((value - valueMin) / valueScale) * size : 1;
 
@@ -37,18 +37,18 @@ export class TcBar extends TcBase {
         };
 
         this.values.forEach((value, index) => {
-            let inlineStart = (inlineSize + this.gap) * index;
-            let blockStart = (value < 0) ? blockPosition(Math.min(valueMax, 0)) : blockPosition(value);
-            let blockEnd = (value < 0) ? blockPosition(value) : blockPosition(Math.max(valueMin, 0));
+            let crossStart = (crossSize + this.gap) * index;
+            let flowStart = (value < 0) ? flowPosition(Math.min(valueMax, 0)) : flowPosition(value);
+            let flowEnd = (value < 0) ? flowPosition(value) : flowPosition(Math.max(valueMin, 0));
             if (this.horizontal) {
-                [blockStart, blockEnd] = [blockEnd, blockStart];
+                [flowStart, flowEnd] = [flowEnd, flowStart];
             }
 
-            let blockSize = blockEnd - blockStart;
-            if (blockSize == 0) {
-                blockSize = 1;
+            let flowSize = flowEnd - flowStart;
+            if (flowSize == 0) {
+                flowSize = 1;
                 if (valueScale && (this.horizontal ? (valueMax < 0) : (valueMax > 0))) {
-                    blockStart--;
+                    flowStart--;
                 }
             }
 
@@ -57,11 +57,11 @@ export class TcBar extends TcBase {
                 value: value,
                 label: this.labels[index],
                 origin: {
-                    x: this.horizontal ? blockStart : inlineStart,
-                    y: this.horizontal ? inlineStart : blockStart,
+                    x: this.horizontal ? flowStart : crossStart,
+                    y: this.horizontal ? crossStart : flowStart,
                 },
-                width: this.horizontal ? blockSize : inlineSize,
-                height: this.horizontal ? inlineSize : blockSize,
+                width: this.horizontal ? flowSize : crossSize,
+                height: this.horizontal ? crossSize : flowSize,
             });
         });
     }

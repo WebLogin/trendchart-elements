@@ -34,39 +34,39 @@ export class TcStack extends TcBase {
 
         const valueMax = Math.max(this.values.reduce((a, b) => a + b, 0), this.max);
 
-        let inlineStart = this.horizontal ? 0 : this.height;
-        const blockStart = 0;
+        const crossStart = 0;
+        let flowStart = this.horizontal ? 0 : this.height;
 
         this.values.forEach((value, index) => {
-            const inlineSize = (value / valueMax) * (this.horizontal ? this.width : this.height);
-            const blockSize = this.horizontal ? this.height : this.width;
+            const crossSize = this.horizontal ? this.height : this.width;
+            const flowSize = (value / valueMax) * (this.horizontal ? this.width : this.height);
 
             this.valueShapes.push({
                 index: index,
                 value: value,
                 label: this.labels[index],
                 origin: {
-                    x: this.horizontal ? inlineStart : blockStart,
-                    y: this.horizontal ? blockStart : (inlineStart - inlineSize),
+                    x: this.horizontal ? flowStart : crossStart,
+                    y: this.horizontal ? crossStart : (flowStart - flowSize),
                 },
-                width: this.horizontal ? inlineSize : blockSize,
-                height: this.horizontal ? blockSize : inlineSize,
+                width: this.horizontal ? flowSize : crossSize,
+                height: this.horizontal ? crossSize : flowSize,
             });
 
             if (index > 0 && value !== 0) {
                 this.gapLines.push({
                     start: {
-                        x: this.horizontal ? inlineStart : blockStart,
-                        y: this.horizontal ? blockStart : inlineStart,
+                        x: this.horizontal ? flowStart : crossStart,
+                        y: this.horizontal ? crossStart : flowStart,
                     },
                     end: {
-                        x: this.horizontal ? inlineStart : blockSize,
-                        y: this.horizontal ? blockSize : inlineStart,
+                        x: this.horizontal ? flowStart : crossSize,
+                        y: this.horizontal ? crossSize : flowStart,
                     },
                 });
             }
 
-            inlineStart = this.horizontal ? (inlineStart + inlineSize) : (inlineStart - inlineSize);
+            flowStart = this.horizontal ? (flowStart + flowSize) : (flowStart - flowSize);
         });
 
         this.valuesRectangle = {
