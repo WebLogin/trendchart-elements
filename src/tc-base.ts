@@ -9,7 +9,7 @@ export abstract class TcBase extends LitElement {
     @property({type: Array})
     public labels: string[] = [];
     @property({type: Number})
-    public max?: number;
+    public max = 0;
     @property({type: String})
     public tooltip = '@L @V';
 

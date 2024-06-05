@@ -8,7 +8,7 @@ import { ValueShapeRectangle } from './types.js';
 @customElement('tc-bar')
 export class TcBar extends TcBase {
     @property({type: Number})
-    public min?: number;
+    public min = 0;
     @property({type: Number})
     public gap = 2;
     @property({type: Number})
@@ -24,8 +24,8 @@ export class TcBar extends TcBase {
     protected computeChartData(): void {
         this.valueShapes = [];
 
-        const valueMin = Number.isFinite(this.min) ? Math.min(...this.values, this.min!) : Math.min(...this.values);
-        const valueMax = Number.isFinite(this.max) ? Math.max(...this.values, this.max!) : Math.max(...this.values);
+        const valueMin = Math.min(...this.values, this.min);
+        const valueMax = Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
         const inlineSize = ((this.horizontal ? this.height : this.width) - (this.gap * (this.values.length - 1))) / this.values.length;
