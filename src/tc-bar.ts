@@ -74,18 +74,15 @@ export class TcBar extends TcBase {
             <svg class="chart" width="100%" height="100%">
                 ${this.valueShapes.map((valueShape, index) => svg`
                     <rect class="area"
-                        x="${this.horizontal ? 0 : valueShape.origin.x}"
-                        y="${this.horizontal ? valueShape.origin.y : 0}"
-                        width="${this.horizontal ? this.width : valueShape.width}"
-                        height="${this.horizontal ? valueShape.height : this.height}"
+                        x="${this.horizontal ? 0 : valueShape.origin.x}" y="${this.horizontal ? valueShape.origin.y : 0}"
+                        width="${this.horizontal ? this.width : valueShape.width}" height="${this.horizontal ? valueShape.height : this.height}"
                         rx="${radius}" ry="${radius}"
                     />
                     <rect class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"
-                        x="${valueShape.origin.x}"
-                        y="${valueShape.origin.y}"
-                        width="${valueShape.width}"
-                        height="${valueShape.height}"
+                        x="${valueShape.origin.x}" y="${valueShape.origin.y}"
+                        width="${valueShape.width}" height="${valueShape.height}"
                         rx="${radius}" ry="${radius}"
+                        style="fill: var(--color-${index + 1}, var(--color))"
                     />
                 `)}
             </svg>
