@@ -10,6 +10,8 @@ export abstract class TcBase extends LitElement {
     public labels: string[] = [];
     @property({type: Number})
     public max = 0;
+    @property({type: Boolean, reflect: true})
+    public static = false;
     @property({type: String})
     public tooltip = '@L @V';
 
@@ -182,25 +184,34 @@ export abstract class TcBase extends LitElement {
         });
 
         // Mouse enter/leave shape
+        let currentValueShapeActive: ValueShape | undefined;
         wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
             event.stopPropagation();
 
             const newValueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
-            if (this.valueShapeActive && (!newValueShapeActive || newValueShapeActive.index !== this.valueShapeActive.index)) {
-                this.dispatchValueShapeEvent('shape-leave', this.valueShapeActive);
+            if (currentValueShapeActive && (!newValueShapeActive || newValueShapeActive.index !== currentValueShapeActive.index)) {
+                this.dispatchValueShapeEvent('shape-leave', currentValueShapeActive);
             }
-            if (newValueShapeActive && (!this.valueShapeActive || newValueShapeActive.index !== this.valueShapeActive.index)) {
+            if (newValueShapeActive && (!currentValueShapeActive || newValueShapeActive.index !== currentValueShapeActive.index)) {
                 this.dispatchValueShapeEvent('shape-enter', newValueShapeActive);
             }
-            this.valueShapeActive = newValueShapeActive;
+
+            currentValueShapeActive = newValueShapeActive;
+            if (!this.static) {
+                this.valueShapeActive = currentValueShapeActive;
+            }
         });
         wrapperElement.addEventListener('mouseleave', (event: MouseEvent) => {
             event.stopPropagation();
 
-            if (this.valueShapeActive) {
-                this.dispatchValueShapeEvent('shape-leave', this.valueShapeActive);
+            if (currentValueShapeActive) {
+                this.dispatchValueShapeEvent('shape-leave', currentValueShapeActive);
             }
-            this.valueShapeActive = undefined;
+
+            currentValueShapeActive = undefined;
+            if (!this.static) {
+                this.valueShapeActive = currentValueShapeActive;
+            }
         });
     }
 
