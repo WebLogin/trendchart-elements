@@ -207,6 +207,11 @@ export abstract class TcBase extends LitElement {
                 this.valueShapeActive = currentValueShapeActive;
             }
         });
+        document.addEventListener('click', (event: MouseEvent) => {
+            if (event.composedPath().includes(wrapperElement) || this.static) return;
+
+            wrapperElement.dispatchEvent(new MouseEvent('mouseleave'));
+        });
     }
 
 
