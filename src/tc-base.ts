@@ -175,8 +175,6 @@ export abstract class TcBase extends LitElement {
 
         // Click on shape
         wrapperElement.addEventListener('click', (event: MouseEvent) => {
-            event.stopPropagation();
-
             const valueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
             if (valueShapeActive) {
                 this.dispatchValueShapeEvent('shape-click', valueShapeActive);
@@ -186,8 +184,6 @@ export abstract class TcBase extends LitElement {
         // Mouse enter/leave shape
         let currentValueShapeActive: ValueShape | undefined;
         wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
-            event.stopPropagation();
-
             const newValueShapeActive = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
             if (currentValueShapeActive && (!newValueShapeActive || newValueShapeActive.index !== currentValueShapeActive.index)) {
                 this.dispatchValueShapeEvent('shape-leave', currentValueShapeActive);
@@ -202,8 +198,6 @@ export abstract class TcBase extends LitElement {
             }
         });
         wrapperElement.addEventListener('mouseleave', (event: MouseEvent) => {
-            event.stopPropagation();
-
             if (currentValueShapeActive) {
                 this.dispatchValueShapeEvent('shape-leave', currentValueShapeActive);
             }
