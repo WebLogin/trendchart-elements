@@ -38,7 +38,7 @@ export abstract class TcBase extends LitElement {
             --tooltip-padding: 3px 4px;
             --tooltip-background: black;
             --tooltip-shadow: none;
-            display: inline-block;
+            display: block;
             width: 120px;
             height: 60px;
         }
