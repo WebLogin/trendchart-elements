@@ -1,4 +1,8 @@
 // Shapes
+export interface ShapePoint {
+    x: number,
+    y: number,
+}
 export interface ShapeCircle {
     center: ShapePoint,
     radius: number,
@@ -6,10 +10,6 @@ export interface ShapeCircle {
 export interface ShapeLine {
     start: ShapePoint,
     end: ShapePoint,
-}
-export interface ShapePoint {
-    x: number,
-    y: number,
 }
 export interface ShapeRectangle {
     origin: ShapePoint,

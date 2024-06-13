@@ -6,7 +6,7 @@ import { ShapeCircle, ShapeLine, ShapePoint, ValueShapeSlice } from './types.js'
 
 
 @customElement('tc-pie')
-export class TcPie extends TcBase {
+export class TcPie extends TcBase<ValueShapeSlice> {
     @property({type: Number})
     public gap = 2;
     @property({type: Number})
@@ -14,13 +14,13 @@ export class TcPie extends TcBase {
     @property({type: Number})
     public donut?: number;
 
-    protected valueShapes: ValueShapeSlice[] = [];
-    protected valueShapeActive?: ValueShapeSlice;
-    private cutoutCircle!: ShapeCircle;
-    private gapLines!: ShapeLine[];
-    private areaPath!: string;
+    private otherShapes!: {
+        gapLines: ShapeLine[],
+        areaPath: string,
+        cutoutCircle: ShapeCircle,
+    };
 
-    static styles = [
+    public static styles = [
         TcBase.styles,
         css`
             :host {
@@ -31,49 +31,53 @@ export class TcPie extends TcBase {
     ];
 
 
-    protected computeChartData(): void {
+    protected computeChartShapes(): void {
         this.valueShapes = [];
-        this.gapLines = [];
-        this.areaPath = '';
+        this.otherShapes = {
+            gapLines: [],
+            areaPath: '',
+            cutoutCircle: {} as ShapeCircle,
+        };
 
-        const center: ShapePoint = {
-            x: this.width / 2,
-            y: this.height / 2,
-        }
-        const radius = Math.min(center.x, center.y);
         const valueTotal = this.values.reduce((a, b) => a + b, 0);
         const valueMax = Math.max(valueTotal, this.max);
         let valuesSum = 0;
 
+        const pieCenter: ShapePoint = {
+            x: this.width / 2,
+            y: this.height / 2,
+        }
+        const pieRadius = Math.min(pieCenter.x, pieCenter.y);
+
+        this.otherShapes.cutoutCircle = {
+            center: pieCenter,
+            radius: pieRadius - Math.min(this.donut ?? Infinity, pieRadius),
+        };
+
         const slicePoint = (value: number, radius: number): ShapePoint => {
             const radians = (value / valueMax * Math.PI * 2) - (Math.PI / 2) + (this.rotate * Math.PI * 2 / 360);
             return {
-                x: radius * Math.cos(radians) + center.x,
-                y: radius * Math.sin(radians) + center.y,
+                x: radius * Math.cos(radians) + pieCenter.x,
+                y: radius * Math.sin(radians) + pieCenter.y,
             };
         };
 
         const slicePath = (value: number): string => {
             const percentage = (value / valueMax) * 100;
-            const pointStart = slicePoint(valuesSum, radius);
-            const pointEnd = slicePoint((valuesSum + value) * (percentage === 100 ? 0.99999 : 1), radius);
+            const pointStart = slicePoint(valuesSum, pieRadius);
+            const pointEnd = slicePoint((valuesSum + value) * (percentage === 100 ? 0.99999 : 1), pieRadius);
 
             let slice = '';
             slice += 'M' + pointStart.x + ',' + pointStart.y + ' ';
-            slice += 'A' + [radius, radius, '0', (percentage > 50 ? '1' : '0'), '1', pointEnd.x, pointEnd.y].join(',') + ' ';
-            slice += 'L' + [center.x, center.y].join(',') + ' ';
+            slice += 'A' + [pieRadius, pieRadius, '0', (percentage > 50 ? '1' : '0'), '1', pointEnd.x, pointEnd.y].join(',') + ' ';
+            slice += 'L' + [pieCenter.x, pieCenter.y].join(',') + ' ';
             slice += 'Z';
 
             return slice;
         };
 
-        this.cutoutCircle = {
-            center: center,
-            radius: radius - Math.min(this.donut ?? Infinity, radius),
-        };
-
         this.values.forEach((value, index) => {
-            const slicePointCenter = slicePoint(valuesSum + (value / 2), radius - ((radius - this.cutoutCircle!.radius) / 2));
+            const slicePointCenter = slicePoint(valuesSum + (value / 2), pieRadius - ((pieRadius - this.otherShapes.cutoutCircle.radius) / 2));
             this.valueShapes.push({
                 index: index,
                 value: value,
@@ -84,19 +88,20 @@ export class TcPie extends TcBase {
 
             valuesSum += value;
 
-            this.gapLines!.push({
-                start: slicePoint(valuesSum, radius),
-                end: center,
+            this.otherShapes.gapLines.push({
+                start: slicePoint(valuesSum, pieRadius),
+                end: pieCenter,
             });
         });
 
         const valueResidual = valueMax - valueTotal;
+
         if (valueResidual) {
-            this.areaPath = slicePath(valueResidual);
+            this.otherShapes.areaPath = slicePath(valueResidual);
         }
 
-        if (this.values.length === 1 || valueResidual) {
-            this.gapLines.pop();
+        if (valueResidual || this.values.length === 1) {
+            this.otherShapes.gapLines.pop();
         }
     }
 
@@ -107,8 +112,8 @@ export class TcPie extends TcBase {
                 <defs>
                     <mask id="mask">
                         <rect x="0" y="0" width="100%" height="100%" fill="white"/>
-                        <circle cx="${this.cutoutCircle.center.x}" cy="${this.cutoutCircle.center.y}" r="${this.cutoutCircle.radius}" fill="black"/>
-                        ${this.gapLines.map((gapLine) => svg`
+                        <circle cx="${this.otherShapes.cutoutCircle.center.x}" cy="${this.otherShapes.cutoutCircle.center.y}" r="${this.otherShapes.cutoutCircle.radius}" fill="black"/>
+                        ${this.otherShapes.gapLines.map((gapLine) => svg`
                             <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
                                 x2="${gapLine.end.x}" y2="${gapLine.end.y}"
                                 stroke-width="${this.gap}" stroke="black" stroke-linecap="round"
@@ -117,7 +122,7 @@ export class TcPie extends TcBase {
                     </mask>
                 </defs>
                 <g mask="url(#mask)">
-                    <path class="area" d="${this.areaPath}"/>
+                    <path class="area" d="${this.otherShapes.areaPath}"/>
                     ${this.valueShapes.map((valueShape, index) => svg`
                         <path class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"
                             d="${valueShape.path}"
@@ -131,7 +136,7 @@ export class TcPie extends TcBase {
 
 
     protected tooltipTemplate(): TemplateResult {
-        if (!this.valueShapeActive || !this.tooltipText()) return html``;
+        if (!this.valueShapeActive || !this.tooltipText) return html``;
 
         const style: StyleInfo = {
             left: this.valueShapeActive.center.x + 'px',
@@ -140,13 +145,13 @@ export class TcPie extends TcBase {
         };
 
         return html`
-            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText()}</div>
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText}</div>
         `;
     }
 
 
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeSlice | undefined {
-        if (!this.hasEnoughValues()) return;
+        if (!this.hasEnoughValueShapes()) return;
 
         if (this.valueShapes.length === 1) {
             return this.valueShapes[0];
@@ -164,5 +169,10 @@ export class TcPie extends TcBase {
         if (valueShapeActiveIndex < 0) return;
 
         return this.valueShapes[valueShapeActiveIndex];
+    }
+
+
+    protected hasEnoughValueShapes(): boolean {
+        return (this.valueShapes.length >= 1);
     }
 }

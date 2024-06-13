@@ -6,7 +6,7 @@ import { ShapeLine, ShapeRectangle, ValueShapeRectangle } from './types.js';
 
 
 @customElement('tc-stack')
-export class TcStack extends TcBase {
+export class TcStack extends TcBase<ValueShapeRectangle> {
     @property({type: Number})
     public gap = 2;
     @property({type: Number})
@@ -14,12 +14,12 @@ export class TcStack extends TcBase {
     @property({type: Boolean, reflect: true})
     public horizontal = false;
 
-    protected valueShapes: ValueShapeRectangle[] = [];
-    protected valueShapeActive?: ValueShapeRectangle;
-    private gapLines!: ShapeLine[];
-    private valuesRectangle!: ShapeRectangle;
+    private otherShapes!: {
+        gapLines: ShapeLine[],
+        valuesRectangle: ShapeRectangle,
+    };
 
-    static styles = [
+    public static styles = [
         TcBase.styles,
         css`
             :host(:not([horizontal])) { width: 20px; }
@@ -28,9 +28,12 @@ export class TcStack extends TcBase {
     ];
 
 
-    protected computeChartData(): void {
+    protected computeChartShapes(): void {
         this.valueShapes = [];
-        this.gapLines = [];
+        this.otherShapes = {
+            gapLines: [],
+            valuesRectangle: {} as ShapeRectangle,
+        };
 
         const valueMax = Math.max(this.values.reduce((a, b) => a + b, 0), this.max);
 
@@ -54,7 +57,7 @@ export class TcStack extends TcBase {
             });
 
             if (index > 0 && value !== 0) {
-                this.gapLines.push({
+                this.otherShapes.gapLines.push({
                     start: {
                         x: this.horizontal ? flowStart : crossStart,
                         y: this.horizontal ? crossStart : flowStart,
@@ -69,16 +72,16 @@ export class TcStack extends TcBase {
             flowStart = this.horizontal ? (flowStart + flowSize) : (flowStart - flowSize);
         });
 
-        this.valuesRectangle = {
+        this.otherShapes.valuesRectangle = {
             origin: { x: 0, y: 0 },
             width: this.width,
             height: this.height,
         };
         if (this.horizontal) {
-            this.valuesRectangle.width = this.valueShapes.reduce((a, valueShape) => a + valueShape.width, 0);
+            this.otherShapes.valuesRectangle.width = this.valueShapes.reduce((a, valueShape) => a + valueShape.width, 0);
         } else {
-            this.valuesRectangle.height = this.valueShapes.reduce((a, valueShape) => a + valueShape.height, 0);
-            this.valuesRectangle.origin.y = this.height - this.valuesRectangle.height;
+            this.otherShapes.valuesRectangle.height = this.valueShapes.reduce((a, valueShape) => a + valueShape.height, 0);
+            this.otherShapes.valuesRectangle.origin.y = this.height - this.otherShapes.valuesRectangle.height;
         }
     }
 
@@ -90,13 +93,13 @@ export class TcStack extends TcBase {
             <svg class="chart" width="100%" height="100%">
                 <defs>
                     <rect id="values-rectangle"
-                        x="${this.valuesRectangle.origin.x}" y="${this.valuesRectangle.origin.y}"
-                        width="${this.valuesRectangle.width}" height="${this.valuesRectangle.height}"
+                        x="${this.otherShapes.valuesRectangle.origin.x}" y="${this.otherShapes.valuesRectangle.origin.y}"
+                        width="${this.otherShapes.valuesRectangle.width}" height="${this.otherShapes.valuesRectangle.height}"
                         rx="${radius}" ry="${radius}"
                     />
                     <mask id="values-mask">
                         <use xlink:href="#values-rectangle" x="0" y="0" fill="white"/>
-                        ${this.gapLines.map((gapLine) => svg`
+                        ${this.otherShapes.gapLines.map((gapLine) => svg`
                             <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
                                 x2="${gapLine.end.x}" y2="${gapLine.end.y}"
                                 stroke-width="${this.gap}" stroke="black" stroke-linecap="round"
@@ -132,7 +135,7 @@ export class TcStack extends TcBase {
 
 
     protected tooltipTemplate(): TemplateResult {
-        if (!this.valueShapeActive || !this.tooltipText()) return html``;
+        if (!this.valueShapeActive || !this.tooltipText) return html``;
 
         const style: StyleInfo = {
             left: (this.valueShapeActive.origin.x + (this.valueShapeActive.width / 2)) + 'px',
@@ -141,13 +144,13 @@ export class TcStack extends TcBase {
         };
 
         return html`
-            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText()}</div>
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText}</div>
         `;
     }
 
 
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | undefined {
-        if (!this.hasEnoughValues()) return;
+        if (!this.hasEnoughValueShapes()) return;
 
         if (this.valueShapes.length === 1) {
             return this.valueShapes[0];
@@ -163,5 +166,10 @@ export class TcStack extends TcBase {
 
             return position >= positionMin && position <= positionMax;
         });
+    }
+
+
+    protected hasEnoughValueShapes(): boolean {
+        return (this.valueShapes.length >= 1);
     }
 }

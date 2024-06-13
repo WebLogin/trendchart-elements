@@ -6,7 +6,7 @@ import { ValueShapeRectangle } from './types.js';
 
 
 @customElement('tc-bar')
-export class TcBar extends TcBase {
+export class TcBar extends TcBase<ValueShapeRectangle> {
     @property({type: Number})
     public min = 0;
     @property({type: Number})
@@ -16,12 +16,8 @@ export class TcBar extends TcBase {
     @property({type: Boolean, reflect: true})
     public horizontal = false;
 
-    protected valuesMinCount = 2;
-    protected valueShapes: ValueShapeRectangle[] = [];
-    protected valueShapeActive?: ValueShapeRectangle;
 
-
-    protected computeChartData(): void {
+    protected computeChartShapes(): void {
         this.valueShapes = [];
 
         const valueMin = Math.min(...this.values, this.min);
@@ -91,7 +87,7 @@ export class TcBar extends TcBase {
 
 
     protected tooltipTemplate(): TemplateResult {
-        if (!this.valueShapeActive || !this.tooltipText()) return html``;
+        if (!this.valueShapeActive || !this.tooltipText) return html``;
 
         const style: StyleInfo = {
             left: (this.valueShapeActive.origin.x + (this.valueShapeActive.width / 2)) + 'px',
@@ -105,13 +101,13 @@ export class TcBar extends TcBase {
         }
 
         return html`
-            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText()}</div>
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText}</div>
         `;
     }
 
 
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | undefined {
-        if (!this.hasEnoughValues()) return;
+        if (!this.hasEnoughValueShapes()) return;
 
         const position = this.horizontal ? y : x;
 
@@ -123,5 +119,10 @@ export class TcBar extends TcBase {
 
             return position >= positionMin && position <= positionMax;
         });
+    }
+
+
+    protected hasEnoughValueShapes(): boolean {
+        return (this.valueShapes.length >= 2);
     }
 }

@@ -6,19 +6,18 @@ import { ValueShapeCircle } from './types.js';
 
 
 @customElement('tc-line')
-export class TcLine extends TcBase {
+export class TcLine extends TcBase<ValueShapeCircle> {
     @property({type: Number})
     public min = 0;
     @property({type: Number})
     public weight = 2;
 
-    protected valuesMinCount = 2;
-    protected valueShapes: ValueShapeCircle[] = [];
-    protected valueShapeActive?: ValueShapeCircle;
-    private linePath!: string;
-    private areaPath!: string;
+    private otherShapes!: {
+        linePath: string,
+        areaPath: string,
+    }
 
-    static styles = [
+    public static styles = [
         TcBase.styles,
         css`
             :host {
@@ -42,8 +41,12 @@ export class TcLine extends TcBase {
     ];
 
 
-    protected computeChartData(): void {
+    protected computeChartShapes(): void {
         this.valueShapes = [];
+        this.otherShapes = {
+            linePath: '',
+            areaPath: '',
+        };
 
         const valueMin = Math.min(...this.values, this.min);
         const valueMax = Math.max(...this.values, this.max);
@@ -66,24 +69,22 @@ export class TcLine extends TcBase {
             return y + (this.weight / 2);
         };
 
-        this.values.forEach((value, index) => {
-            this.valueShapes.push({
-                index: index,
-                value: value,
-                label: this.labels[index],
-                center: {
-                    x: pointPositionX(index),
-                    y: pointPositionY(value),
-                },
-                radius: Math.floor((this.weight + 6) / 2),
-            });
-        });
+        this.valueShapes = this.values.map((value, index) => ({
+            index: index,
+            value: value,
+            label: this.labels[index],
+            center: {
+                x: pointPositionX(index),
+                y: pointPositionY(value),
+            },
+            radius: Math.floor((this.weight + 6) / 2),
+        }));
 
-        this.linePath = this.valueShapes
+        this.otherShapes.linePath = this.valueShapes
             .map((valueShape, index) => ((index === 0) ? 'M' : 'L') + valueShape.center.x + ',' +  valueShape.center.y)
             .join(' ');
 
-        this.areaPath = this.linePath
+        this.otherShapes.areaPath = this.otherShapes.linePath
             .concat('L' + this.valueShapes[this.valueShapes.length - 1].center.x + ',' + pointPositionY(Math.max(valueMin, 0)) + ' ')
             .concat('L' + this.valueShapes[0].center.x + ',' + pointPositionY(Math.max(valueMin, 0)) + ' ')
             .concat('Z');
@@ -103,11 +104,11 @@ export class TcLine extends TcBase {
             <svg class="chart">
                 <defs>
                     <mask id="area-mask">
-                        <path d="${this.areaPath}" stroke-width="${this.weight}" stroke="white" fill="white" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="${this.otherShapes.areaPath}" stroke-width="${this.weight}" stroke="white" fill="white" stroke-linecap="round" stroke-linejoin="round"/>
                     </mask>
                 </defs>
                 <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#area-mask)"/>
-                <path class="shape" d="${this.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round"/>
+                <path class="shape" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div class="point" style="${styleMap(pointStyle)}"></div>
         `;
@@ -115,7 +116,7 @@ export class TcLine extends TcBase {
 
 
     protected tooltipTemplate(): TemplateResult {
-        if (!this.valueShapeActive || !this.tooltipText()) return html``;
+        if (!this.valueShapeActive || !this.tooltipText) return html``;
 
         const style: StyleInfo = {
             left: this.valueShapeActive.center.x + 'px',
@@ -129,16 +130,21 @@ export class TcLine extends TcBase {
         }
 
         return html`
-            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText()}</div>
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText}</div>
         `;
     }
 
 
     protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle | undefined {
-        if (!this.hasEnoughValues()) return;
+        if (!this.hasEnoughValueShapes()) return;
 
         return this.valueShapes.reduce((previous, current) => {
             return (Math.abs(current.center.x - x) < Math.abs(previous.center.x - x) ? current : previous);
         });
+    }
+
+
+    protected hasEnoughValueShapes(): boolean {
+        return (this.valueShapes.length >= 2);
     }
 }
