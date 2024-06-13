@@ -103,12 +103,14 @@ export class TcLine extends TcBase<ValueShapeCircle> {
         return html`
             <svg class="chart">
                 <defs>
+                    <path id="line-path" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round"/>
                     <mask id="area-mask">
                         <path d="${this.otherShapes.areaPath}" stroke-width="${this.weight}" stroke="white" fill="white" stroke-linecap="round" stroke-linejoin="round"/>
+                        <use xlink:href="#line-path" stroke="black" fill="none"/>
                     </mask>
                 </defs>
                 <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#area-mask)"/>
-                <path class="shape" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round"/>
+                <use class="shape" xlink:href="#line-path" stroke="black" fill="none"/>
             </svg>
             <div class="point" style="${styleMap(pointStyle)}"></div>
         `;
