@@ -32,8 +32,8 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
             --color: #597BFC;
             --opacity: 1;
             --opacity-active: 0.5;
-            --area-color: var(--color);
-            --area-opacity: 0;
+            --residual-color: black;
+            --residual-opacity: 0;
             --tooltip-font-color: white;
             --tooltip-font-size: 0.875em;
             --tooltip-font-weight: bold;
@@ -66,9 +66,9 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
             border-radius: inherit;
             transform: translateZ(0);
         }
-        .chart .area {
-            fill: var(--area-color);
-            opacity: var(--area-opacity);
+        .chart .residual {
+            fill: var(--residual-color);
+            opacity: var(--residual-opacity);
             stroke: none;
         }
         .chart .shape {

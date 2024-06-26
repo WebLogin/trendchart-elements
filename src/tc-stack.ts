@@ -92,33 +92,21 @@ export class TcStack extends TcBase<ValueShapeRectangle> {
         return html`
             <svg class="chart">
                 <defs>
-                    <rect id="values-rectangle"
-                        x="${this.otherShapes.valuesRectangle.origin.x}" y="${this.otherShapes.valuesRectangle.origin.y}"
-                        width="${this.otherShapes.valuesRectangle.width}" height="${this.otherShapes.valuesRectangle.height}"
-                        rx="${radius}" ry="${radius}"
-                    />
                     <mask id="values-mask" maskUnits="userSpaceOnUse">
-                        <use xlink:href="#values-rectangle" x="0" y="0" fill="white"/>
+                        <rect x="${this.otherShapes.valuesRectangle.origin.x}" y="${this.otherShapes.valuesRectangle.origin.y}" width="${this.otherShapes.valuesRectangle.width}" height="${this.otherShapes.valuesRectangle.height}" rx="${radius}" ry="${radius}" fill="white"/>
                         ${this.otherShapes.gapLines.map((gapLine) => svg`
-                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
-                                x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                                stroke-width="${this.gap}" stroke="black" stroke-linecap="round"
-                            />
+                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}" x2="${gapLine.end.x}" y2="${gapLine.end.y}" stroke-width="${this.gap}" stroke="black" stroke-linecap="round"/>
                         `)}
                     </mask>
-                    <mask id="area-mask" maskUnits="userSpaceOnUse">
+                    <mask id="residual-mask" maskUnits="userSpaceOnUse">
                         <rect x="0" y="0" width="100%" height="100%" rx="${radius}" ry="${radius}" fill="white"/>
-                        <use xlink:href="#values-rectangle" x="0" y="0" fill="black"/>
+                        <rect x="${this.otherShapes.valuesRectangle.origin.x}" y="${this.otherShapes.valuesRectangle.origin.y}" width="${this.otherShapes.valuesRectangle.width}" height="${this.otherShapes.valuesRectangle.height}" rx="${radius}" ry="${radius}" fill="black"/>
                     </mask>
                 </defs>
-                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#area-mask)"/>
+                <rect class="residual" x="0" y="0" width="100%" height="100%" mask="url(#residual-mask)"/>
                 <g mask="url(#values-mask)">
-                    ${this.valueShapes.map((valueShape, index) => svg`
-                        <rect class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"
-                            x="${valueShape.origin.x}" y="${valueShape.origin.y}"
-                            width="${valueShape.width}" height="${valueShape.height}"
-                            style="fill: var(--color-${index + 1}, var(--color))"
-                        />
+                    ${this.valueShapes.map((valueShape) => svg`
+                        <rect class="shape ${(this.active === valueShape.index) ? 'is-active' : ''}" x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" style="fill: var(--color-${valueShape.index + 1}, var(--color))"/>
                     `)}
                 </g>
             </svg>

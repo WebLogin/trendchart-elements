@@ -16,7 +16,7 @@ export class TcPie extends TcBase<ValueShapeSlice> {
 
     private otherShapes!: {
         gapLines: ShapeLine[],
-        areaPath: string,
+        residualPath: string,
         cutoutCircle: ShapeCircle,
     };
 
@@ -35,7 +35,7 @@ export class TcPie extends TcBase<ValueShapeSlice> {
         this.valueShapes = [];
         this.otherShapes = {
             gapLines: [],
-            areaPath: '',
+            residualPath: '',
             cutoutCircle: {} as ShapeCircle,
         };
 
@@ -97,7 +97,7 @@ export class TcPie extends TcBase<ValueShapeSlice> {
         const valueResidual = valueMax - valueTotal;
 
         if (valueResidual) {
-            this.otherShapes.areaPath = slicePath(valueResidual);
+            this.otherShapes.residualPath = slicePath(valueResidual);
         }
 
         if (valueResidual || this.values.length === 1) {
@@ -114,20 +114,14 @@ export class TcPie extends TcBase<ValueShapeSlice> {
                         <rect x="0" y="0" width="100%" height="100%" fill="white"/>
                         <circle cx="${this.otherShapes.cutoutCircle.center.x}" cy="${this.otherShapes.cutoutCircle.center.y}" r="${this.otherShapes.cutoutCircle.radius}" fill="black"/>
                         ${this.otherShapes.gapLines.map((gapLine) => svg`
-                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
-                                x2="${gapLine.end.x}" y2="${gapLine.end.y}"
-                                stroke-width="${this.gap}" stroke="black" stroke-linecap="round"
-                            />
+                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}" x2="${gapLine.end.x}" y2="${gapLine.end.y}" stroke-width="${this.gap}" stroke="black" stroke-linecap="round"/>
                         `)}
                     </mask>
                 </defs>
                 <g mask="url(#mask)">
-                    <path class="area" d="${this.otherShapes.areaPath}"/>
-                    ${this.valueShapes.map((valueShape, index) => svg`
-                        <path class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"
-                            d="${valueShape.path}"
-                            style="fill: var(--color-${index + 1}, var(--color))"
-                        />
+                    <path class="residual" d="${this.otherShapes.residualPath}"/>
+                    ${this.valueShapes.map((valueShape) => svg`
+                        <path class="shape ${(this.active === valueShape.index) ? 'is-active' : ''}" d="${valueShape.path}" style="fill: var(--color-${valueShape.index + 1}, var(--color))"/>
                     `)}
                 </g>
             </svg>

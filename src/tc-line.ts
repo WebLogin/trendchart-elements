@@ -29,10 +29,17 @@ export class TcLine extends TcBase<ValueShapeCircle> {
                 --point-border-color: var(--color);
                 --point-opacity: 0;
                 --point-opacity-active: 1;
+                --area-color: var(--color);
+                --area-opacity: 0;
             }
             .chart .shape {
                 fill: none;
                 stroke: var(--color);
+            }
+            .chart .area {
+                fill: var(--area-color);
+                opacity: var(--area-opacity);
+                stroke: none;
             }
             .points {
                 position: absolute;
@@ -116,34 +123,40 @@ export class TcLine extends TcBase<ValueShapeCircle> {
         return html`
             <svg class="chart">
                 <defs>
-                    <g id="values-points">
+                    <g id="values-points-mask">
                         ${this.valueShapes.map((valueShape) => svg`
-                            <circle
-                                cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}"
-                                style="opacity: calc(100 * var(${(this.active === valueShape.index) ? '--point-opacity-active' : '--point-opacity'}))"
-                            />
+                            <circle cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}" style="opacity: calc(100 * var(${(this.active === valueShape.index) ? '--point-opacity-active' : '--point-opacity'}))"/>
                         `)}
                     </g>
+                    <mask id="residual-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        <path d="${this.otherShapes.areaPath}" fill="black"/>
+                        <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
+                        <use xlink:href="#values-points-mask" x="0" y="0" fill="black" stroke="none"/>
+                    </mask>
+                    <mask id="residual-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        <path d="${this.otherShapes.areaPath}" fill="black"/>
+                        <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
+                        <use xlink:href="#values-points-mask" x="0" y="0" fill="black" stroke="none"/>
+                    </mask>
                     <mask id="area-mask" maskUnits="userSpaceOnUse">
                         <rect x="0" y="0" width="100%" height="100%" fill="white"/>
                         <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
-                        <use xlink:href="#values-points" x="0" y="0" fill="black" stroke="none"/>
+                        <use xlink:href="#values-points-mask" x="0" y="0" fill="black" stroke="none"/>
                     </mask>
                     <mask id="line-mask" maskUnits="userSpaceOnUse">
                         <rect x="0" y="0" width="100%" height="100%" fill="white"/>
-                        <use xlink:href="#values-points" x="0" y="0" fill="black" stroke="none"/>
+                        <use xlink:href="#values-points-mask" x="0" y="0" fill="black" stroke="none"/>
                     </mask>
                 </defs>
+                <rect class="residual" x="0" y="0" width="100%" height="100%" mask="url(#residual-mask)"/>
                 <path class="area" d="${this.otherShapes.areaPath}" mask="url(#area-mask)"/>
                 <path class="shape" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" mask="url(#line-mask)"/>
             </svg>
             <svg class="points">
                 ${this.valueShapes.map((valueShape) => svg`
-                    <circle
-                        class="point ${(this.active === valueShape.index) ? 'is-active' : ''}"
-                        cx="${valueShape.center.x}" cy="${valueShape.center.y}"
-                        r="${valueShape.radius - (this.weight * 0.4)}" stroke-width="${this.weight * 0.8}"
-                    />
+                    <circle class="point ${(this.active === valueShape.index) ? 'is-active' : ''}" cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius - (this.weight * 0.4)}" stroke-width="${this.weight * 0.8}"/>
                 `)}
             </svg>
         `;
