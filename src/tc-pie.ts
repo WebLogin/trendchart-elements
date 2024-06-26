@@ -108,9 +108,9 @@ export class TcPie extends TcBase<ValueShapeSlice> {
 
     protected chartTemplate(): TemplateResult {
         return html`
-            <svg class="chart" width="100%" height="100%">
+            <svg class="chart">
                 <defs>
-                    <mask id="mask">
+                    <mask id="mask" maskUnits="userSpaceOnUse">
                         <rect x="0" y="0" width="100%" height="100%" fill="white"/>
                         <circle cx="${this.otherShapes.cutoutCircle.center.x}" cy="${this.otherShapes.cutoutCircle.center.y}" r="${this.otherShapes.cutoutCircle.radius}" fill="black"/>
                         ${this.otherShapes.gapLines.map((gapLine) => svg`

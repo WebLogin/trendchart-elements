@@ -67,7 +67,7 @@ export class TcBar extends TcBase<ValueShapeRectangle> {
         const radius = Math.min(this.radius, (this.horizontal ? this.valueShapes[0].height : this.valueShapes[0].width) / 2);
 
         return html`
-            <svg class="chart" width="100%" height="100%">
+            <svg class="chart">
                 ${this.valueShapes.map((valueShape, index) => svg`
                     <rect class="area"
                         x="${this.horizontal ? 0 : valueShape.origin.x}" y="${this.horizontal ? valueShape.origin.y : 0}"
@@ -95,7 +95,7 @@ export class TcBar extends TcBase<ValueShapeRectangle> {
             transform: 'translate(-50%, -100%)',
         };
 
-        if (!this.horizontal && (this.valueShapeActive.value < 0 || Math.max(...this.values) === 0)) {
+        if (!this.horizontal && (this.valueShapeActive.value < 0 || this.onlyNegativeValues())) {
             style.top = (this.valueShapeActive.origin.y + this.valueShapeActive.height + 2) + 'px';
             style.transform = 'translate(-50%, 0%)';
         }

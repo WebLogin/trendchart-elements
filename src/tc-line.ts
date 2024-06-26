@@ -1,4 +1,4 @@
-import { TemplateResult, css, html } from 'lit';
+import { TemplateResult, css, html, nothing, svg } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
@@ -11,6 +11,10 @@ export class TcLine extends TcBase<ValueShapeCircle> {
     public min = 0;
     @property({type: Number})
     public weight = 2;
+    @property({type: Boolean, reflect: true})
+    public inside = false;
+    @property({type: Number})
+    public point?: number;
 
     private otherShapes!: {
         linePath: string,
@@ -21,21 +25,33 @@ export class TcLine extends TcBase<ValueShapeCircle> {
         TcBase.styles,
         css`
             :host {
-                --active-point-color: var(--color);
-                --active-point-shadow: none;
-            }
-            .point {
-                position: absolute;
-                z-index: 2;
-                pointer-events: none;
-                border-radius: 100%;
-                background-color: var(--active-point-color);
-                box-shadow: var(--active-point-shadow);
-                transform: translate(-50%, -50%);
+                --point-inner-color: var(--color);
+                --point-border-color: var(--color);
+                --point-opacity: 0;
+                --point-opacity-active: 1;
             }
             .chart .shape {
                 fill: none;
                 stroke: var(--color);
+            }
+            .points {
+                position: absolute;
+                z-index: 2;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: visible;
+                transform: translateZ(0);
+            }
+            .points .point {
+                fill: var(--point-inner-color);
+                stroke: var(--point-border-color);
+                opacity: var(--point-opacity);
+                will-change: opacity;
+            }
+            .points .point.is-active {
+                opacity: var(--point-opacity-active);
             }
         `,
     ];
@@ -52,21 +68,24 @@ export class TcLine extends TcBase<ValueShapeCircle> {
         const valueMax = Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
+        const pointRadius = this.point ? (this.point / 2) : (this.weight + 6) / 2;
+        const pointOffset = this.inside ? pointRadius : (this.weight / 2);
+
         const pointPositionX = (value: number): number => {
-            const width = this.width - this.weight;
+            const width = this.width - (pointOffset * 2);
             let x = value * (width / (this.values.length - 1));
 
-            return x + (this.weight / 2);
+            return x + pointOffset;
         };
 
         const pointPositionY = (value: number): number => {
-            const height = this.height - this.weight;
+            const height = this.height - (pointOffset * 2);
             let y = height;
             if (valueScale) {
                 y -= ((value - valueMin) / valueScale) * height;
             }
 
-            return y + (this.weight / 2);
+            return y + pointOffset;
         };
 
         this.valueShapes = this.values.map((value, index) => ({
@@ -77,7 +96,7 @@ export class TcLine extends TcBase<ValueShapeCircle> {
                 x: pointPositionX(index),
                 y: pointPositionY(value),
             },
-            radius: Math.floor((this.weight + 6) / 2),
+            radius: pointRadius,
         }));
 
         this.otherShapes.linePath = this.valueShapes
@@ -85,34 +104,48 @@ export class TcLine extends TcBase<ValueShapeCircle> {
             .join(' ');
 
         this.otherShapes.areaPath = this.otherShapes.linePath
-            .concat('L' + this.valueShapes[this.valueShapes.length - 1].center.x + ',' + pointPositionY(Math.max(valueMin, 0)) + ' ')
-            .concat('L' + this.valueShapes[0].center.x + ',' + pointPositionY(Math.max(valueMin, 0)) + ' ')
+            .concat('L' + (this.valueShapes[this.valueShapes.length - 1].center.x + pointOffset) + ',' + this.valueShapes[this.valueShapes.length - 1].center.y + ' ')
+            .concat('L' + (this.valueShapes[this.valueShapes.length - 1].center.x + pointOffset) + ',' + (pointPositionY(Math.max(valueMin, 0)) + (this.onlyNegativeValues() ? -pointOffset : pointOffset)) + ' ')
+            .concat('L' + (this.valueShapes[0].center.x - pointOffset) + ',' + (pointPositionY(Math.max(valueMin, 0)) + (this.onlyNegativeValues() ? -pointOffset : pointOffset)) + ' ')
+            .concat('L' + (this.valueShapes[0].center.x - pointOffset) + ',' + this.valueShapes[0].center.y + ' ')
             .concat('Z');
     }
 
 
     protected chartTemplate(): TemplateResult {
-        const pointStyle: StyleInfo = {
-            display: this.valueShapeActive ? 'block' : 'none',
-            left: (this.valueShapeActive ? this.valueShapeActive.center.x : 0) + 'px',
-            top: (this.valueShapeActive ? this.valueShapeActive.center.y : 0) + 'px',
-            width: (this.valueShapeActive ? (this.valueShapeActive.radius * 2) : 0) + 'px',
-            height: (this.valueShapeActive ? (this.valueShapeActive.radius * 2) : 0) + 'px',
-        };
-
         return html`
             <svg class="chart">
                 <defs>
-                    <path id="line-path" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round"/>
-                    <mask id="area-mask">
-                        <path d="${this.otherShapes.areaPath}" stroke-width="${this.weight}" stroke="white" fill="white" stroke-linecap="round" stroke-linejoin="round"/>
-                        <use xlink:href="#line-path" stroke="black" fill="none"/>
+                    <g id="values-points">
+                        ${this.valueShapes.map((valueShape) => svg`
+                            <circle
+                                cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}"
+                                style="opacity: calc(100 * var(${(this.active === valueShape.index) ? '--point-opacity-active' : '--point-opacity'}))"
+                            />
+                        `)}
+                    </g>
+                    <mask id="area-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
+                        <use xlink:href="#values-points" x="0" y="0" fill="black" stroke="none"/>
+                    </mask>
+                    <mask id="line-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        <use xlink:href="#values-points" x="0" y="0" fill="black" stroke="none"/>
                     </mask>
                 </defs>
-                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#area-mask)"/>
-                <use class="shape" xlink:href="#line-path" stroke="black" fill="none"/>
+                <path class="area" d="${this.otherShapes.areaPath}" mask="url(#area-mask)"/>
+                <path class="shape" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" mask="url(#line-mask)"/>
             </svg>
-            <div class="point" style="${styleMap(pointStyle)}"></div>
+            <svg class="points">
+                ${this.valueShapes.map((valueShape) => svg`
+                    <circle
+                        class="point ${(this.active === valueShape.index) ? 'is-active' : ''}"
+                        cx="${valueShape.center.x}" cy="${valueShape.center.y}"
+                        r="${valueShape.radius - (this.weight * 0.4)}" stroke-width="${this.weight * 0.8}"
+                    />
+                `)}
+            </svg>
         `;
     }
 
@@ -126,7 +159,7 @@ export class TcLine extends TcBase<ValueShapeCircle> {
             transform: 'translate(-50%, -100%)',
         };
 
-        if ((this.valueShapeActive.value < 0 || Math.max(...this.values) === 0)) {
+        if ((this.valueShapeActive.value < 0 || this.onlyNegativeValues())) {
             style.top = (this.valueShapeActive.center.y + this.valueShapeActive.radius + 2) + 'px';
             style.transform = 'translate(-50%, 0%)';
         }

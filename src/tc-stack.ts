@@ -90,14 +90,14 @@ export class TcStack extends TcBase<ValueShapeRectangle> {
         const radius = Math.min(this.radius, (this.height / 2), (this.width / 2));
 
         return html`
-            <svg class="chart" width="100%" height="100%">
+            <svg class="chart">
                 <defs>
                     <rect id="values-rectangle"
                         x="${this.otherShapes.valuesRectangle.origin.x}" y="${this.otherShapes.valuesRectangle.origin.y}"
                         width="${this.otherShapes.valuesRectangle.width}" height="${this.otherShapes.valuesRectangle.height}"
                         rx="${radius}" ry="${radius}"
                     />
-                    <mask id="values-mask">
+                    <mask id="values-mask" maskUnits="userSpaceOnUse">
                         <use xlink:href="#values-rectangle" x="0" y="0" fill="white"/>
                         ${this.otherShapes.gapLines.map((gapLine) => svg`
                             <line x1="${gapLine.start.x}" y1="${gapLine.start.y}"
@@ -106,20 +106,12 @@ export class TcStack extends TcBase<ValueShapeRectangle> {
                             />
                         `)}
                     </mask>
-                    <mask id="area-mask">
-                        <rect x="0" y="0"
-                            width="100%" height="100%"
-                            rx="${radius}" ry="${radius}"
-                            fill="white"
-                        />
+                    <mask id="area-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" rx="${radius}" ry="${radius}" fill="white"/>
                         <use xlink:href="#values-rectangle" x="0" y="0" fill="black"/>
                     </mask>
                 </defs>
-                <rect class="area"
-                    x="0" y="0"
-                    width="100%" height="100%"
-                    mask="url(#area-mask)"
-                />
+                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#area-mask)"/>
                 <g mask="url(#values-mask)">
                     ${this.valueShapes.map((valueShape, index) => svg`
                         <rect class="shape ${(this.valueShapeActive?.index === index) ? 'is-active' : ''}"

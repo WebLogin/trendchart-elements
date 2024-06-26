@@ -31,7 +31,7 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
         :host {
             --color: #597BFC;
             --opacity: 1;
-            --active-opacity: 0.5;
+            --opacity-active: 0.5;
             --area-color: var(--color);
             --area-opacity: 0;
             --tooltip-font-color: white;
@@ -63,7 +63,8 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
             width: 100%;
             height: 100%;
             overflow: hidden;
-            border-radius: inherit
+            border-radius: inherit;
+            transform: translateZ(0);
         }
         .chart .area {
             fill: var(--area-color);
@@ -74,9 +75,10 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
             fill: var(--color);
             opacity: var(--opacity);
             stroke: none;
+            will-change: opacity;
         }
         .chart .shape.is-active {
-            opacity: var(--active-opacity);
+            opacity: var(--opacity-active);
         }
         .tooltip {
             position: absolute;
@@ -132,7 +134,7 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
             this.labels = this.labels.map((label) => (label != null) ? ('' + label).trim() : '');
         }
 
-        const propertiesRelatedToChartShapes = ['width', 'height', 'values', 'labels', 'min', 'max', 'gap', 'weight', 'donut', 'radius'];
+        const propertiesRelatedToChartShapes = ['width', 'height', 'values', 'labels', 'min', 'max', 'gap', 'weight', 'point', 'inside', 'donut', 'radius'];
         if (propertiesRelatedToChartShapes.some((property) => changedProperties.has(property as any))) {
             this.computeChartShapes();
         }
@@ -237,6 +239,11 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
 
 
     protected abstract hasEnoughValueShapes(): boolean;
+
+
+    protected onlyNegativeValues(): boolean {
+        return Math.max(...this.values) <= 0;
+    }
 
 
     private dispatchValueShapeEvent(type: string, valueShape: TValueShape): void {
