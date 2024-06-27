@@ -4,7 +4,7 @@
     --card-footer-background-color: #F3F4F6;
     display: grid;
     gap: 2rem;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
     margin: 0 0 6rem 0;
 }
 .b-tests-grid > .test {
@@ -22,6 +22,18 @@
     border: 0.1rem solid var(--card-border-color);
     background-color: #FFFFFF;
 }
+.b-tests-grid > .test > .content.has-shape-colors {
+    --color-1: #597BFC;
+    --color-2: #e2445c;
+    --color-3: #9CD326;
+    --color-4: #fdab3d;
+    --color-5: #784BD1;
+    --color-6: #f1de0f;
+    --color-7: #c725d3;
+    --color-8: #11a5db;
+    --color-9: #7F5347;
+    --color-10: #373737;
+}
 .b-tests-grid > .test > .footer {
     flex: 1 0 auto;
     display: flex;
@@ -36,3 +48,8 @@
     border-top: 0;
     background-color: var(--card-footer-background-color);
 }
+/* @media (min-width: 500px) {
+    .b-tests-grid {
+        grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    }
+} */
