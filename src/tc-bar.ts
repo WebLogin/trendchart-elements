@@ -66,19 +66,25 @@ export class TcBar extends TcBase<ValueShapeRectangle> {
     protected chartTemplate(): TemplateResult {
         const radius = Math.min(this.radius, (this.horizontal ? this.valueShapes[0].height : this.valueShapes[0].width) / 2);
 
+        const barStyle = (index?: number): StyleInfo  => ({
+            opacity: `var(${(this.active === index) ? '--opacity-active': '--opacity'})`,
+            fill: `var(--color-${(index ?? 0) + 1}, var(--color))`,
+            willChange: 'opacity',
+        });
+
         return html`
             <svg class="chart">
                 <defs>
                     <mask id="residual-mask" maskUnits="userSpaceOnUse">
                         ${this.valueShapes.map((valueShape) => svg`
-                            <rect x="${this.horizontal ? 0 : valueShape.origin.x}" y="${this.horizontal ? valueShape.origin.y : 0}" width="${this.horizontal ? this.width : valueShape.width}" height="${this.horizontal ? valueShape.height : this.height}" rx="${radius}" ry="${radius}" fill="white" stroke="none"/>
-                            <rect x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" rx="${radius}" ry="${radius}" fill="black" stroke="none"/>
+                            <rect x="${this.horizontal ? 0 : valueShape.origin.x}" y="${this.horizontal ? valueShape.origin.y : 0}" width="${this.horizontal ? this.width : valueShape.width}" height="${this.horizontal ? valueShape.height : this.height}" rx="${radius}" ry="${radius}" fill="white"/>
+                            <rect x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" rx="${radius}" ry="${radius}" fill="black"/>
                         `)}
                     </mask>
                 </defs>
                 <rect class="residual" x="0" y="0" width="100%" height="100%" mask="url(#residual-mask)"/>
                 ${this.valueShapes.map((valueShape) => svg`
-                    <rect class="shape ${(this.active === valueShape.index) ? 'is-active' : ''}" x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" rx="${radius}" ry="${radius}" style="fill: var(--color-${valueShape.index + 1}, var(--color))"/>
+                    <rect class="bar" x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" rx="${radius}" ry="${radius}" style="${styleMap(barStyle(valueShape.index))}"/>
                 `)}
             </svg>
         `;

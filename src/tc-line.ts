@@ -1,4 +1,4 @@
-import { TemplateResult, css, html, nothing, svg } from 'lit';
+import { TemplateResult, css, html, svg } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
@@ -32,14 +32,9 @@ export class TcLine extends TcBase<ValueShapeCircle> {
                 --area-color: var(--color);
                 --area-opacity: 0;
             }
-            .chart .shape {
-                fill: none;
-                stroke: var(--color);
-            }
             .chart .area {
                 fill: var(--area-color);
                 opacity: var(--area-opacity);
-                stroke: none;
             }
             .points {
                 position: absolute;
@@ -50,15 +45,6 @@ export class TcLine extends TcBase<ValueShapeCircle> {
                 height: 100%;
                 overflow: visible;
                 transform: translateZ(0);
-            }
-            .points .point {
-                fill: var(--point-inner-color);
-                stroke: var(--point-border-color);
-                opacity: var(--point-opacity);
-                will-change: opacity;
-            }
-            .points .point.is-active {
-                opacity: var(--point-opacity-active);
             }
         `,
     ];
@@ -120,43 +106,56 @@ export class TcLine extends TcBase<ValueShapeCircle> {
 
 
     protected chartTemplate(): TemplateResult {
+        const lineStyle = (): StyleInfo  => ({
+            opacity: 'var(--opacity)',
+            fill: 'none',
+            stroke: 'var(--color)',
+        });
+
+        const pointStyle = (index?: number): StyleInfo  => ({
+            opacity: `var(${(this.active === index) ? '--point-opacity-active' : '--point-opacity'})`,
+            fill: 'var(--point-inner-color)',
+            stroke: 'var(--point-border-color)',
+            willChange: 'opacity',
+        });
+
+        const pointMaskStyle = (index?: number): StyleInfo  => ({
+            opacity: `calc(100 * var(${(this.active === index) ? '--point-opacity-active' : '--point-opacity'}))`,
+            willChange: 'opacity',
+        });
+
         return html`
             <svg class="chart">
                 <defs>
-                    <g id="values-points-mask">
+                    <mask id="residual-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        <path d="${this.otherShapes.areaPath}" fill="black"/>
+                        <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
                         ${this.valueShapes.map((valueShape) => svg`
-                            <circle cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}" style="opacity: calc(100 * var(${(this.active === valueShape.index) ? '--point-opacity-active' : '--point-opacity'}))"/>
+                            <circle cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}" fill="black" style="${styleMap(pointMaskStyle(valueShape.index))})"/>
                         `)}
-                    </g>
-                    <mask id="residual-mask" maskUnits="userSpaceOnUse">
-                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
-                        <path d="${this.otherShapes.areaPath}" fill="black"/>
-                        <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
-                        <use xlink:href="#values-points-mask" x="0" y="0" fill="black" stroke="none"/>
-                    </mask>
-                    <mask id="residual-mask" maskUnits="userSpaceOnUse">
-                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
-                        <path d="${this.otherShapes.areaPath}" fill="black"/>
-                        <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
-                        <use xlink:href="#values-points-mask" x="0" y="0" fill="black" stroke="none"/>
                     </mask>
                     <mask id="area-mask" maskUnits="userSpaceOnUse">
                         <rect x="0" y="0" width="100%" height="100%" fill="white"/>
                         <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
-                        <use xlink:href="#values-points-mask" x="0" y="0" fill="black" stroke="none"/>
+                        ${this.valueShapes.map((valueShape) => svg`
+                            <circle cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}" fill="black" style="${styleMap(pointMaskStyle(valueShape.index))})"/>
+                        `)}
                     </mask>
                     <mask id="line-mask" maskUnits="userSpaceOnUse">
                         <rect x="0" y="0" width="100%" height="100%" fill="white"/>
-                        <use xlink:href="#values-points-mask" x="0" y="0" fill="black" stroke="none"/>
+                        ${this.valueShapes.map((valueShape) => svg`
+                            <circle cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}" fill="black" style="${styleMap(pointMaskStyle(valueShape.index))})"/>
+                        `)}
                     </mask>
                 </defs>
                 <rect class="residual" x="0" y="0" width="100%" height="100%" mask="url(#residual-mask)"/>
                 <path class="area" d="${this.otherShapes.areaPath}" mask="url(#area-mask)"/>
-                <path class="shape" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" mask="url(#line-mask)"/>
+                <path class="line" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" mask="url(#line-mask)" style="${styleMap(lineStyle())}"/>
             </svg>
             <svg class="points">
                 ${this.valueShapes.map((valueShape) => svg`
-                    <circle class="point ${(this.active === valueShape.index) ? 'is-active' : ''}" cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius - (this.weight * 0.4)}" stroke-width="${this.weight * 0.8}"/>
+                    <circle class="point" cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius - (this.weight * 0.4)}" stroke-width="${this.weight * 0.8}" style="${styleMap(pointStyle(valueShape.index))}"/>
                 `)}
             </svg>
         `;

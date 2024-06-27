@@ -107,6 +107,12 @@ export class TcPie extends TcBase<ValueShapeSlice> {
 
 
     protected chartTemplate(): TemplateResult {
+        const sliceStyle = (index?: number): StyleInfo  => ({
+            opacity: `var(${(this.active === index) ? '--opacity-active': '--opacity'})`,
+            fill: `var(--color-${(index ?? 0) + 1}, var(--color))`,
+            willChange: 'opacity',
+        });
+
         return html`
             <svg class="chart">
                 <defs>
@@ -114,14 +120,14 @@ export class TcPie extends TcBase<ValueShapeSlice> {
                         <rect x="0" y="0" width="100%" height="100%" fill="white"/>
                         <circle cx="${this.otherShapes.cutoutCircle.center.x}" cy="${this.otherShapes.cutoutCircle.center.y}" r="${this.otherShapes.cutoutCircle.radius}" fill="black"/>
                         ${this.otherShapes.gapLines.map((gapLine) => svg`
-                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}" x2="${gapLine.end.x}" y2="${gapLine.end.y}" stroke-width="${this.gap}" stroke="black" stroke-linecap="round"/>
+                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}" x2="${gapLine.end.x}" y2="${gapLine.end.y}" stroke-width="${this.gap}" stroke-linecap="round" stroke="black"/>
                         `)}
                     </mask>
                 </defs>
                 <g mask="url(#mask)">
                     <path class="residual" d="${this.otherShapes.residualPath}"/>
                     ${this.valueShapes.map((valueShape) => svg`
-                        <path class="shape ${(this.active === valueShape.index) ? 'is-active' : ''}" d="${valueShape.path}" style="fill: var(--color-${valueShape.index + 1}, var(--color))"/>
+                        <path class="slice" d="${valueShape.path}" style="${styleMap(sliceStyle(valueShape.index))}"/>
                     `)}
                 </g>
             </svg>
@@ -156,7 +162,7 @@ export class TcPie extends TcBase<ValueShapeSlice> {
         point.x = x;
         point.y = y;
 
-        const valueShapeActiveIndex = Array.from(chart.querySelectorAll<SVGPathElement>('.shape')).findIndex((path) => {
+        const valueShapeActiveIndex = Array.from(chart.querySelectorAll<SVGPathElement>('.slice')).findIndex((path) => {
             return path.isPointInFill(point);
         });
 

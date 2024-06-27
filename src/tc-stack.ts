@@ -89,13 +89,19 @@ export class TcStack extends TcBase<ValueShapeRectangle> {
     protected chartTemplate(): TemplateResult {
         const radius = Math.min(this.radius, (this.height / 2), (this.width / 2));
 
+        const barStyle = (index?: number): StyleInfo  => ({
+            opacity: `var(${(this.active === index) ? '--opacity-active': '--opacity'})`,
+            fill: `var(--color-${(index ?? 0) + 1}, var(--color))`,
+            willChange: 'opacity',
+        });
+
         return html`
             <svg class="chart">
                 <defs>
                     <mask id="values-mask" maskUnits="userSpaceOnUse">
                         <rect x="${this.otherShapes.valuesRectangle.origin.x}" y="${this.otherShapes.valuesRectangle.origin.y}" width="${this.otherShapes.valuesRectangle.width}" height="${this.otherShapes.valuesRectangle.height}" rx="${radius}" ry="${radius}" fill="white"/>
                         ${this.otherShapes.gapLines.map((gapLine) => svg`
-                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}" x2="${gapLine.end.x}" y2="${gapLine.end.y}" stroke-width="${this.gap}" stroke="black" stroke-linecap="round"/>
+                            <line x1="${gapLine.start.x}" y1="${gapLine.start.y}" x2="${gapLine.end.x}" y2="${gapLine.end.y}" stroke-width="${this.gap}" stroke-linecap="round" stroke="black"/>
                         `)}
                     </mask>
                     <mask id="residual-mask" maskUnits="userSpaceOnUse">
@@ -106,7 +112,7 @@ export class TcStack extends TcBase<ValueShapeRectangle> {
                 <rect class="residual" x="0" y="0" width="100%" height="100%" mask="url(#residual-mask)"/>
                 <g mask="url(#values-mask)">
                     ${this.valueShapes.map((valueShape) => svg`
-                        <rect class="shape ${(this.active === valueShape.index) ? 'is-active' : ''}" x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" style="fill: var(--color-${valueShape.index + 1}, var(--color))"/>
+                        <rect class="bar" x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" style="${styleMap(barStyle(valueShape.index))}"/>
                     `)}
                 </g>
             </svg>

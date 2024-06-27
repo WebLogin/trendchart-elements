@@ -69,16 +69,6 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
         .chart .residual {
             fill: var(--residual-color);
             opacity: var(--residual-opacity);
-            stroke: none;
-        }
-        .chart .shape {
-            fill: var(--color);
-            opacity: var(--opacity);
-            stroke: none;
-            will-change: opacity;
-        }
-        .chart .shape.is-active {
-            opacity: var(--opacity-active);
         }
         .tooltip {
             position: absolute;
