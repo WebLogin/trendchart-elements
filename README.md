@@ -59,28 +59,28 @@ Charts configuration is made with CSS variables and HTML attributes :
  
 | Name | Default | Description |
 | :--- | :-----: | :---------- |
-| ➡️ **All charts** |||
+| ➡️ **All charts** |||
 | `values` | - | Required - Array of numbers for the values, at least 2 for line and bar charts. Example : `values="[12,10,11]"` |
 | `labels` | `[]` | Optional - Array of strings for the labels corresponding to the values, it needs to be the same length as `values` array. Example : `labels='["A","B","C"]'` |
 | `static` | `false` | Optional - Boolean to disable tooltip and hover styling |
 | `tooltip-disabled` | `false` | Optional - Boolean to disable tooltip |
 | `tooltip-format` | `@L @V` | Optional - String to format the tooltip text. Two placeholders are available, `@V` for the current value and `@L` for the current label if present |
 | `max` | `0` | Optional - Number to change the max scale of the chart |
-| ➡️ **Line chart** |||
+| ➡️ **Line chart** |||
 | `min` | `0` | Optional - Number to change the min scale of the chart |
 | `weight` | `2` | Optional - Number for the line weight |
 | `point` | `undefined` | Optional - Number for the point weight, if not set it will be `weight + 6` |
 | `inside` | `false` | Optional - Boolean to draw the points inside the chart. Because the line touch the edges by default, the points have half of their size outside the chart. Usefull if all points are visible |
-| ➡️ **Bar chart** |||
+| ➡️ **Bar chart** |||
 | `min` | `0` | Optional - Number to change the min scale of the chart |
 | `radius` | `2` | Optional - Number for the radius of the bars |
 | `horizontal` | `false` | Optional - Boolean to change the orientation to horizontal |
 | `gap` | `2` | Optional - Number for the gap between bars |
-| ➡️ ** Stack chart** |||
+| ➡️ **Stack chart** |||
 | `radius` | `2` | Optional - Number for the radius of the global bar |
 | `horizontal` | `false` | Optional - Boolean to change the orientation to horizontal |
 | `gap` | `2` | Optional - Number for the gap between bars |
-| ➡️ **Pie chart** |||
+| ➡️ **Pie chart** |||
 | `donut` | `undefined` | Optional - Number to create a donut of the given weight |
 | `rotate` | `0` | Optional - Number in degrees to rotate the chart, 0 being the top |
 | `gap` | `2` | Optional - Number for the gap between slices |
@@ -95,7 +95,7 @@ For boolean ones you just have to set them on the tag, like this :
  
 | Name | Default | Description |
 | :--- | :-----: | :---------- |
-| ➡️ **All charts** |||
+| ➡️ **All charts** |||
 | `--shape-color` | `#597BFC` | - |
 | `--shape-opacity` | `1` | - |
 | `--residual-color` | `black` | The residual represent unused space, for example if you set a `max` of 100 but the highest value is lower |
@@ -107,14 +107,14 @@ For boolean ones you just have to set them on the tag, like this :
 | `--tooltip-padding` | `3px 4px` | - |
 | `--tooltip-background` | `black` | - |
 | `--tooltip-shadow` | `none` | - |
-| ➡️ **Line chart** |||
+| ➡️ **Line chart** |||
 | `--area-color` | `--shape-color` | The area represent the space under the line |
 | `--area-opacity` | `0` | - |
 | `--point-inner-color` | `--shape-color` | - |
 | `--point-border-color` | `--shape-color` | - |
 | `--point-opacity` | `0` | - |
 | `--point-opacity-active` | `1` | - |
-| ➡️ **Bar / Stack / Pie chart** |||
+| ➡️ **Bar / Stack / Pie chart** |||
 | `--shape-color-x` | `--shape-color` | Color of the `x` shape starting at 1 : `--shape-color-1`, `--shape-color-2`, etc |
 | `--shape-opacity-active` |`0.5` | Opacity of the current active shape |
 
