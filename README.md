@@ -8,9 +8,7 @@ Web components to generate simple, light and responsive charts representing tren
 
 It is often useful to display some simple charts to represent a data visualization trend without the need of a big chart library, TrendChart Elements is made for that. The aim was to be as plug-and-play as possible, like native HTML tags, so all the configuration is made with CSS variables and HTML attributes. It's fully responsive with built-in basic tooltip.
 
-Tested on modern browsers : `Chrome >= 73`, `Firefox >= 63`, `Edge >= 79`, `Safari >= 12`
-
-No dependency except [Lit](https://github.com/lit/lit/) to create web components.
+`10.5ko` minified and gzipped, tree-shakeable, written in TypeScript, and no dependency except [Lit](https://github.com/lit/lit/) to create web components (50% of the package size). Tested on modern browsers : `Chrome >= 73`, `Firefox >= 63`, `Edge >= 79`, `Safari >= 12`.
 
 
 ## Installation
