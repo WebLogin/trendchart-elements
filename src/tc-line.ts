@@ -1,4 +1,4 @@
-import { PropertyValues, TemplateResult, css, html } from 'lit';
+import { TemplateResult, css, html, svg } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
@@ -6,143 +6,192 @@ import { ValueShapeCircle } from './types.js';
 
 
 @customElement('tc-line')
-export class TcLine extends TcBase {
-    @property({type: Number, attribute: 'shape-size'})
-    public shapeSize = 2;
+export class TcLine extends TcBase<ValueShapeCircle> {
+    @property({type: Number})
+    public min = 0;
+    @property({type: Number})
+    public weight = 2;
+    @property({type: Boolean, reflect: true})
+    public inside = false;
+    @property({type: Number})
+    public point?: number;
 
-    protected valueShapes!: ValueShapeCircle[];
-    protected valueShapeFocused!: ValueShapeCircle;
-    private linePath!: string;
-    private areaPath!: string;
+    private otherShapes!: {
+        linePath: string,
+        areaPath: string,
+    }
 
-    static styles = [
+    public static styles = [
         TcBase.styles,
         css`
             :host {
-                --point-color: var(--shape-color);
-                --point-opacity: 1;
-                --point-shadow: none;
+                --point-inner-color: var(--shape-color);
+                --point-border-color: var(--shape-color);
+                --point-opacity: 0;
+                --point-opacity-active: 1;
+                --area-color: var(--shape-color);
+                --area-opacity: 0;
             }
-            .point {
+            .chart .area {
+                fill: var(--area-color);
+                opacity: var(--area-opacity);
+            }
+            .points {
                 position: absolute;
                 z-index: 2;
-                pointer-events: none;
-                border-radius: 100%;
-                background-color: var(--point-color);
-                opacity: var(--point-opacity);
-                box-shadow: var(--point-shadow);
-                transform: translate(-50%, -50%);
-            }
-            .chart > .shape {
-                fill: none;
-                stroke: var(--shape-color);
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: visible;
+                transform: translateZ(0);
             }
         `,
     ];
 
 
-    protected computeChartData(): void {
+    protected computeChartShapes(): void {
         this.valueShapes = [];
+        this.otherShapes = {
+            linePath: '',
+            areaPath: '',
+        };
 
-        let valueMin = Math.min(...this.values);
-        if (this.min !== null) {
-            valueMin = Math.min(valueMin, this.min);
-        }
-
-        let valueMax = Math.max(...this.values);
-        if (this.max !== null) {
-            valueMax = Math.max(valueMax, this.max);
-        }
-
+        const valueMin = Math.min(...this.values, this.min);
+        const valueMax = Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
+        const pointRadius = this.point ? (this.point / 2) : (this.weight + 6) / 2;
+        const pointOffset = this.inside ? pointRadius : (this.weight / 2);
+
         const pointPositionX = (value: number): number => {
-            const width = this.width - this.shapeSize;
+            const width = this.width - (pointOffset * 2);
             let x = value * (width / (this.values.length - 1));
 
-            return x + (this.shapeSize / 2);
+            return x + pointOffset;
         };
 
         const pointPositionY = (value: number): number => {
-            const height = this.height - this.shapeSize;
+            const height = this.height - (pointOffset * 2);
             let y = height;
             if (valueScale) {
                 y -= ((value - valueMin) / valueScale) * height;
             }
 
-            return y + (this.shapeSize / 2);
+            return y + pointOffset;
         };
 
-        this.values.forEach((value, index) => {
-            this.valueShapes.push({
-                index: index,
-                value: value,
-                label: this.labels[index] ?? null,
-                center: {
-                    x: pointPositionX(index),
-                    y: pointPositionY(value),
-                },
-                radius: Math.floor((this.shapeSize + 6) / 2),
-            });
-        });
+        this.valueShapes = this.values.map((value, index) => ({
+            index: index,
+            value: value,
+            label: this.labels[index],
+            center: {
+                x: pointPositionX(index),
+                y: pointPositionY(value),
+            },
+            radius: pointRadius,
+        }));
 
-        this.linePath = this.valueShapes
+        this.otherShapes.linePath = this.valueShapes
             .map((valueShape, index) => ((index === 0) ? 'M' : 'L') + valueShape.center.x + ',' +  valueShape.center.y)
             .join(' ');
 
-        this.areaPath = this.linePath
-            .concat('L' + this.valueShapes[this.valueShapes.length - 1].center.x + ',' + pointPositionY(Math.max(valueMin, 0)) + ' ')
-            .concat('L' + this.valueShapes[0].center.x + ',' + pointPositionY(Math.max(valueMin, 0)) + ' ')
+        this.otherShapes.areaPath = this.otherShapes.linePath
+            .concat('L' + (this.valueShapes[this.valueShapes.length - 1].center.x + pointOffset) + ',' + this.valueShapes[this.valueShapes.length - 1].center.y + ' ')
+            .concat('L' + (this.valueShapes[this.valueShapes.length - 1].center.x + pointOffset) + ',' + (pointPositionY(Math.max(valueMin, 0)) + (this.onlyNegativeValues() ? -pointOffset : pointOffset)) + ' ')
+            .concat('L' + (this.valueShapes[0].center.x - pointOffset) + ',' + (pointPositionY(Math.max(valueMin, 0)) + (this.onlyNegativeValues() ? -pointOffset : pointOffset)) + ' ')
+            .concat('L' + (this.valueShapes[0].center.x - pointOffset) + ',' + this.valueShapes[0].center.y + ' ')
             .concat('Z');
     }
 
 
-    protected chartTemplate(): TemplateResult | null {
-        if (this.valueShapes.length < 2) {
-            return null;
-        }
+    protected chartTemplate(): TemplateResult {
+        const lineStyle = (): StyleInfo  => ({
+            opacity: 'var(--shape-opacity)',
+            fill: 'none',
+            stroke: 'var(--shape-color)',
+        });
 
-        const pointStyle: StyleInfo = { display: 'none' };
-        if (this.valueShapeFocused) {
-            pointStyle.display = 'block';
-            pointStyle.left = this.valueShapeFocused.center.x + 'px';
-            pointStyle.top = this.valueShapeFocused.center.y + 'px';
-            pointStyle.width = (this.valueShapeFocused.radius * 2) + 'px';
-            pointStyle.height = (this.valueShapeFocused.radius * 2) + 'px';
-        }
+        const pointStyle = (index?: number): StyleInfo  => ({
+            opacity: `var(${(this.active === index) ? '--point-opacity-active' : '--point-opacity'})`,
+            fill: 'var(--point-inner-color)',
+            stroke: 'var(--point-border-color)',
+            willChange: 'opacity',
+        });
+
+        const pointMaskStyle = (index?: number): StyleInfo  => ({
+            opacity: `calc(100 * var(${(this.active === index) ? '--point-opacity-active' : '--point-opacity'}))`,
+            willChange: 'opacity',
+        });
 
         return html`
             <svg class="chart">
-                <mask id="mask">
-                    <path d="${this.areaPath}" stroke-width="${this.shapeSize}" stroke="#FFFFFF" fill="#FFFFFF" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
-                </mask>
-                <rect class="area" x="0" y="0" width="100%" height="100%" mask="url(#mask)"/>
-                <path class="shape" d="${this.linePath}" stroke-width="${this.shapeSize}" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs>
+                    <mask id="residual-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        <path d="${this.otherShapes.areaPath}" fill="black"/>
+                        <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
+                        ${this.valueShapes.map((valueShape) => svg`
+                            <circle cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}" fill="black" style="${styleMap(pointMaskStyle(valueShape.index))})"/>
+                        `)}
+                    </mask>
+                    <mask id="area-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        <path d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" stroke="black" fill="none"/>
+                        ${this.valueShapes.map((valueShape) => svg`
+                            <circle cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}" fill="black" style="${styleMap(pointMaskStyle(valueShape.index))})"/>
+                        `)}
+                    </mask>
+                    <mask id="line-mask" maskUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+                        ${this.valueShapes.map((valueShape) => svg`
+                            <circle cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius}" fill="black" style="${styleMap(pointMaskStyle(valueShape.index))})"/>
+                        `)}
+                    </mask>
+                </defs>
+                <rect class="residual" x="0" y="0" width="100%" height="100%" mask="url(#residual-mask)"/>
+                <path class="area" d="${this.otherShapes.areaPath}" mask="url(#area-mask)"/>
+                <path class="line" d="${this.otherShapes.linePath}" stroke-width="${this.weight}" stroke-linecap="round" stroke-linejoin="round" mask="url(#line-mask)" style="${styleMap(lineStyle())}"/>
             </svg>
-            <div class="point" style="${styleMap(pointStyle)}"></div>
+            <svg class="points">
+                ${this.valueShapes.map((valueShape) => svg`
+                    <circle class="point" cx="${valueShape.center.x}" cy="${valueShape.center.y}" r="${valueShape.radius - (this.weight * 0.4)}" stroke-width="${this.weight * 0.8}" style="${styleMap(pointStyle(valueShape.index))}"/>
+                `)}
+            </svg>
         `;
     }
 
 
-    protected tooltipAnchorPositionFor(valueShape: ValueShapeCircle): StyleInfo {
+    protected tooltipTemplate(): TemplateResult {
+        if (!this.valueShapeActive || !this.tooltipText) return html``;
+
         const style: StyleInfo = {
-            left: valueShape.center.x + 'px',
-            top: (valueShape.center.y - valueShape.radius - 2) + 'px',
+            left: this.valueShapeActive.center.x + 'px',
+            top: (this.valueShapeActive.center.y - this.valueShapeActive.radius - 2) + 'px',
             transform: 'translate(-50%, -100%)',
         };
 
-        if ((valueShape.value < 0 || Math.max(...this.values) === 0)) {
-            style.top = (valueShape.center.y + valueShape.radius + 2) + 'px';
+        if ((this.valueShapeActive.value < 0 || this.onlyNegativeValues())) {
+            style.top = (this.valueShapeActive.center.y + this.valueShapeActive.radius + 2) + 'px';
             style.transform = 'translate(-50%, 0%)';
         }
 
-        return style;
+        return html`
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText}</div>
+        `;
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle {
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeCircle | undefined {
+        if (!this.hasEnoughValueShapes()) return;
+
         return this.valueShapes.reduce((previous, current) => {
             return (Math.abs(current.center.x - x) < Math.abs(previous.center.x - x) ? current : previous);
         });
+    }
+
+
+    protected hasEnoughValueShapes(): boolean {
+        return (this.valueShapes.length >= 2);
     }
 }

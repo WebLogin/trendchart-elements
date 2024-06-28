@@ -31,77 +31,120 @@ import { TcLine } from "@weblogin/trendchart-elements";
 ```
 
 
+## Update from V1
+
+Some of the markup has changed to make room for new features, have a look at the documentation below to find the new names.
+
+
 ## Usage
 
 <p align="center">
-    <img src="./docs/demo.jpg" alt="Demo" width="1019">
+    <img src="./docs/demo-2.jpg" alt="Demo" width="1020">
+    <br>
+    <b>Check out <a href="https://weblogin.github.io/trendchart-elements/demo/" target="_blank">the demo page</a> for various charts stylings and use cases.</b>
 </p>
-
-**Check out the [demo page](https://weblogin.github.io/trendchart-elements/demo/)** for various charts, stylings and use cases.
 
 ```html
 <tc-line values="[12,10,12,11,7,6,8,10,12]"></tc-line>
-<tc-column values="[11,7,6,8,10,12,8,10,12]"></tc-column>
-<tc-bar values="[11,7,6,8,10,12,8,10,12]"></tc-bar>
 <tc-pie values="[35,68,22,16]"></tc-pie>
+<tc-bar values="[11,7,6,8,10,12,8,10,12]"></tc-bar>
+<tc-stack values="[24,18,19,7]"></tc-stack>
 ```
 
-Charts configuration is made with CSS variables and HTML attributes.
+Use CSS to change the `width` and `height` of the chart, because they are responsive you can use percentages.
 
-Use CSS to change the `width` and `height` of the chart, because they are responsive you can use percentages. In some cases you'll need to have a radius around the chart if its container has one, for that just add a `border-radius` CSS rule to the chart.
+In some cases you'll need to have a radius around the chart if its container has one, for that just add a `border-radius` CSS rule to the chart.
 
-#### HTML attributes
+Charts configuration is made with CSS variables and HTML attributes :
+	
+### HTML Attributes
+ 
+| Name | Default | Description |
+| :--- | :-----: | :---------- |
+| ➡️ **All charts** |||
+| `values` | - | Required - Array of numbers for the values, at least 2 for line and bar charts. Example : `values="[12,10,11]"` |
+| `labels` | `[]` | Optional - Array of strings for the labels corresponding to the values, it needs to be the same length as `values` array. Example : `labels='["A","B","C"]'` |
+| `static` | `false` | Optional - Boolean to disable tooltip and hover styling |
+| `tooltip-disabled` | `false` | Optional - Boolean to disable tooltip |
+| `tooltip-format` | `@L @V` | Optional - String to format the tooltip text. Two placeholders are available, `@V` for the current value and `@L` for the current label if present |
+| `max` | `0` | Optional - Number to change the max scale of the chart |
+| ➡️ **Line chart** |||
+| `min` | `0` | Optional - Number to change the min scale of the chart |
+| `weight` | `2` | Optional - Number for the line weight |
+| `point` | `undefined` | Optional - Number for the point weight, if not set it will be `weight + 6` |
+| `inside` | `false` | Optional - Boolean to draw the points inside the chart. Because the line touch the edges by default, the points have half of their size outside the chart. Usefull if all points are visible |
+| ➡️ **Bar chart** |||
+| `min` | `0` | Optional - Number to change the min scale of the chart |
+| `radius` | `2` | Optional - Number for the radius of the bars |
+| `horizontal` | `false` | Optional - Boolean to change the orientation to horizontal |
+| `gap` | `2` | Optional - Number for the gap between bars |
+| ➡️ ** Stack chart** |||
+| `radius` | `2` | Optional - Number for the radius of the global bar |
+| `horizontal` | `false` | Optional - Boolean to change the orientation to horizontal |
+| `gap` | `2` | Optional - Number for the gap between bars |
+| ➡️ **Pie chart** |||
+| `donut` | `undefined` | Optional - Number to create a donut of the given weight |
+| `rotate` | `0` | Optional - Number in degrees to rotate the chart, 0 being the top |
+| `gap` | `2` | Optional - Number for the gap between slices |
 
-- Common
-	- `values` - Required array of numbers for the values. Example `values="[12,10,11]"` - Default `[]`
-	- `labels` - Optional array of strings for the labels corresponding to the values, it needs to be the same length as `values` array. Only usefull when chart not `static`. Example `labels='["Foo","Bar","Baz"]'` - Default `[]`
-	- `min` - Optional number or null for the minimum value, in most cases you'll need to set it to `0`. When `null` the chart uses the smallest value - Default `null`
-	- `max` - Optional number or null for the maximum value, usefull if you need to have multiple charts with the same scale. When `null` the chart uses the highest value - Default `null`
-	- `static` - Optional attribute to disable tooltip and other hover styling, it doesn't need a value, just add the attribute
-	- `tooltip` - Optional string to format the tooltip text. Two placeholders are available, `@V` being the current value and `@L` the current label if present - Default `@L @V`
-- Line chart
-	- `shape-size` - Optional number for the line size - Default `2`
-- Column / Bar chart
-	- `shape-radius` - Optional number for the columns / bars radius - Default `1`
-	- `shape-gap` - Optional number for the gap between columns / bars - Default `1`
-- Pie chart
-	- `shape-size` - Optional number or null for the slice size, `null` gives a pie and a `number` create a donut - Default `null`
-	- `shape-gap` - Optional number for the gap between slices - Default `1`
+For boolean ones you just have to set them on the tag, like this :
 
-#### CSS variables
+```html
+<tc-bar values="[3,9,10]" static><tc-bar>
+```
 
-- Common
-	- `--shape-color` - Default `#597BFC`
-	- `--shape-opacity` - Default `1`
-	- `--area-color` - Default `var(--shape-color)`
-	- `--area-opacity` - Default `0`
-	- `--tooltip-font-color` - Default `white`
-	- `--tooltip-font-size` - Default `0.875em`
-	- `--tooltip-font-weight` - Default `bold`
-	- `--tooltip-radius` - Default `3px`
-	- `--tooltip-padding` - Default `3px 4px`
-	- `--tooltip-background` - Default `black`
-	- `--tooltip-shadow` - Default `none`
-- Line chart
-	- `--point-color` - Default `var(--shape-color)`
-	- `--point-opacity ` - Default `1`
-	- `--point-shadow ` - Default `none `
-- Column / Bar chart
-	- `--shape-focused-opacity` - Column / Bar opacity on hover - Default `0.5`
-- Pie chart
-	- `--shape-focused-opacity` - Slice opacity on hover - Default `0.5`
+### CSS Variables
+ 
+| Name | Default | Description |
+| :--- | :-----: | :---------- |
+| ➡️ **All charts** |||
+| `--shape-color` | `#597BFC` | - |
+| `--shape-opacity` | `1` | - |
+| `--residual-color` | `black` | The residual represent unused space, for example if you set a `max` of 100 but the highest value is lower |
+| `--residual-opacity` | `0` | - |
+| `--tooltip-font-color` | `white` | - |
+| `--tooltip-font-size` | `0.875em` | - |
+| `--tooltip-font-weight` | `bold` | - |
+| `--tooltip-radius` | `3px` | - |
+| `--tooltip-padding` | `3px 4px` | - |
+| `--tooltip-background` | `black` | - |
+| `--tooltip-shadow` | `none` | - |
+| ➡️ **Line chart** |||
+| `--area-color` | `--shape-color` | The area represent the space under the line |
+| `--area-opacity` | `0` | - |
+| `--point-inner-color` | `--shape-color` | - |
+| `--point-border-color` | `--shape-color` | - |
+| `--point-opacity` | `0` | - |
+| `--point-opacity-active` | `1` | - |
+| ➡️ **Bar / Stack / Pie chart** |||
+| `--shape-color-x` | `--shape-color` | Color of the `x` shape starting at 1 : `--shape-color-1`, `--shape-color-2`, etc |
+| `--shape-opacity-active` |`0.5` | Opacity of the current active shape |
 
+### Events
 
-## Upcoming V2
+Several custom events are fired so you can react to them. The `detail` property on the `event` contains associated data like the `index` and `value`.
 
-New major version (will change the markup) work in progress, with the following features :
+| Name | Description |
+| ---- | ----------- |
+| `shape-enter` | Fire on mouse enter a value shape |
+| `shape-leave` | Fire on mouse leave a value shape |
+| `shape-click` | Fire on mouse click on a value shape |
 
-- [ ] Stacked bar values
-- [ ] Stacked column values
-- [ ] Extract tooltip to reduce size
-- [ ] Emit events on hover for better third party integration
-- [ ] Lit 3 compatibility
+### JS API
 
+Even if TrendChart Elements is supposed to be used as a simple chart system, several properties are exposed so you can interact with the chart programmatically. In addition to the [HTML Attributes](#html-attributes) above, here are some other usefull ones :
+
+| Name | Description |
+| ---- | ----------- |
+| `valueShapes` | Array of `valueShape` objects. Each represent a value that will be displayed in the chart |
+| `valueShapeActive` | Getter for the current active `valueShape` object |
+| `active` | Index of the current active `valueShape`, can be used to manually set the active index |
+
+```js
+// <tc-line values="[12,10,12,11,7,6,8,10,12]"></tc-line>
+const lineChart = document.querySelector('tc-line');
+lineChart.active = 3;
+```
 
 ## License
 

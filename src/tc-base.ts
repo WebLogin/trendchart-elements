@@ -1,40 +1,39 @@
 import { CSSResultGroup, HTMLTemplateResult, LitElement, PropertyValues, TemplateResult, css, html, nothing } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
-import { ValueShape } from './types.js';
+import { ValueShape, ValueShapeEvent } from './types.js';
 
 
-export abstract class TcBase extends LitElement {
+export abstract class TcBase<TValueShape extends ValueShape> extends LitElement {
     @property({type: Array})
     public values: number[] = [];
     @property({type: Array})
     public labels: string[] = [];
     @property({type: Number})
-    public min: number | null = null;
-    @property({type: Number})
-    public max: number | null = null;
+    public max = 0;
+    @property({type: Number, attribute: false})
+    public active?: number;
     @property({type: Boolean, reflect: true})
     public static = false;
-    @property({type: String})
-    public tooltip = '@L @V';
+    @property({type: String, attribute: 'tooltip-format'})
+    public tooltipFormat = '@L @V';
+    @property({type: Boolean, attribute: 'tooltip-disabled', reflect: true})
+    public tooltipDisabled = false;
 
     @state()
-    public width = 0;
+    protected width = 0;
     @state()
-    public height = 0;
-    @state()
-    protected valueShapeFocused: ValueShape | null = null;
+    protected height = 0;
 
-    protected valueShapes: ValueShape[] = [];
+    public valueShapes: TValueShape[] = [];
     private resizeObserver!: ResizeObserver;
 
-    static styles = css`
+    public static styles = css`
         :host {
             --shape-color: #597BFC;
             --shape-opacity: 1;
-            --shape-focused-opacity: 0.5;
-            --area-color: var(--shape-color);
-            --area-opacity: 0;
+            --shape-opacity-active: 0.5;
+            --residual-color: black;
+            --residual-opacity: 0;
             --tooltip-font-color: white;
             --tooltip-font-size: 0.875em;
             --tooltip-font-weight: bold;
@@ -42,7 +41,7 @@ export abstract class TcBase extends LitElement {
             --tooltip-padding: 3px 4px;
             --tooltip-background: black;
             --tooltip-shadow: none;
-            display: inline-block;
+            display: block;
             width: 120px;
             height: 60px;
         }
@@ -64,20 +63,12 @@ export abstract class TcBase extends LitElement {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            border-radius: inherit
+            border-radius: inherit;
+            transform: translateZ(0);
         }
-        .chart .area {
-            fill: var(--area-color);
-            opacity: var(--area-opacity);
-            stroke: none;
-        }
-        .chart > .shape {
-            fill: var(--shape-color);
-            opacity: var(--shape-opacity);
-            stroke: none;
-        }
-        .chart .shape.is-focused {
-            opacity: var(--shape-focused-opacity);
+        .chart .residual {
+            fill: var(--residual-color);
+            opacity: var(--residual-opacity);
         }
         .tooltip {
             position: absolute;
@@ -90,11 +81,19 @@ export abstract class TcBase extends LitElement {
             color: var(--tooltip-font-color);
             padding: var(--tooltip-padding);
             pointer-events: none;
+            user-select: none;
             border-radius: var(--tooltip-radius);
             background-color: var(--tooltip-background);
             box-shadow: var(--tooltip-shadow);
         }
     ` as CSSResultGroup;
+
+
+    public get valueShapeActive(): TValueShape | undefined {
+        if (this.active === undefined) return;
+
+        return this.valueShapes[this.active];
+    }
 
 
     public connectedCallback() {
@@ -122,83 +121,130 @@ export abstract class TcBase extends LitElement {
         }
 
         if (changedProperties.has('labels')) {
-            this.labels = this.labels.map((label) => (label != null) ? '' + label : '');
+            this.labels = this.labels.map((label) => (label != null) ? ('' + label).trim() : '');
         }
 
-        const propertiesRelatedToChart = ['width', 'height', 'values', 'labels', 'min', 'max', 'shapeSize', 'shapeGap', 'shapeRadius'];
-        if (propertiesRelatedToChart.some((property) => changedProperties.has(property as any))) {
-            this.computeChartData();
+        const propertiesRelatedToChartShapes = ['width', 'height', 'values', 'labels', 'min', 'max', 'gap', 'weight', 'point', 'inside', 'donut', 'radius'];
+        if (propertiesRelatedToChartShapes.some((property) => changedProperties.has(property as any))) {
+            this.computeChartShapes();
         }
     }
-
-
-    protected abstract computeChartData(): void;
 
 
     protected render(): HTMLTemplateResult {
         return html`
             <div class="wrapper">
-                ${this.chartTemplate() ?? nothing}
-                ${this.tooltipTemplate() ?? nothing}
+                ${this.hasEnoughValueShapes() ? this.chartTemplate() : nothing}
+                ${this.hasEnoughValueShapes() ? this.tooltipTemplate() : nothing}
             </div>
         `;
     }
 
 
-    protected abstract chartTemplate(): TemplateResult | null;
-
-
-    protected tooltipTemplate(): TemplateResult | null {
-        if (!this.valueShapeFocused) {
-            return null;
-        }
-
-        const style = this.tooltipAnchorPositionFor(this.valueShapeFocused);
-
-        const text = this.tooltip
-            .replace(/@V/g, this.valueShapeFocused.value.toLocaleString())
-            .replace(/@L/g, this.valueShapeFocused.label ? this.valueShapeFocused.label : '')
-            .trim();
-
-        return html`
-            <div class="tooltip" style="${styleMap(style)}">${text}</div>
-        `;
-    }
-
-
-    protected abstract tooltipAnchorPositionFor(valueShape: ValueShape): StyleInfo;
-
-
     protected firstUpdated() {
-        if (!this.static) {
-            const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
-            wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
-                this.valueShapeFocused = this.findValueShapeAtPosition(event.offsetX, event.offsetY);;
-            });
-            wrapperElement.addEventListener('mouseleave', () => {
-                this.valueShapeFocused = null;
-            });
-        }
+        const wrapperElement = this.renderRoot.querySelector('.wrapper') as HTMLElement;
+
+        // Register event shape click
+        wrapperElement.addEventListener('click', (event: MouseEvent) => {
+            const valueShapeClicked = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
+            if (valueShapeClicked) {
+                this.dispatchValueShapeEvent('shape-click', valueShapeClicked);
+            }
+        });
+
+        // Register event shape hover
+        let currentValueShapeHovered: TValueShape | undefined;
+        wrapperElement.addEventListener('mousemove', (event: MouseEvent) => {
+            const newValueShapeHovered = this.findValueShapeAtPosition(event.offsetX, event.offsetY);
+            if (currentValueShapeHovered && (!newValueShapeHovered || newValueShapeHovered.index !== currentValueShapeHovered.index)) {
+                this.dispatchValueShapeEvent('shape-leave', currentValueShapeHovered);
+            }
+            if (newValueShapeHovered && (!currentValueShapeHovered || newValueShapeHovered.index !== currentValueShapeHovered.index)) {
+                this.dispatchValueShapeEvent('shape-enter', newValueShapeHovered);
+            }
+
+            currentValueShapeHovered = newValueShapeHovered;
+
+            if (!this.static) {
+                this.active = currentValueShapeHovered?.index;
+            }
+        });
+        wrapperElement.addEventListener('mouseleave', (event: MouseEvent) => {
+            if (currentValueShapeHovered) {
+                this.dispatchValueShapeEvent('shape-leave', currentValueShapeHovered);
+            }
+
+            currentValueShapeHovered = undefined;
+            if (!this.static) {
+                this.active = currentValueShapeHovered;
+            }
+        });
+        document.addEventListener('click', (event: MouseEvent) => {
+            if (event.composedPath().includes(wrapperElement) || this.static) return;
+
+            wrapperElement.dispatchEvent(new MouseEvent('mouseleave'));
+        });
     }
-
-
-    protected abstract findValueShapeAtPosition(x: number, y: number): ValueShape | null;
 
 
     protected updated() {
-        if (this.valueShapeFocused) {
+        // Fix tooltip overflow
+        const tooltip = this.renderRoot.querySelector<HTMLElement>('.tooltip');
+        if (tooltip) {
             const screenOffset = 10;
-            const tooltipElement = this.renderRoot.querySelector('.tooltip') as HTMLElement;
-            const tooltipRect = tooltipElement.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
 
-            let left = parseFloat(tooltipElement.style.left);
+            let left = parseFloat(tooltip.style.left);
             if (tooltipRect.left < screenOffset) {
                 left += screenOffset - Math.floor(tooltipRect.left);
             } else if (tooltipRect.right > (document.documentElement.offsetWidth - screenOffset)) {
                 left += (document.documentElement.offsetWidth - screenOffset - Math.ceil(tooltipRect.right));
             }
 
-            tooltipElement.style.left = `${left}px`;
+            tooltip.style.left = `${left}px`;
         }
+    }
+
+
+    protected abstract computeChartShapes(): void;
+
+
+    protected abstract chartTemplate(): TemplateResult;
+
+
+    protected abstract tooltipTemplate(): TemplateResult;
+
+
+    protected get tooltipText(): string {
+        if (!this.valueShapeActive || this.static || this.tooltipDisabled) return '';
+
+        return this.tooltipFormat
+            .replace(/@V/g, this.valueShapeActive.value.toLocaleString())
+            .replace(/@L/g, this.valueShapeActive.label ? this.valueShapeActive.label : '')
+            .trim();
+    }
+
+
+    protected abstract findValueShapeAtPosition(x: number, y: number): TValueShape | undefined;
+
+
+    protected abstract hasEnoughValueShapes(): boolean;
+
+
+    protected onlyNegativeValues(): boolean {
+        return Math.max(...this.values) <= 0;
+    }
+
+
+    private dispatchValueShapeEvent(type: string, valueShape: TValueShape): void {
+        this.dispatchEvent(new CustomEvent<ValueShapeEvent>(type, {
+            detail: {
+                index: valueShape.index,
+                value: valueShape.value,
+                label: valueShape.label,
+            },
+            bubbles: false,
+            composed: false,
+          }));
     }
 }

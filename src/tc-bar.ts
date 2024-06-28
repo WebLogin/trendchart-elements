@@ -1,125 +1,133 @@
-import { css, html, PropertyValues, svg, TemplateResult } from 'lit';
+import { TemplateResult, html, svg } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { StyleInfo } from 'lit/directives/style-map.js';
+import { StyleInfo, styleMap } from 'lit/directives/style-map.js';
 import { TcBase } from './tc-base.js';
 import { ValueShapeRectangle } from './types.js';
 
 
 @customElement('tc-bar')
-export class TcBar extends TcBase {
-    @property({type: Number, attribute: 'shape-gap'})
-    public shapeGap = 1;
-    @property({type: Number, attribute: 'shape-radius'})
-    public shapeRadius = 1;
-
-    protected valueShapes!: ValueShapeRectangle[];
-    protected valueShapeFocused!: ValueShapeRectangle;
-
-    static styles = [
-        TcBase.styles,
-        css``,
-    ];
+export class TcBar extends TcBase<ValueShapeRectangle> {
+    @property({type: Number})
+    public min = 0;
+    @property({type: Number})
+    public gap = 2;
+    @property({type: Number})
+    public radius = 2;
+    @property({type: Boolean, reflect: true})
+    public horizontal = false;
 
 
-    protected computeChartData(): void {
+    protected computeChartShapes(): void {
         this.valueShapes = [];
 
-        let valueMin = Math.min(...this.values);
-        if (this.min !== null) {
-            valueMin = Math.min(valueMin, this.min);
-        }
-
-        let valueMax = Math.max(...this.values);
-        if (this.max !== null) {
-            valueMax = Math.max(valueMax, this.max);
-        }
-
+        const valueMin = Math.min(...this.values, this.min);
+        const valueMax = Math.max(...this.values, this.max);
         const valueScale = valueMax - valueMin;
 
-        const barHeight = (this.height - (this.shapeGap * (this.values.length - 1))) / this.values.length;
+        const crossSize = ((this.horizontal ? this.height : this.width) - (this.gap * (this.values.length - 1))) / this.values.length;
+        const flowPosition = (value: number): number => {
+            const size = this.horizontal ? this.width : this.height;
+            const position = valueScale ? ((value - valueMin) / valueScale) * size : 1;
 
-        const barPositionX = (value: number): number => {
-            return valueScale ? ((value - valueMin) / valueScale) * this.width : 1;
+            return this.horizontal ? position : (size - position);
         };
 
         this.values.forEach((value, index) => {
-            let yTop = (barHeight + this.shapeGap) * index;
-            let xLeft = (value < 0) ? barPositionX(value) : barPositionX(Math.max(valueMin, 0));
-            let xRight = (value < 0) ? barPositionX(Math.min(valueMax, 0)) : barPositionX(value);
+            let crossStart = (crossSize + this.gap) * index;
+            let flowStart = (value < 0) ? flowPosition(Math.min(valueMax, 0)) : flowPosition(value);
+            let flowEnd = (value < 0) ? flowPosition(value) : flowPosition(Math.max(valueMin, 0));
+            if (this.horizontal) {
+                [flowStart, flowEnd] = [flowEnd, flowStart];
+            }
 
-            let width = xRight - xLeft;
-            if (width == 0) {
-                width = 1;
-                if (valueMax < 0 && valueScale) {
-                    xLeft--;
+            let flowSize = flowEnd - flowStart;
+            if (flowSize == 0) {
+                flowSize = 1;
+                if (valueScale && (this.horizontal ? (valueMax < 0) : (valueMax > 0))) {
+                    flowStart--;
                 }
             }
 
             this.valueShapes.push({
                 index: index,
                 value: value,
-                label: this.labels[index] ?? null,
+                label: this.labels[index],
                 origin: {
-                    x: xLeft,
-                    y: yTop,
+                    x: this.horizontal ? flowStart : crossStart,
+                    y: this.horizontal ? crossStart : flowStart,
                 },
-                width: width,
-                height: barHeight,
+                width: this.horizontal ? flowSize : crossSize,
+                height: this.horizontal ? crossSize : flowSize,
             });
         });
     }
 
 
-    protected chartTemplate(): TemplateResult | null {
-        if (this.valueShapes.length < 1) {
-            return null;
-        }
+    protected chartTemplate(): TemplateResult {
+        const radius = Math.min(this.radius, (this.horizontal ? this.valueShapes[0].height : this.valueShapes[0].width) / 2);
 
-        const shapeRadius = Math.min(this.shapeRadius, (this.valueShapes[0].height / 2));
+        const barStyle = (index?: number): StyleInfo  => ({
+            opacity: `var(${(this.active === index) ? '--shape-opacity-active': '--shape-opacity'})`,
+            fill: `var(--shape-color-${(index ?? 0) + 1}, var(--shape-color))`,
+            willChange: 'opacity',
+        });
 
         return html`
-            <svg class="chart" width="100%" height="100%">
-                ${this.valueShapes.map((valueShape, index) => svg`
-                    <rect class="area"
-                        x="0"
-                        y="${valueShape.origin.y}"
-                        width="100%"
-                        height="${valueShape.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
-                    />
-                    <rect class="shape ${(this.valueShapeFocused?.index === index) ? 'is-focused' : ''}"
-                        x="${valueShape.origin.x}"
-                        y="${valueShape.origin.y}"
-                        width="${valueShape.width}"
-                        height="${valueShape.height}"
-                        rx="${shapeRadius}" ry="${shapeRadius}"
-                    />
+            <svg class="chart">
+                <defs>
+                    <mask id="residual-mask" maskUnits="userSpaceOnUse">
+                        ${this.valueShapes.map((valueShape) => svg`
+                            <rect x="${this.horizontal ? 0 : valueShape.origin.x}" y="${this.horizontal ? valueShape.origin.y : 0}" width="${this.horizontal ? this.width : valueShape.width}" height="${this.horizontal ? valueShape.height : this.height}" rx="${radius}" ry="${radius}" fill="white"/>
+                            <rect x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" rx="${radius}" ry="${radius}" fill="black"/>
+                        `)}
+                    </mask>
+                </defs>
+                <rect class="residual" x="0" y="0" width="100%" height="100%" mask="url(#residual-mask)"/>
+                ${this.valueShapes.map((valueShape) => svg`
+                    <rect class="bar" x="${valueShape.origin.x}" y="${valueShape.origin.y}" width="${valueShape.width}" height="${valueShape.height}" rx="${radius}" ry="${radius}" style="${styleMap(barStyle(valueShape.index))}"/>
                 `)}
             </svg>
         `;
     }
 
 
-    protected tooltipAnchorPositionFor(valueShape: ValueShapeRectangle): StyleInfo {
+    protected tooltipTemplate(): TemplateResult {
+        if (!this.valueShapeActive || !this.tooltipText) return html``;
+
         const style: StyleInfo = {
-            left: (valueShape.origin.x + valueShape.width) + 'px',
-            top: (valueShape.origin.y - 2) + 'px',
+            left: (this.valueShapeActive.origin.x + (this.valueShapeActive.width / 2)) + 'px',
+            top: (this.valueShapeActive.origin.y - 2) + 'px',
             transform: 'translate(-50%, -100%)',
         };
 
-        if ((valueShape.value < 0 || Math.max(...this.values) === 0)) {
-            style.left = valueShape.origin.x + 'px';
+        if (!this.horizontal && (this.valueShapeActive.value < 0 || this.onlyNegativeValues())) {
+            style.top = (this.valueShapeActive.origin.y + this.valueShapeActive.height + 2) + 'px';
+            style.transform = 'translate(-50%, 0%)';
         }
 
-        return style;
+        return html`
+            <div class="tooltip" style="${styleMap(style)}">${this.tooltipText}</div>
+        `;
     }
 
 
-    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | null {
+    protected findValueShapeAtPosition(x: number, y: number): ValueShapeRectangle | undefined {
+        if (!this.hasEnoughValueShapes()) return;
+
+        const position = this.horizontal ? y : x;
+
         return this.valueShapes.find((valueShape: ValueShapeRectangle): boolean => {
-            const yMin = valueShape.origin.y - (this.shapeGap / 2);
-            const yMax = valueShape.origin.y + valueShape.height + (this.shapeGap / 2);
-            return y >= yMin && y <= yMax;
-        }) ?? null;
+            const shapeOrigin = this.horizontal ? valueShape.origin.y : valueShape.origin.x;
+            const shapeSize = this.horizontal ? valueShape.height : valueShape.width;
+            const positionMin = shapeOrigin - (this.gap / 2);
+            const positionMax = shapeOrigin + shapeSize + (this.gap / 2);
+
+            return position >= positionMin && position <= positionMax;
+        });
+    }
+
+
+    protected hasEnoughValueShapes(): boolean {
+        return (this.valueShapes.length >= 2);
     }
 }

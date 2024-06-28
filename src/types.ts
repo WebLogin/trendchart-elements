@@ -1,4 +1,8 @@
 // Shapes
+export interface ShapePoint {
+    x: number,
+    y: number,
+}
 export interface ShapeCircle {
     center: ShapePoint,
     radius: number,
@@ -6,10 +10,6 @@ export interface ShapeCircle {
 export interface ShapeLine {
     start: ShapePoint,
     end: ShapePoint,
-}
-export interface ShapePoint {
-    x: number,
-    y: number,
 }
 export interface ShapeRectangle {
     origin: ShapePoint,
@@ -26,9 +26,13 @@ export interface ShapeSlice {
 interface BaseValueShape {
     index: number,
     value: number,
-    label: string | null,
+    label?: string,
 }
 export interface ValueShapeCircle extends BaseValueShape, ShapeCircle {}
 export interface ValueShapeRectangle extends BaseValueShape, ShapeRectangle {}
 export interface ValueShapeSlice extends BaseValueShape, ShapeSlice {}
 export type ValueShape = ValueShapeCircle | ValueShapeRectangle | ValueShapeSlice;
+
+
+// Events
+export interface ValueShapeEvent extends BaseValueShape {}
