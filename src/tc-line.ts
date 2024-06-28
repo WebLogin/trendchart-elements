@@ -25,11 +25,11 @@ export class TcLine extends TcBase<ValueShapeCircle> {
         TcBase.styles,
         css`
             :host {
-                --point-inner-color: var(--color);
-                --point-border-color: var(--color);
+                --point-inner-color: var(--shape-color);
+                --point-border-color: var(--shape-color);
                 --point-opacity: 0;
                 --point-opacity-active: 1;
-                --area-color: var(--color);
+                --area-color: var(--shape-color);
                 --area-opacity: 0;
             }
             .chart .area {
@@ -107,9 +107,9 @@ export class TcLine extends TcBase<ValueShapeCircle> {
 
     protected chartTemplate(): TemplateResult {
         const lineStyle = (): StyleInfo  => ({
-            opacity: 'var(--opacity)',
+            opacity: 'var(--shape-opacity)',
             fill: 'none',
-            stroke: 'var(--color)',
+            stroke: 'var(--shape-color)',
         });
 
         const pointStyle = (index?: number): StyleInfo  => ({

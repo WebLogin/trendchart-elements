@@ -29,9 +29,9 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
 
     public static styles = css`
         :host {
-            --color: #597BFC;
-            --opacity: 1;
-            --opacity-active: 0.5;
+            --shape-color: #597BFC;
+            --shape-opacity: 1;
+            --shape-opacity-active: 0.5;
             --residual-color: black;
             --residual-opacity: 0;
             --tooltip-font-color: white;

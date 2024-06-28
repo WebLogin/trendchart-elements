@@ -23,16 +23,16 @@
     background-color: #FFFFFF;
 }
 .b-tests-grid > .test > .content.has-shape-colors {
-    --color-1: #597BFC;
-    --color-2: #e2445c;
-    --color-3: #9CD326;
-    --color-4: #fdab3d;
-    --color-5: #784BD1;
-    --color-6: #f1de0f;
-    --color-7: #c725d3;
-    --color-8: #11a5db;
-    --color-9: #7F5347;
-    --color-10: #373737;
+    --shape-color-1: #597BFC;
+    --shape-color-2: #e2445c;
+    --shape-color-3: #9CD326;
+    --shape-color-4: #fdab3d;
+    --shape-color-5: #784BD1;
+    --shape-color-6: #f1de0f;
+    --shape-color-7: #c725d3;
+    --shape-color-8: #11a5db;
+    --shape-color-9: #7F5347;
+    --shape-color-10: #373737;
 }
 .b-tests-grid > .test > .footer {
     flex: 1 0 auto;

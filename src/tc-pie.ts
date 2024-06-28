@@ -108,8 +108,8 @@ export class TcPie extends TcBase<ValueShapeSlice> {
 
     protected chartTemplate(): TemplateResult {
         const sliceStyle = (index?: number): StyleInfo  => ({
-            opacity: `var(${(this.active === index) ? '--opacity-active': '--opacity'})`,
-            fill: `var(--color-${(index ?? 0) + 1}, var(--color))`,
+            opacity: `var(${(this.active === index) ? '--shape-opacity-active': '--shape-opacity'})`,
+            fill: `var(--shape-color-${(index ?? 0) + 1}, var(--shape-color))`,
             willChange: 'opacity',
         });
 

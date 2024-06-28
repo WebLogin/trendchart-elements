@@ -90,8 +90,8 @@ export class TcStack extends TcBase<ValueShapeRectangle> {
         const radius = Math.min(this.radius, (this.height / 2), (this.width / 2));
 
         const barStyle = (index?: number): StyleInfo  => ({
-            opacity: `var(${(this.active === index) ? '--opacity-active': '--opacity'})`,
-            fill: `var(--color-${(index ?? 0) + 1}, var(--color))`,
+            opacity: `var(${(this.active === index) ? '--shape-opacity-active': '--shape-opacity'})`,
+            fill: `var(--shape-color-${(index ?? 0) + 1}, var(--shape-color))`,
             willChange: 'opacity',
         });
 

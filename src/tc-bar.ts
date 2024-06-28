@@ -67,8 +67,8 @@ export class TcBar extends TcBase<ValueShapeRectangle> {
         const radius = Math.min(this.radius, (this.horizontal ? this.valueShapes[0].height : this.valueShapes[0].width) / 2);
 
         const barStyle = (index?: number): StyleInfo  => ({
-            opacity: `var(${(this.active === index) ? '--opacity-active': '--opacity'})`,
-            fill: `var(--color-${(index ?? 0) + 1}, var(--color))`,
+            opacity: `var(${(this.active === index) ? '--shape-opacity-active': '--shape-opacity'})`,
+            fill: `var(--shape-color-${(index ?? 0) + 1}, var(--shape-color))`,
             willChange: 'opacity',
         });
 

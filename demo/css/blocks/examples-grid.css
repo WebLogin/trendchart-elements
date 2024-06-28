@@ -26,7 +26,7 @@
     border-bottom: none;
 }
 .b-examples-grid > .example-repositories > .row > .chart {
-    --tooltip-background: var(--color);
+    --tooltip-background: var(--shape-color);
     flex: 0 0 auto;
     width: 20rem;
     height: 3rem;
@@ -107,7 +107,7 @@
     opacity: 0.5;
 }
 .b-examples-grid > .example-visitors > .chart {
-    --color: #FFFFFF;
+    --shape-color: #FFFFFF;
     --area-opacity: 0.15;
     --point-opacity: 1;
     --point-opacity-active: 0.5;
@@ -144,9 +144,9 @@
     margin: 0.3rem 0 0 0;
 }
 .b-examples-grid > .example-orders > .chart {
-    --color: #FFFFFF;
-    --opacity: 0.35;
-    --opacity-active: 0.7;
+    --shape-color: #FFFFFF;
+    --shape-opacity: 0.35;
+    --shape-opacity-active: 0.7;
     --tooltip-font-color: #FFFFFF;
     --tooltip-background: #333333;
     border-radius: 0 0 1rem 1rem;
@@ -157,10 +157,10 @@
 
 /* Sources */
 .b-examples-grid > .example-sources {
-    --color-1: #A838FF;
-    --color-2: #19D6BF;
-    --color-3: #3C37FF;
-    --color-4: #FFBD3C;
+    --shape-color-1: #A838FF;
+    --shape-color-2: #19D6BF;
+    --shape-color-3: #3C37FF;
+    --shape-color-4: #FFBD3C;
     position: relative;
     display: flex;
     flex-flow: row nowrap;
@@ -178,7 +178,7 @@
     height: 12rem;
 }
 .b-examples-grid > .example-sources > .chart > .pie {
-    --opacity-active: 0.6;
+    --shape-opacity-active: 0.6;
     --tooltip-font-color: #1C1E27;
     --tooltip-background: #D8D7DA;
     width: 100%;
@@ -229,10 +229,10 @@
     margin: 0 0.8rem 0 0;
     background-color: black;
 }
-.b-examples-grid > .example-sources > .legend > li:nth-child(1):before { background-color: var(--color-1); }
-.b-examples-grid > .example-sources > .legend > li:nth-child(2):before { background-color: var(--color-2); }
-.b-examples-grid > .example-sources > .legend > li:nth-child(3):before { background-color: var(--color-3); }
-.b-examples-grid > .example-sources > .legend > li:nth-child(4):before { background-color: var(--color-4); }
+.b-examples-grid > .example-sources > .legend > li:nth-child(1):before { background-color: var(--shape-color-1); }
+.b-examples-grid > .example-sources > .legend > li:nth-child(2):before { background-color: var(--shape-color-2); }
+.b-examples-grid > .example-sources > .legend > li:nth-child(3):before { background-color: var(--shape-color-3); }
+.b-examples-grid > .example-sources > .legend > li:nth-child(4):before { background-color: var(--shape-color-4); }
 
 
 /* Viewers */
@@ -274,11 +274,11 @@
     display: inline-block;
 }
 .b-examples-grid > .example-viewers > .chart {
-    --color: #FFFFFF;
+    --shape-color: #FFFFFF;
     --area-color: #00acd2;
     --area-opacity: 1;
     --tooltip-font-color: #1E2128;
-    --tooltip-background: var(--color);
+    --tooltip-background: var(--shape-color);
     flex: 0 1 auto;
     width: 100%;
     height: 7rem;
@@ -305,15 +305,15 @@
     height: 5.6rem;
 }
 .b-examples-grid > .example-health > .item > .chart > tc-pie {
-    --color: #51A7E1;
+    --shape-color: #51A7E1;
     --residual-opacity: 0.1;
     width: 100%;
     height: 100%;
 }
-.b-examples-grid > .example-health > .item:nth-child(1) > .chart > tc-pie { --color: #F17A33; }
-.b-examples-grid > .example-health > .item:nth-child(2) > .chart > tc-pie { --color: #2DCD71; }
-.b-examples-grid > .example-health > .item:nth-child(3) > .chart > tc-pie { --color: #7346D2; }
-.b-examples-grid > .example-health > .item:nth-child(4) > .chart > tc-pie { --color: #51A7E1; }
+.b-examples-grid > .example-health > .item:nth-child(1) > .chart > tc-pie { --shape-color: #F17A33; }
+.b-examples-grid > .example-health > .item:nth-child(2) > .chart > tc-pie { --shape-color: #2DCD71; }
+.b-examples-grid > .example-health > .item:nth-child(3) > .chart > tc-pie { --shape-color: #7346D2; }
+.b-examples-grid > .example-health > .item:nth-child(4) > .chart > tc-pie { --shape-color: #51A7E1; }
 .b-examples-grid > .example-health > .item > .chart > img {
     position: absolute;
     top: 30%;
@@ -372,12 +372,12 @@
 
 /* Languages */
 .b-examples-grid > .example-languages {
-    --color-1: #36a2eb;
-    --color-2: #ff9f40;
-    --color-3: #ff6384;
-    --color-4: #4bc061;
-    --color-5: #ffcd56;
-    --color-6: #926BFA;
+    --shape-color-1: #36a2eb;
+    --shape-color-2: #ff9f40;
+    --shape-color-3: #ff6384;
+    --shape-color-4: #4bc061;
+    --shape-color-5: #ffcd56;
+    --shape-color-6: #926BFA;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -428,12 +428,12 @@
     margin: 0 0.4rem 0 0;
     background-color: black;
 }
-.b-examples-grid > .example-languages > .legend > li:nth-child(1):before { background-color: var(--color-1); }
-.b-examples-grid > .example-languages > .legend > li:nth-child(2):before { background-color: var(--color-2); }
-.b-examples-grid > .example-languages > .legend > li:nth-child(3):before { background-color: var(--color-3); }
-.b-examples-grid > .example-languages > .legend > li:nth-child(4):before { background-color: var(--color-4); }
-.b-examples-grid > .example-languages > .legend > li:nth-child(5):before { background-color: var(--color-5); }
-.b-examples-grid > .example-languages > .legend > li:nth-child(6):before { background-color: var(--color-6); }
+.b-examples-grid > .example-languages > .legend > li:nth-child(1):before { background-color: var(--shape-color-1); }
+.b-examples-grid > .example-languages > .legend > li:nth-child(2):before { background-color: var(--shape-color-2); }
+.b-examples-grid > .example-languages > .legend > li:nth-child(3):before { background-color: var(--shape-color-3); }
+.b-examples-grid > .example-languages > .legend > li:nth-child(4):before { background-color: var(--shape-color-4); }
+.b-examples-grid > .example-languages > .legend > li:nth-child(5):before { background-color: var(--shape-color-5); }
+.b-examples-grid > .example-languages > .legend > li:nth-child(6):before { background-color: var(--shape-color-6); }
 
 
 /* Balance */
@@ -468,8 +468,8 @@
     border-bottom: 0.1rem dashed #CCCCCC;
 }
 .b-examples-grid > .example-balance > .charts > tc-bar {
-    --color-1: #926BFA;
-    --color-2: #2BBF7D;
+    --shape-color-1: #926BFA;
+    --shape-color-2: #2BBF7D;
     flex: 0 1 auto;
     display: block;
     width: 2.2rem;
@@ -521,10 +521,10 @@
     margin: auto -0.1rem -0.1rem -0.1rem;
 }
 .b-examples-grid > .example-compare > .charts > tc-line {
-    --color: #FFFFFF;
+    --shape-color: #FFFFFF;
     --area-opacity: 0.8;
     --point-inner-color: var(--area-color);
-    --point-border-color: var(--color);
+    --point-border-color: var(--shape-color);
     position: absolute;
     top: 0;
     left: 0;
@@ -583,7 +583,7 @@
     min-height: 10rem;
 }
 .b-examples-grid > .example-overlap > .charts > tc-bar {
-    --color: #d7e0e6;
+    --shape-color: #d7e0e6;
     position: absolute;
     top: 0;
     left: 0;
@@ -591,11 +591,11 @@
     height: 100%;
 }
 .b-examples-grid > .example-overlap > .charts > tc-line {
-    --color: #2193b0;
+    --shape-color: #2193b0;
     --point-opacity: 1;
     --point-inner-color: #FFFFFF;
     --tooltip-font-color: #FFFFFF;
-    --tooltip-background: var(--color);
+    --tooltip-background: var(--shape-color);
     position: absolute;
     top: 0;
     left: 0;
