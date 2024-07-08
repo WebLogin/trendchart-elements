@@ -21,7 +21,7 @@
     "types": "dist/index.d.ts",
     "files": [
         "/dist"
-      ],
+    ],
     "scripts": {
         "build": "rm -rf dist && tsc",
         "demo": "concurrently --kill-others \"rollup --config --watch\" \"wds\""

@@ -916,6 +916,7 @@
                         <tc-stack horizontal values="[120,100,80]" labels='["Foo","Bar","Baz"]' id="test-events"></tc-stack>
                         <script>
                             const testEvents = document.getElementById('test-events');
+                            testEvents.addEventListener('computed', (ev) => console.log(ev.type, ev.detail));
                             testEvents.addEventListener('shape-click', (ev) => console.log(ev.type, ev.detail));
                             testEvents.addEventListener('shape-enter', (ev) => console.log(ev.type, ev.detail));
                             testEvents.addEventListener('shape-leave', (ev) => console.log(ev.type, ev.detail));

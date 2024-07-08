@@ -120,13 +120,14 @@ For boolean ones you just have to set them on the tag, like this :
 
 ### Events
 
-Several custom events are fired so you can react to them. The `detail` property on the `event` contains associated data like the `index` and `value`.
+Several custom events are fired so you can react to them. For some events the `detail` property of the event contains associated data. Have a look at the bottom of the [demo page](https://weblogin.github.io/trendchart-elements/demo/#test-events) to see a test for events (in the console).
 
-| Name | Description |
-| ---- | ----------- |
-| `shape-enter` | Fire on mouse enter a value shape |
-| `shape-leave` | Fire on mouse leave a value shape |
-| `shape-click` | Fire on mouse click on a value shape |
+| Name | Description | Detail |
+| ---- | ----------- | :----: |
+| `computed` | Fire everytime the chart is computed | `null` |
+| `shape-enter` | Fire on mouse enter a value shape | `Object` |
+| `shape-leave` | Fire on mouse leave a value shape | `Object` |
+| `shape-click` | Fire on mouse click on a value shape | `Object` |
 
 ### JS API
 

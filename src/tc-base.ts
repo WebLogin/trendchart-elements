@@ -127,6 +127,7 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
         const propertiesRelatedToChartShapes = ['width', 'height', 'values', 'labels', 'min', 'max', 'gap', 'weight', 'point', 'inside', 'donut', 'radius'];
         if (propertiesRelatedToChartShapes.some((property) => changedProperties.has(property as any))) {
             this.computeChartShapes();
+            this.dispatchEvent(new CustomEvent('computed', {bubbles: false, composed: false}));
         }
     }
 
