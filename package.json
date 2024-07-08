@@ -27,7 +27,7 @@
         "demo": "concurrently --kill-others \"rollup --config --watch\" \"wds\""
     },
     "dependencies": {
-        "lit": "^2.0.2"
+        "lit": "^2.0.2 || ^3.0.0"
     },
     "devDependencies": {
         "@rollup/plugin-node-resolve": "^15.0.2",
