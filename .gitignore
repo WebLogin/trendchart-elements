@@ -1,16 +1,9 @@
-## editors
+*.log
+.DS_Store
+/dist/
+/node_modules/
+/npm-debug.log
+package-lock.json
 /.idea
 /.vscode
 
-## system files
-.DS_Store
-
-## npm
-/node_modules/
-/npm-debug.log
-
-*.log
-.DS_Store
-storybook-static
-custom-elements.json
-/dist/
