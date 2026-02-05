@@ -64,7 +64,7 @@ Charts configuration is made with CSS variables and HTML attributes :
 | `labels` | `[]` | Optional - Array of strings for the labels corresponding to the values, it needs to be the same length as `values` array. Example : `labels='["A","B","C"]'` |
 | `static` | `false` | Optional - Boolean to disable tooltip and hover styling |
 | `tooltip-disabled` | `false` | Optional - Boolean to disable tooltip |
-| `tooltip-format` | `@L @V` | Optional - String to format the tooltip text. Two placeholders are available, `@V` for the current value and `@L` for the current label if present |
+| `tooltip-format` | `@L @V` | Optional - String to format the tooltip text. Two placeholders are available, `@V` for the current value and `@L` for the current label if present. You can use `&#10;` to create a new line |
 | `max` | `0` | Optional - Number to change the max scale of the chart |
 | ➡️ **Line chart** |||
 | `min` | `0` | Optional - Number to change the min scale of the chart |

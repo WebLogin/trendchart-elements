@@ -77,7 +77,7 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
             font-weight: var(--tooltip-font-weight);
             line-height: 1;
             text-align: center;
-            white-space: nowrap;
+            white-space: pre;
             color: var(--tooltip-font-color);
             padding: var(--tooltip-padding);
             pointer-events: none;
