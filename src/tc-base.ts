@@ -189,7 +189,6 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
 
 
     protected updated() {
-        // Fix tooltip overflow
         const tooltip = this.renderRoot.querySelector<HTMLElement>('.tooltip');
         if (tooltip) {
             const screenOffset = 10;
@@ -233,7 +232,7 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
 
 
     protected onlyNegativeValues(): boolean {
-        return Math.max(...this.values) <= 0;
+        return Math.max(...this.values) < 0;
     }
 
 
