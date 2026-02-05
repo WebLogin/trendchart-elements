@@ -231,8 +231,12 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
     protected abstract hasEnoughValueShapes(): boolean;
 
 
-    protected onlyNegativeValues(): boolean {
-        return Math.max(...this.values) < 0;
+    protected isNegativeChart(): boolean {
+        if (this.values.every((value) => value === 0)) {
+            return false;
+        }
+
+        return Math.max(...this.values) <= 0;
     }
 
 

@@ -98,8 +98,8 @@ export class TcLine extends TcBase<ValueShapeCircle> {
 
         this.otherShapes.areaPath = this.otherShapes.linePath
             .concat('L' + (this.valueShapes[this.valueShapes.length - 1].center.x + pointOffset) + ',' + this.valueShapes[this.valueShapes.length - 1].center.y + ' ')
-            .concat('L' + (this.valueShapes[this.valueShapes.length - 1].center.x + pointOffset) + ',' + (pointPositionY(Math.max(valueMin, 0)) + (this.onlyNegativeValues() ? -pointOffset : pointOffset)) + ' ')
-            .concat('L' + (this.valueShapes[0].center.x - pointOffset) + ',' + (pointPositionY(Math.max(valueMin, 0)) + (this.onlyNegativeValues() ? -pointOffset : pointOffset)) + ' ')
+            .concat('L' + (this.valueShapes[this.valueShapes.length - 1].center.x + pointOffset) + ',' + (pointPositionY(Math.max(valueMin, 0)) + (this.isNegativeChart() ? -pointOffset : pointOffset)) + ' ')
+            .concat('L' + (this.valueShapes[0].center.x - pointOffset) + ',' + (pointPositionY(Math.max(valueMin, 0)) + (this.isNegativeChart() ? -pointOffset : pointOffset)) + ' ')
             .concat('L' + (this.valueShapes[0].center.x - pointOffset) + ',' + this.valueShapes[0].center.y + ' ')
             .concat('Z');
     }
@@ -171,7 +171,7 @@ export class TcLine extends TcBase<ValueShapeCircle> {
             transform: 'translate(-50%, -100%)',
         };
 
-        if ((this.valueShapeActive.value < 0 || this.onlyNegativeValues())) {
+        if ((this.valueShapeActive.value < 0 || this.isNegativeChart())) {
             style.top = (this.valueShapeActive.center.y + this.valueShapeActive.radius + 2) + 'px';
             style.transform = 'translate(-50%, 0%)';
         }

@@ -100,7 +100,7 @@ export class TcBar extends TcBase<ValueShapeRectangle> {
             transform: 'translate(-50%, -100%)',
         };
 
-        if (!this.horizontal && (this.valueShapeActive.value < 0 || this.onlyNegativeValues())) {
+        if (!this.horizontal && (this.valueShapeActive.value < 0 || this.isNegativeChart())) {
             style.top = (this.valueShapeActive.origin.y + this.valueShapeActive.height + 2) + 'px';
             style.transform = 'translate(-50%, 0%)';
         }
