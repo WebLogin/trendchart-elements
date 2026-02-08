@@ -48,8 +48,3 @@
     border-top: 0;
     background-color: var(--card-footer-background-color);
 }
-/* @media (min-width: 500px) {
-    .b-tests-grid {
-        grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    }
-} */

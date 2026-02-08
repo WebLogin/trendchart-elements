@@ -912,6 +912,18 @@
                     </div>
                 </div>
                 <div class="test">
+                    <div class="content" style="overflow-x: scroll; overflow-y: hidden; justify-content: start;">
+                        <tc-line values="[50,55,45,48,44,39,50,50,43]"
+                            tooltip-format="Sed egestas metus: @V"
+                            min="0" max="100"
+                            style="--area-opacity: 0.15; width: 400px; flex: 0 0 auto;">
+                        </tc-line>
+                    </div>
+                    <div class="footer">
+                        Tooltip scrollable overflow
+                    </div>
+                </div>
+                <div class="test">
                     <div class="content">
                         <tc-stack horizontal values="[120,100,80]" labels='["Foo","Bar","Baz"]' id="test-events"></tc-stack>
                         <script>

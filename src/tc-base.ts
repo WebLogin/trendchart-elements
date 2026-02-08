@@ -189,16 +189,30 @@ export abstract class TcBase<TValueShape extends ValueShape> extends LitElement 
 
 
     protected updated() {
+        // Fix tooltip position to prevent overflow
         const tooltip = this.renderRoot.querySelector<HTMLElement>('.tooltip');
         if (tooltip) {
-            const screenOffset = 10;
-            const tooltipRect = tooltip.getBoundingClientRect();
+            let offset = 10;
+            let tooltipRect = tooltip.getBoundingClientRect();
+            let containerRect = document.documentElement.getBoundingClientRect();
+
+            // Search closest scrollable container
+            let parent = this.parentElement;
+            while (parent && parent !== document.documentElement) {
+                if (/(auto|scroll)/.test(getComputedStyle(parent).overflowX)) {
+                    console.log(parent);
+                    containerRect = parent.getBoundingClientRect();
+                    offset = 5;
+                    break;
+                }
+                parent = parent.parentElement;
+            }
 
             let left = parseFloat(tooltip.style.left);
-            if (tooltipRect.left < screenOffset) {
-                left += screenOffset - Math.floor(tooltipRect.left);
-            } else if (tooltipRect.right > (document.documentElement.offsetWidth - screenOffset)) {
-                left += (document.documentElement.offsetWidth - screenOffset - Math.ceil(tooltipRect.right));
+            if (tooltipRect.left < containerRect.left + offset) {
+                left += (containerRect.left + offset) - Math.floor(tooltipRect.left);
+            } else if (tooltipRect.right > (containerRect.right - offset)) {
+                left += (containerRect.right - offset - Math.ceil(tooltipRect.right));
             }
 
             tooltip.style.left = `${left}px`;
